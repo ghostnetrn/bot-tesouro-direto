@@ -23,8 +23,8 @@ Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
 ## 🌟 Features
 
 - [x] Integração com Telegram
-- [ ] Alerta diário com resumo dos preços
 - [x] Deploy com Docker
+- [ ] Alerta diário com resumo dos preços
 
 ## 💜 Dúvidas ou sugestões
 
