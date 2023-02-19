@@ -20,7 +20,7 @@ Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
     $ npm start
 ```
 
-## :octocat: Features
+## 🌟 Features
 
 - [ ] Integração com Telegram
 - [ ] Alerta diário com resumo dos preços
