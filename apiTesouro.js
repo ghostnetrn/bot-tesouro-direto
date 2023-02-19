@@ -46,11 +46,11 @@ async function getTituloInfo(bondName) {
         };
 
         if (currBondName.toLowerCase().includes("selic")) {
-          info.rentabilidadeAnual = "SELIC + " + anulInvstmtRate + "%";
+          info.rentabilidadeAnual = "SELIC + " + anulInvstmtRate;
         } else if (currBondName.toLowerCase().includes("ipca")) {
-          info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate + "%";
+          info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
         } else if (currBondName.toLowerCase().includes("renda")) {
-          info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate + "%";
+          info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
         } else {
           info.rentabilidadeAnual = anulInvstmtRate;
         }
@@ -59,6 +59,33 @@ async function getTituloInfo(bondName) {
     }
 
     throw new Error("Título não encontrado.");
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function listarTitulosComRentabilidadeAlta(percentual) {
+  const srcURL = urlApi;
+  const agent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+
+  try {
+    const response = await axios.get(srcURL, {
+      httpsAgent: agent,
+    });
+
+    const parsedData = response.data.response;
+
+    const titulosComRentabilidadeAlta = parsedData.TrsrBdTradgList.filter(
+      (bond) => bond.TrsrBd.anulInvstmtRate > percentual
+    ).map((bond) => bond.TrsrBd);
+
+    if (titulosComRentabilidadeAlta.length === 0) {
+      return `Nenhum título encontrado com rentabilidade maior do que ${percentual}.`;
+    }
+
+    return titulosComRentabilidadeAlta;
   } catch (error) {
     throw error;
   }
@@ -95,4 +122,5 @@ async function listarTitulosComInvestimentoMinimo() {
 module.exports = {
   getTituloInfo,
   listarTitulosComInvestimentoMinimo,
+  listarTitulosComRentabilidadeAlta,
 };
