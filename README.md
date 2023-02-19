@@ -26,6 +26,6 @@ Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
 - [ ] Alerta diário com resumo dos preços
 - [ ] Deploy com docker
 
-## 💜 Thanks
+## 💜 Dúvidas ou sugestões
 
-Se quiser uma
+Verifique as [Issues](https://github.com/ghostnetrn/bot-tesouro-direto/issues) que estão abertas e se já não existe alguma com a sua feature.
