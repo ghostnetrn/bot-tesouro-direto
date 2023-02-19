@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Telegraf } = require("telegraf");
+const { Telegraf, Markup, Extra } = require("telegraf");
 const {
   getTituloInfo,
   listarTitulosComInvestimentoMinimo,
@@ -28,8 +28,22 @@ const keyboard = {
   },
 };
 
+// Crie um teclado personalizado com um botão para iniciar o bot
+const keyboardStart = Markup.keyboard([
+  ["🧾 Teclado"], // Row1 with 2 buttons
+  ["☸ Help"], //, '🔛 Test Mode'], // Row2 with 2 buttons
+  // ['📖 Help', '₿ Biscoint'] // Row3 with 2 buttons
+])
+  .oneTime()
+  .resize();
+
+bot.hears("🧾 Teclado", async (ctx) => {
+  await ctx.reply("Menu", keyboard);
+});
+
 bot.start(async (ctx) => {
   try {
+    ctx.reply("🧾 Teclado");
     ctx.reply("Selecione uma opção:", keyboard);
   } catch (error) {
     console.error(error.message);
@@ -54,6 +68,7 @@ bot.action("all", async (ctx) => {
     };
 
     ctx.reply("Selecione um título para obter informações:", keyboard);
+    ctx.reply("Para exibir o menu digite /start");
   } catch (error) {
     console.error(error.message);
     ctx.reply("Ocorreu um erro ao listar os títulos.");
@@ -84,6 +99,7 @@ bot.action("maxInvestment", async (ctx) => {
     };
 
     ctx.reply("Selecione o percentual de investimento mínimo:", keyboard);
+    ctx.reply("Para exibir o menu digite /start");
   } catch (error) {
     console.error(error.message);
     ctx.reply(
