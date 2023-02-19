@@ -1,4 +1,4 @@
-## :blush: **Qual a motivação?**
+## :blush: **Motivo**
 
 Retornar as informações de um título específico do Tesouro Direto.
 Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
