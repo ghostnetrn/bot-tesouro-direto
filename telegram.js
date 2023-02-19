@@ -34,16 +34,22 @@ const keyboardStart = Markup.keyboard([
   ["☸ Help"], //, '🔛 Test Mode'], // Row2 with 2 buttons
   // ['📖 Help', '₿ Biscoint'] // Row3 with 2 buttons
 ])
-  .oneTime()
+  //.oneTime()
   .resize();
 
 bot.hears("🧾 Teclado", async (ctx) => {
   await ctx.reply("Menu", keyboard);
 });
 
+bot.hears("☸ Help", async (ctx) => {
+  await ctx.reply(
+    "Visite https://github.com/ghostnetrn/bot-tesouro-direto/issues"
+  );
+});
+
 bot.start(async (ctx) => {
   try {
-    ctx.reply("🧾 Teclado");
+    ctx.reply("🧾 Teclado", keyboardStart);
     ctx.reply("Selecione uma opção:", keyboard);
   } catch (error) {
     console.error(error.message);
