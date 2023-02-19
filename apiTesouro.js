@@ -119,8 +119,37 @@ async function listarTitulosComInvestimentoMinimo() {
   }
 }
 
+async function listarTitulos() {
+  const srcURL = urlApi;
+
+  const agent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+
+  try {
+    const response = await axios.get(srcURL, {
+      httpsAgent: agent,
+    });
+
+    const parsedData = response.data.response;
+    const titulos = [];
+
+    for (const bond of parsedData.TrsrBdTradgList) {
+      const { minInvstmtAmt } = bond.TrsrBd;
+      if (minInvstmtAmt > 0) {
+        titulos.push(bond);
+      }
+    }
+
+    return titulos;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   getTituloInfo,
   listarTitulosComInvestimentoMinimo,
   listarTitulosComRentabilidadeAlta,
+  listarTitulos
 };

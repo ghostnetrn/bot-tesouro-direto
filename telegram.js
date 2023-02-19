@@ -4,6 +4,7 @@ const {
   getTituloInfo,
   listarTitulosComInvestimentoMinimo,
   listarTitulosComRentabilidadeAlta,
+  listarTitulos,
 } = require("./apiTesouro");
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -160,6 +161,34 @@ bot.action(/(.+)/i, async (ctx) => {
     ctx.reply("Ocorreu um erro ao buscar as informações do título.", keyboard);
   }
 });
+
+async function verificarRentabilidade() {
+  const titulos = await listarTitulos();
+  let mensagem = "📝 <b>Relatório diário:</b>\n";
+  mensagem += `Rentabilidade acima de ${process.env.ALERTA_RENTABILIDADE}%\n\n`;
+
+  for (const bond of titulos) {
+    if (
+      bond.TrsrBd.anulInvstmtRate >=
+      parseFloat(process.env.ALERTA_RENTABILIDADE)
+    ) {
+      mensagem += `<b>${bond.TrsrBd.nm}</b>: ${bond.TrsrBd.anulInvstmtRate}%\n`;
+    }
+  }
+
+  if (mensagem !== "📝 *Relatório diário:*\n") {
+    // Enviar uma mensagem no Telegram
+    await bot.telegram.sendMessage(process.env.CHAT_ID, mensagem, {
+      parse_mode: "HTML",
+    });
+  }
+}
+
+// Chamar a função verificarRentabilidade() periodicamente usando setInterval()
+setInterval(
+  verificarRentabilidade,
+  parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60 * 1000
+);
 
 // Inicia o bot
 bot.launch();
