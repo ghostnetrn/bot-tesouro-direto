@@ -27,7 +27,7 @@ Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
 
 - [x] Integração com Telegram
 - [x] Deploy com Docker
-- [ ] Alerta diário com resumo dos preços
+- [x] Alerta diário com resumo dos preços
 
 ## 💜 Dúvidas ou sugestões
 
