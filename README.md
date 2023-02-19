@@ -3,15 +3,29 @@
 Retornar as informações de um título específico do Tesouro Direto.
 Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
 
-## Instalação
+## 🗂 Como baixar o projeto
 
-- baixe o código fonte e execute: `npm install`
+```bash
 
-## Execução
+    # Clonar o repositório
+    $ git clone https://github.com/ghostnetrn/bot-tesouro-direto.git
 
-- rode com o comando: `npm start`
+    # Entrar no diretório
+    $ cd bot-tesouro-direto
 
-### Features
+    # Instalar as dependências
+    $ npm install
+
+    # Iniciar o projeto
+    $ npm start
+```
+
+## Features
 
 - [ ] Integração com Telegram
 - [ ] Alerta diário com resumo dos preços
+- [ ] Deploy com docker
+
+## 💜 Thanks
+
+Se quiser uma
