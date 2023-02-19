@@ -1,6 +1,8 @@
+require("dotenv").config();
 const axios = require("axios");
 const https = require("https");
 const { format } = require("date-fns");
+const urlApi = process.env.URL_API;
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
@@ -11,8 +13,7 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
  * @return {Object} Objeto contendo informações do título
  **/
 async function getTituloInfo(bondName) {
-  const srcURL =
-    "https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json";
+  const srcURL = urlApi;
 
   const agent = new https.Agent({
     rejectUnauthorized: false,
@@ -63,6 +64,35 @@ async function getTituloInfo(bondName) {
   }
 }
 
+async function listarTitulosComInvestimentoMinimo() {
+  const srcURL = urlApi;
+
+  const agent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+
+  try {
+    const response = await axios.get(srcURL, {
+      httpsAgent: agent,
+    });
+
+    const parsedData = response.data.response;
+    const titulos = [];
+
+    for (const bond of parsedData.TrsrBdTradgList) {
+      const { nm: bondName, minInvstmtAmt } = bond.TrsrBd;
+      if (minInvstmtAmt > 0) {
+        titulos.push(bondName);
+      }
+    }
+
+    return titulos;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   getTituloInfo,
+  listarTitulosComInvestimentoMinimo,
 };
