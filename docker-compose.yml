@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  tesourodireto:
+    image: tesourodireto
+    container_name: tesourodireto
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/app
+    env_file: .env
+    restart: unless-stopped
