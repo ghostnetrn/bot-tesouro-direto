@@ -18,6 +18,9 @@ Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
 
     # Iniciar o projeto
     $ npm start
+
+    # Para usar com Docker
+    $ docker-compose up -d
 ```
 
 ## 🌟 Features
