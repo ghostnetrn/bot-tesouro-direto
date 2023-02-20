@@ -4,6 +4,12 @@ const https = require("https");
 const { format } = require("date-fns");
 const urlApi = process.env.URL_API;
 
+// statistics
+const fs = require("fs");
+const csv = require("csv-parser");
+const ss = require("simple-statistics");
+
+
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 /**
@@ -147,9 +153,62 @@ async function listarTitulos() {
   }
 }
 
+function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
+  const url =
+    "https://www.tesourotransparente.gov.br/ckan/dataset/f0468ecc-ae97-4287-89c2-6d8139fb4343/resource/e5f90e3a-8f8d-4895-9c56-4bb2f7877920/download/VendasTesouroDireto.csv";
+
+  return axios
+    .get(url, { responseType: "stream" })
+    .then((response) => {
+      return new Promise((resolve, reject) => {
+        response.data
+          .pipe(fs.createWriteStream("VendasTesouroDireto.csv"))
+          .on("finish", () => {
+            const pus = [];
+            fs.createReadStream("VendasTesouroDireto.csv")
+              .pipe(csv({ separator: ";" }))
+              .on("data", (row) => {
+                if (
+                  row["Tipo Titulo"] === tipoTitulo &&
+                  row["Vencimento do Titulo"] === vencimentoTitulo
+                ) {
+                  const puValue = parseFloat(row.PU.replace(",", "."));
+                  if (!isNaN(puValue)) {
+                    pus.push(puValue);
+                  }
+                }
+              })
+              .on("end", () => {
+                const min = ss.min(pus);
+                const q1 = ss.quantile(pus, 0.25);
+                const median = ss.median(pus);
+                const q3 = ss.quantile(pus, 0.75);
+                const max = ss.max(pus);
+                const mean = ss.mean(pus);
+                const stdev = ss.standardDeviation(pus);
+
+                resolve({
+                  min: min.toFixed(2),
+                  q1: q1.toFixed(2),
+                  median: median.toFixed(2),
+                  q3: q3.toFixed(2),
+                  max: max.toFixed(2),
+                  mean: mean.toFixed(2),
+                  stdev: stdev.toFixed(2),
+                });
+              });
+          });
+      });
+    })
+    .catch((error) => {
+      return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
+    });
+}
+
 module.exports = {
   getTituloInfo,
   listarTitulosComInvestimentoMinimo,
   listarTitulosComRentabilidadeAlta,
-  listarTitulos
+  listarTitulos,
+  getTesouroInfo
 };
