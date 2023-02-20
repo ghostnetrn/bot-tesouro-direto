@@ -39,9 +39,12 @@ const keyboardStart = Markup.keyboard([
   .resize();
 
 // Adicionar a função que trata a ação do novo botão
-bot.hears("📈 Gráficos", (ctx) => {
-  ctx.reply(
+bot.hears("📈 Gráficos", async (ctx) => {
+  await ctx.reply(
     "Acesse o link https://www.tesouroinfo.com/graficos para visualizar os gráficos."
+  );
+  await ctx.reply(
+    "Acesse também https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm"
   );
 });
 
