@@ -5,6 +5,7 @@ const {
   listarTitulosComInvestimentoMinimo,
   listarTitulosComRentabilidadeAlta,
   listarTitulos,
+  getTesouroInfo,
 } = require("./apiTesouro");
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
