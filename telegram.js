@@ -33,10 +33,17 @@ const keyboard = {
 const keyboardStart = Markup.keyboard([
   ["🧾 Teclado"], // Row1 with 2 buttons
   ["☸ Help"], //, '🔛 Test Mode'], // Row2 with 2 buttons
-  // ['📖 Help', '₿ Biscoint'] // Row3 with 2 buttons
+  ["📈 Gráficos"], // Row3 with 1 button
 ])
   //.oneTime()
   .resize();
+
+// Adicionar a função que trata a ação do novo botão
+bot.hears("📈 Gráficos", (ctx) => {
+  ctx.reply(
+    "Acesse o link https://www.tesouroinfo.com/graficos para visualizar os gráficos."
+  );
+});
 
 bot.hears("🧾 Teclado", async (ctx) => {
   await ctx.reply("Menu", keyboard);
