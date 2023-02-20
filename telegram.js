@@ -162,7 +162,8 @@ bot.action(/maxInvestment_(\d+)/i, async (ctx) => {
 
 bot.action(/(.+)/i, async (ctx) => {
   const titulo = ctx.match[1].trim();
-
+  ctx.reply('Gerando dados... Por favor, aguarde!')
+  
   try {
     const cotacao = await getTituloInfo(titulo);
     const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
