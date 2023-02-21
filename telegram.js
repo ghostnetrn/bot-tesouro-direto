@@ -16,12 +16,6 @@ const keyboard = {
     inline_keyboard: [
       [
         {
-          text: "Listar títulos bons pra comprar",
-          callback_data: "titulosBons",
-        },
-      ],
-      [
-        {
           text: "Listar todos os títulos",
           callback_data: "all",
         },
@@ -30,6 +24,12 @@ const keyboard = {
         {
           text: "Listar títulos com maior percentual de investimento",
           callback_data: "maxInvestment",
+        },
+      ],
+      [
+        {
+          text: "Listar títulos bons pra comprar",
+          callback_data: "titulosBons",
         },
       ],
     ],
