@@ -102,7 +102,7 @@ bot.action("all", async (ctx) => {
 bot.action("titulosBons", async (ctx) => {
   ctx.reply("Gerando dados... Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
-  let message = "Não foram encontrados títulos bons para compra.\n\n";
+  let message = "";
 
   try {
     for (const titulo of titulos) {
@@ -130,9 +130,18 @@ bot.action("titulosBons", async (ctx) => {
         message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
         message += "😀 *J4 - COMPRA ÓTIMA*\n\n";
       }
+
+      if (message !== "") {
+        await ctx.replyWithMarkdown(message, keyboard);
+        message = "";
+      }
     }
 
-    await ctx.replyWithMarkdown(message, keyboard);
+    if (message === "")
+      await ctx.replyWithMarkdown(
+        "Não foram encontrados títulos bons para comprar",
+        keyboard
+      );
   } catch (error) {
     console.error(error.message);
     ctx.reply("Ocorreu um erro ao buscar as informações do título.", keyboard);
