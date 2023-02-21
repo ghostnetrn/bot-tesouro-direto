@@ -247,7 +247,7 @@ bot.action(/(.+)/i, async (ctx) => {
       cotacao.precoUnitario >= dadostesouro.q3 &&
       cotacao.precoUnitario <= dadostesouro.max
     ) {
-      message += "😀 *J3 - COMPRA ÓTIMA*";
+      message += "😀 *J4 - COMPRA ÓTIMA*";
     }
 
     ctx.replyWithMarkdown(message, keyboard);
