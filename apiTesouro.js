@@ -155,11 +155,6 @@ async function listarTitulos() {
   }
 }
 
-const fs = require("fs");
-const axios = require("axios");
-const csv = require("csv-parser");
-const ss = require("simple-statistics");
-
 async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
   const url = urlarquivo;
   const localFile = "PrecoTaxaTesouroDireto.csv";
