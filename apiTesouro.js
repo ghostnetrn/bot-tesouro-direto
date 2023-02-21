@@ -188,6 +188,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
           const taxaCompra = parseFloat(
             row["Taxa Compra Manha"].replace(",", ".")
           );
+          console.log(taxaCompra);
           pus.push(taxaCompra);
         }
       })
