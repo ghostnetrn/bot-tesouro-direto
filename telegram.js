@@ -134,7 +134,7 @@ bot.action("titulosBons", async (ctx) => {
         resolve(message);
       });
     });
-    Promisse.all(promises).then(() => {
+    Promise.all(promises).then(() => {
       ctx.replyWithMarkdown(message, keyboard);
     });
   } catch (error) {
@@ -241,7 +241,7 @@ bot.action(/(.+)/i, async (ctx) => {
       cotacao.precoUnitario >= dadostesouro.median &&
       cotacao.precoUnitario < dadostesouro.q3
     ) {
-      message += "🫡 *J3 - COMPRA BOA*";
+      message += "😗 *J3 - COMPRA BOA*";
     } else if (
       cotacao.precoUnitario >= dadostesouro.q3 &&
       cotacao.precoUnitario <= dadostesouro.max
