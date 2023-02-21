@@ -159,7 +159,6 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
   const url = urlarquivo;
   const localFilePath = "PrecoTaxaTesouroDireto.csv";
   const axiosConfig = {};
-  let shouldDownload = false;
 
   return fs.promises
     .stat(localFilePath)
@@ -167,90 +166,75 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
       axiosConfig.headers = {
         "If-Modified-Since": localFileStats.mtime.toUTCString(),
       };
-    })
-    .catch(() => {
-      shouldDownload = true;
-    })
-    .then(() => {
-      return axios
-        .get(url, axiosConfig)
-        .then((response) => {
-          if (response.status === 304) {
-            return {};
-          }
-          shouldDownload = true;
-          return new Promise((resolve, reject) => {
-            response.data
-              .pipe(fs.createWriteStream(localFilePath))
-              .on("finish", () => {
-                resolve();
-              });
-          });
-        })
-        .catch((error) => {
-          return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
-        });
-    })
-    .then(() => {
-      if (shouldDownload) {
+      return axios.get(url, axiosConfig).then((response) => {
+        if (response.status === 304) {
+          return fs.promises.readFile(localFilePath, "utf8");
+        }
         return new Promise((resolve, reject) => {
-          fs.createReadStream(localFilePath)
-            .pipe(csv({ separator: ";" }))
-            .on("data", () => {})
-            .on("end", () => {
+          response.data
+            .pipe(fs.createWriteStream(localFilePath))
+            .on("finish", () => {
               resolve();
             });
         });
-      }
+      });
+    })
+    .catch((error) => {
+      return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
     })
     .then(() => {
-      const pus = [];
-      fs.createReadStream(localFilePath)
-        .pipe(csv({ separator: ";" }))
-        .on("data", (row) => {
-          if (
-            row["Tipo Titulo"] === tipoTitulo &&
-            row["Data Vencimento"] === vencimentoTitulo
-          ) {
-            const taxaCompra = parseFloat(
-              row["Taxa Compra Manha"].replace(",", ".")
-            );
-            if (!isNaN(taxaCompra) || taxaCompra !== 0 || taxaCompra !== null) {
-              pus.push(taxaCompra);
+      return new Promise((resolve, reject) => {
+        fs.createReadStream(localFilePath)
+          .pipe(csv({ separator: ";" }))
+          .on("data", (row) => {
+            if (
+              row["Tipo Titulo"] === tipoTitulo &&
+              row["Data Vencimento"] === vencimentoTitulo
+            ) {
+              const taxaCompra = parseFloat(
+                row["Taxa Compra Manha"].replace(",", ".")
+              );
+              if (
+                !isNaN(taxaCompra) ||
+                taxaCompra !== 0 ||
+                taxaCompra !== null
+              ) {
+                pus.push(taxaCompra);
+              }
             }
-          }
-        })
-        .on("end", () => {
-          if (pus.length === 0) {
-            return {
-              min: "0.00",
-              q1: "0.00",
-              median: "0.00",
-              q3: "0.00",
-              max: "0.00",
-              mean: "0.00",
-              stdev: "0.00",
-            };
-          }
+          })
+          .on("end", () => {
+            if (pus.length === 0) {
+              resolve({
+                min: "0.00",
+                q1: "0.00",
+                median: "0.00",
+                q3: "0.00",
+                max: "0.00",
+                mean: "0.00",
+                stdev: "0.00",
+              });
+            }
 
-          const min = ss.min(pus);
-          const q1 = ss.quantile(pus, 0.25);
-          const median = ss.median(pus);
-          const q3 = ss.quantile(pus, 0.75);
-          const max = ss.max(pus);
-          const mean = ss.mean(pus);
-          const stdev = ss.standardDeviation(pus);
+            const min = ss.min(pus);
+            const q1 = ss.quantile(pus, 0.25);
+            const median = ss.median(pus);
+            const q3 = ss.quantile(pus, 0.75);
+            const max = ss.max(pus);
+            const mean = ss.mean(pus);
+            const stdev = ss.standardDeviation(pus);
 
-          return {
-            min: min.toFixed(2),
-            q1: q1.toFixed(2),
-            median: median.toFixed(2),
-            q3: q3.toFixed(2),
-            max: max.toFixed(2),
-            mean: mean.toFixed(2),
-            stdev: stdev.toFixed(2),
-          };
-        });
+            resolve({
+              min: min.toFixed(2),
+              q1: q1.toFixed(2),
+              median: median.toFixed(2),
+              q3: q3.toFixed(2),
+              max: max.toFixed(2),
+              mean: mean.toFixed(2),
+              stdev: stdev.toFixed(2),
+            });
+          });
+      });
     });
 }
 
