@@ -102,10 +102,10 @@ bot.action("all", async (ctx) => {
 bot.action("titulosBons", async (ctx) => {
   ctx.reply("Gerando dados... Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
-  let message;
+  let message = "Não há títulos bons para comprar!";
 
   try {
-    titulos.forEach(async (titulo) => {
+    const promises = titulos.map(async (titulo) => {
       const cotacao = await getTituloInfo(titulo);
       const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
       const vencimento = cotacao.vencimento;
@@ -121,17 +121,16 @@ bot.action("titulosBons", async (ctx) => {
       ) {
         message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
         message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
-        message += "🫡 *J3 - COMPRA BOA*";
+        message += "🫡 *J3 - COMPRA BOA*\n\n";
       } else if (
         cotacao.precoUnitario >= dadostesouro.q3 &&
         cotacao.precoUnitario <= dadostesouro.max
       ) {
         message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
         message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
-        message += "😀 *J4 - COMPRA ÓTIMA*";
+        message += "😀 *J4 - COMPRA ÓTIMA*\n\n";
       }
     });
-
     ctx.replyWithMarkdown(message, keyboard);
   } catch (error) {
     console.error(error.message);
