@@ -264,7 +264,7 @@ bot.action(/(.+)/i, async (ctx) => {
 
 async function verificarRentabilidade() {
   const titulos = await listarTitulos();
-  let mensagem = "📝 <b>Relatório diário:</b>\n";
+  let mensagem = "📝 <b>Relatório diário:</b> ";
   mensagem += `Rentabilidade acima de ${process.env.ALERTA_RENTABILIDADE}%\n\n`;
 
   for (const bond of titulos) {
