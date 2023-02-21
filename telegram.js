@@ -102,11 +102,9 @@ bot.action("all", async (ctx) => {
 bot.action("titulosBons", async (ctx) => {
   ctx.reply("Gerando dados... Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
-  let message = "Não há títulos bons para comprar!";
 
   try {
     const promises = titulos.map(async (titulo) => {
-      console.log(titulo);
       return new Promise(async (resolve) => {
         const cotacao = await getTituloInfo(titulo);
         const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
@@ -116,6 +114,8 @@ bot.action("titulosBons", async (ctx) => {
         cotacao.precoUnitario = parseFloat(
           cotacao.precoUnitario.replace(/[^\d,]/g, "").replace(",", ".")
         );
+
+        let message = "";
 
         if (
           cotacao.precoUnitario >= dadostesouro.median &&
