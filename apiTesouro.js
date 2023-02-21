@@ -154,26 +154,32 @@ async function listarTitulos() {
 
 function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
   const url =
-    "https://www.tesourotransparente.gov.br/ckan/dataset/f0468ecc-ae97-4287-89c2-6d8139fb4343/resource/e5f90e3a-8f8d-4895-9c56-4bb2f7877920/download/VendasTesouroDireto.csv";
+    "https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv";
 
   return axios
     .get(url, { responseType: "stream" })
     .then((response) => {
       return new Promise((resolve, reject) => {
         response.data
-          .pipe(fs.createWriteStream("VendasTesouroDireto.csv"))
+          .pipe(fs.createWriteStream("PrecoTaxaTesouroDireto.csv"))
           .on("finish", () => {
             const pus = [];
-            fs.createReadStream("VendasTesouroDireto.csv")
+            fs.createReadStream("PrecoTaxaTesouroDireto.csv")
               .pipe(csv({ separator: ";" }))
               .on("data", (row) => {
                 if (
                   row["Tipo Titulo"] === tipoTitulo &&
-                  row["Vencimento do Titulo"] === vencimentoTitulo
+                  row["Data Vencimento"] === vencimentoTitulo
                 ) {
-                  const puValue = parseFloat(row.PU.replace(",", "."));
-                  if (!isNaN(puValue) || puValue !== 0 || puValue !== null) {
-                    pus.push(puValue);
+                  const taxaCompra = parseFloat(
+                    row["Taxa Compra Manha"].replace(",", ".")
+                  );
+                  if (
+                    !isNaN(taxaCompra) ||
+                    taxaCompra !== 0 ||
+                    taxaCompra !== null
+                  ) {
+                    pus.push(taxaCompra);
                   }
                 }
               })

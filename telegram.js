@@ -229,28 +229,24 @@ bot.action(/(.+)/i, async (ctx) => {
     let message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
     message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
 
-    cotacao.precoUnitario = parseFloat(
-      cotacao.precoUnitario.replace(/[^\d,]/g, "").replace(",", ".")
-    );
-
     if (
-      cotacao.precoUnitario >= dadostesouro.min &&
-      cotacao.precoUnitario < dadostesouro.q1
+      cotacao.rentabilidadeAnual <= dadostesouro.min ||
+      cotacao.rentabilidadeAnual < dadostesouro.q1
     ) {
       message += "😡 *J1 - COMPRA PESSÍMA*";
     } else if (
-      cotacao.precoUnitario >= dadostesouro.q1 &&
-      cotacao.precoUnitario < dadostesouro.median
+      cotacao.rentabilidadeAnual >= dadostesouro.q1 &&
+      cotacao.rentabilidadeAnual < dadostesouro.median
     ) {
       message += "😒 *J2 - COMPRA RUIM*";
     } else if (
-      cotacao.precoUnitario >= dadostesouro.median &&
-      cotacao.precoUnitario < dadostesouro.q3
+      cotacao.rentabilidadeAnual >= dadostesouro.median &&
+      cotacao.rentabilidadeAnual < dadostesouro.q3
     ) {
       message += "😗 *J3 - COMPRA BOA*";
     } else if (
-      cotacao.precoUnitario >= dadostesouro.q3 &&
-      cotacao.precoUnitario <= dadostesouro.max
+      cotacao.rentabilidadeAnual >= dadostesouro.q3 ||
+      cotacao.rentabilidadeAnual >= dadostesouro.max
     ) {
       message += "😀 *J4 - COMPRA ÓTIMA*";
     }
@@ -294,20 +290,16 @@ async function verificarRentabilidade() {
       const vencimento = cotacao.vencimento;
       const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
 
-      cotacao.precoUnitario = parseFloat(
-        cotacao.precoUnitario.replace(/[^\d,]/g, "").replace(",", ".")
-      );
-
       if (
-        cotacao.precoUnitario >= dadostesouro.median &&
-        cotacao.precoUnitario < dadostesouro.q3
+        cotacao.rentabilidadeAnual >= dadostesouro.median &&
+        cotacao.rentabilidadeAnual < dadostesouro.q3
       ) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
         message += "😗 <b>J3 - COMPRA BOA</b>\n\n";
       } else if (
-        cotacao.precoUnitario >= dadostesouro.q3 &&
-        cotacao.precoUnitario <= dadostesouro.max
+        cotacao.rentabilidadeAnual >= dadostesouro.q3 ||
+        cotacao.rentabilidadeAnual >= dadostesouro.max
       ) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
