@@ -116,6 +116,10 @@ bot.action("titulosBons", async (ctx) => {
         continue;
       }
 
+      cotacao.rentabilidadeAnual = parseFloat(
+        cotacao.rentabilidadeAnual.match(/\d+\.\d+/)[0]
+      );
+
       if (
         cotacao.rentabilidadeAnual >= dadostesouro.median &&
         cotacao.rentabilidadeAnual < dadostesouro.q3
@@ -301,10 +305,7 @@ async function verificarRentabilidade() {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
         message += "😗 <b>J3 - COMPRA BOA</b>\n\n";
-      } else if (
-        cotacao.rentabilidadeAnual >= dadostesouro.q3 ||
-        cotacao.rentabilidadeAnual >= dadostesouro.max
-      ) {
+      } else if (cotacao.rentabilidadeAnual >= dadostesouro.q3) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
         message += "😀 <b>J4 - COMPRA ÓTIMA</b>\n\n";
