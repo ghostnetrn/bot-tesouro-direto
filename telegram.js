@@ -104,7 +104,7 @@ bot.action("titulosBons", async (ctx) => {
   ctx.reply("Gerando dados... Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
   let message = "";
-
+  console.log(titulos);
   try {
     for (const titulo of titulos) {
       const cotacao = await getTituloInfo(titulo);
