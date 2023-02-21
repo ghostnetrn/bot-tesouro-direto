@@ -157,30 +157,36 @@ async function listarTitulos() {
 
 async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
   const url = urlarquivo;
-  const localFile = "PrecoTaxaTesouroDireto.csv";
+  const arquivoLocal = path.join(__dirname, "PrecoTaxaTesouroDireto.csv");
 
-  // Verifica se o arquivo local existe
-  const localFileExists = fs.existsSync(localFile);
+  let arquivoAtualizado = false;
 
-  // Verifica se o arquivo local está atualizado com o arquivo remoto
-  const remoteFileModifiedTime = (await axios.head(url)).headers[
-    "last-modified"
-  ];
-  const localFileModifiedTime = localFileExists
-    ? fs.statSync(localFile).mtime.toUTCString()
-    : null;
-  const isLocalFileUpdated = localFileModifiedTime === remoteFileModifiedTime;
+  try {
+    // Verifica se o arquivo local existe e está atualizado com o arquivo remoto
+    if (fs.existsSync(arquivoLocal)) {
+      const statsLocal = fs.statSync(arquivoLocal);
+      const statsRemoto = await axios
+        .head(url)
+        .then((response) => response.headers);
 
-  // Baixa o arquivo remoto se o arquivo local não existir ou não estiver atualizado
-  if (!localFileExists || !isLocalFileUpdated) {
-    const response = await axios.get(url, { responseType: "stream" });
-    response.data.pipe(fs.createWriteStream(localFile));
-  }
+      if (statsLocal.mtime >= new Date(statsRemoto["last-modified"])) {
+        arquivoAtualizado = true;
+      }
+    }
 
-  // Lê o arquivo local e calcula as estatísticas
-  return new Promise((resolve, reject) => {
+    // Se o arquivo local não estiver atualizado, baixa o arquivo remoto
+    if (!arquivoAtualizado) {
+      const response = await axios.get(url, { responseType: "stream" });
+      response.data.pipe(fs.createWriteStream(arquivoLocal));
+      await new Promise((resolve, reject) => {
+        response.data.on("end", resolve);
+        response.data.on("error", reject);
+      });
+    }
+
+    // Lê o arquivo local e calcula as estatísticas solicitadas
     const pus = [];
-    fs.createReadStream(localFile)
+    fs.createReadStream(arquivoLocal)
       .pipe(csv({ separator: ";" }))
       .on("data", (row) => {
         if (
@@ -190,14 +196,14 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
           const taxaCompra = parseFloat(
             row["Taxa Compra Manha"].replace(",", ".")
           );
-          if (!isNaN(taxaCompra) && taxaCompra !== 0) {
+          if (!isNaN(taxaCompra)) {
             pus.push(taxaCompra);
           }
         }
       })
       .on("end", () => {
         if (pus.length === 0) {
-          resolve({
+          return {
             min: "0.00",
             q1: "0.00",
             median: "0.00",
@@ -205,8 +211,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
             max: "0.00",
             mean: "0.00",
             stdev: "0.00",
-          });
-          return;
+          };
         }
 
         const min = ss.min(pus);
@@ -217,7 +222,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         const mean = ss.mean(pus);
         const stdev = ss.standardDeviation(pus);
 
-        resolve({
+        return {
           min: min.toFixed(2),
           q1: q1.toFixed(2),
           median: median.toFixed(2),
@@ -225,9 +230,11 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
           max: max.toFixed(2),
           mean: mean.toFixed(2),
           stdev: stdev.toFixed(2),
-        });
+        };
       });
-  });
+  } catch (error) {
+    throw new Error(`Erro ao baixar o arquivo: ${error}`);
+  }
 }
 
 module.exports = {
