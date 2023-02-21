@@ -159,62 +159,63 @@ function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
   const url = urlarquivo;
 
   return axios
-    .get(url, { responseType: "text" })
+    .get(url, { responseType: "stream" })
     .then((response) => {
-      const stats = ss({
-        min: Number.MAX_SAFE_INTEGER,
-        max: Number.MIN_SAFE_INTEGER,
-        data: [],
+      return new Promise((resolve, reject) => {
+        response.data
+          .pipe(fs.createWriteStream("PrecoTaxaTesouroDireto.csv"))
+          .on("finish", () => {
+            const pus = [];
+            fs.createReadStream("PrecoTaxaTesouroDireto.csv")
+              .pipe(csv({ separator: ";" }))
+              .on("data", (row) => {
+                if (
+                  row["Tipo Titulo"] === tipoTitulo &&
+                  row["Data Vencimento"] === vencimentoTitulo
+                ) {
+                  const taxaCompra = parseFloat(
+                    row["Taxa Compra Manha"].replace(",", ".")
+                  );
+                  pus.push(taxaCompra);
+                }
+              })
+              .on("end", () => {
+                if (pus.length === 0) {
+                  resolve({
+                    min: "0.00",
+                    q1: "0.00",
+                    median: "0.00",
+                    q3: "0.00",
+                    max: "0.00",
+                    mean: "0.00",
+                    stdev: "0.00",
+                  });
+                  return;
+                }
+
+                const min = ss.min(pus);
+                const q1 = ss.quantile(pus, 0.25);
+                const median = ss.median(pus);
+                const q3 = ss.quantile(pus, 0.75);
+                const max = ss.max(pus);
+                const mean = ss.mean(pus);
+                const stdev = ss.standardDeviation(pus);
+
+                resolve({
+                  min: min.toFixed(2),
+                  q1: q1.toFixed(2),
+                  median: median.toFixed(2),
+                  q3: q3.toFixed(2),
+                  max: max.toFixed(2),
+                  mean: mean.toFixed(2),
+                  stdev: stdev.toFixed(2),
+                });
+              });
+          });
       });
-
-      response.data
-        .trim()
-        .split("\n")
-        .slice(1)
-        .map((row) => {
-          const cols = row.split(";");
-          if (cols[0] === tipoTitulo && cols[2] === vencimentoTitulo) {
-            const taxaCompra = parseFloat(cols[3].replace(",", "."));
-            stats.data.push(taxaCompra);
-            stats.min = Math.min(stats.min, taxaCompra);
-            stats.max = Math.max(stats.max, taxaCompra);
-          }
-        });
-
-      if (stats.data.length === 0) {
-        return {
-          min: "0.00",
-          q1: "0.00",
-          median: "0.00",
-          q3: "0.00",
-          max: "0.00",
-          mean: "0.00",
-          stdev: "0.00",
-        };
-      }
-
-      const {
-        min,
-        max,
-        q1,
-        median,
-        q3,
-        mean,
-        standardDeviation: stdev,
-      } = ss(stats.data);
-
-      return {
-        min: min.toFixed(2),
-        q1: q1.toFixed(2),
-        median: median.toFixed(2),
-        q3: q3.toFixed(2),
-        max: max.toFixed(2),
-        mean: mean.toFixed(2),
-        stdev: stdev.toFixed(2),
-      };
     })
     .catch((error) => {
-      return Promise.reject(error.message);
+      return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
     });
 }
 
