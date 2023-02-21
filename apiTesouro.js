@@ -3,6 +3,7 @@ const axios = require("axios");
 const https = require("https");
 const { format } = require("date-fns");
 const urlApi = process.env.URL_API;
+const path = require("path");
 
 // statistics
 const fs = require("fs");
