@@ -172,7 +172,6 @@ function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
                   row["Vencimento do Titulo"] === vencimentoTitulo
                 ) {
                   const puValue = parseFloat(row.PU.replace(",", "."));
-                  console.log(puValue);
                   if (!isNaN(puValue) || puValue !== 0 || puValue !== null) {
                     pus.push(puValue);
                   }
