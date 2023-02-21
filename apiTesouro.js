@@ -9,7 +9,6 @@ const fs = require("fs");
 const csv = require("csv-parser");
 const ss = require("simple-statistics");
 
-
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 /**
@@ -173,7 +172,7 @@ function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
                   row["Vencimento do Titulo"] === vencimentoTitulo
                 ) {
                   const puValue = parseFloat(row.PU.replace(",", "."));
-                  if (!isNaN(puValue)) {
+                  if (!isNaN(puValue) || puValue !== 0 || puValue !== null) {
                     pus.push(puValue);
                   }
                 }
@@ -210,5 +209,5 @@ module.exports = {
   listarTitulosComInvestimentoMinimo,
   listarTitulosComRentabilidadeAlta,
   listarTitulos,
-  getTesouroInfo
+  getTesouroInfo,
 };
