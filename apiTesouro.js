@@ -155,86 +155,70 @@ async function listarTitulos() {
   }
 }
 
-async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
+function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
   const url = urlarquivo;
-  const arquivoLocal = path.join(__dirname, "PrecoTaxaTesouroDireto.csv");
 
-  let arquivoAtualizado = false;
+  return axios
+    .get(url, { responseType: "stream" })
+    .then((response) => {
+      return new Promise((resolve, reject) => {
+        response.data
+          .pipe(fs.createWriteStream("PrecoTaxaTesouroDireto.csv"))
+          .on("finish", () => {
+            const pus = [];
+            fs.createReadStream("PrecoTaxaTesouroDireto.csv")
+              .pipe(csv({ separator: ";" }))
+              .on("data", (row) => {
+                if (
+                  row["Tipo Titulo"] === tipoTitulo &&
+                  row["Data Vencimento"] === vencimentoTitulo
+                ) {
+                  const taxaCompra = parseFloat(
+                    row["Taxa Compra Manha"].replace(",", ".")
+                  );
+                  if (!isNaN(taxaCompra)) {
+                    pus.push(taxaCompra);
+                  }
+                }
+              })
+              .on("end", () => {
+                if (pus.length === 0) {
+                  resolve({
+                    min: "0.00",
+                    q1: "0.00",
+                    median: "0.00",
+                    q3: "0.00",
+                    max: "0.00",
+                    mean: "0.00",
+                    stdev: "0.00",
+                  });
+                  return;
+                }
 
-  try {
-    // Verifica se o arquivo local existe e está atualizado com o arquivo remoto
-    if (fs.existsSync(arquivoLocal)) {
-      const statsLocal = fs.statSync(arquivoLocal);
-      const statsRemoto = await axios
-        .head(url)
-        .then((response) => response.headers);
+                const min = ss.min(pus);
+                const q1 = ss.quantile(pus, 0.25);
+                const median = ss.median(pus);
+                const q3 = ss.quantile(pus, 0.75);
+                const max = ss.max(pus);
+                const mean = ss.mean(pus);
+                const stdev = ss.standardDeviation(pus);
 
-      if (statsLocal.mtime >= new Date(statsRemoto["last-modified"])) {
-        arquivoAtualizado = true;
-      }
-    }
-
-    // Se o arquivo local não estiver atualizado, baixa o arquivo remoto
-    if (!arquivoAtualizado) {
-      const response = await axios.get(url, { responseType: "stream" });
-      response.data.pipe(fs.createWriteStream(arquivoLocal));
-      await new Promise((resolve, reject) => {
-        response.data.on("end", resolve);
-        response.data.on("error", reject);
+                resolve({
+                  min: min.toFixed(2),
+                  q1: q1.toFixed(2),
+                  median: median.toFixed(2),
+                  q3: q3.toFixed(2),
+                  max: max.toFixed(2),
+                  mean: mean.toFixed(2),
+                  stdev: stdev.toFixed(2),
+                });
+              });
+          });
       });
-    }
-
-    // Lê o arquivo local e calcula as estatísticas solicitadas
-    const pus = [];
-    fs.createReadStream(arquivoLocal)
-      .pipe(csv({ separator: ";" }))
-      .on("data", (row) => {
-        if (
-          row["Tipo Titulo"] === tipoTitulo &&
-          row["Data Vencimento"] === vencimentoTitulo
-        ) {
-          const taxaCompra = parseFloat(
-            row["Taxa Compra Manha"].replace(",", ".")
-          );
-          if (!isNaN(taxaCompra)) {
-            pus.push(taxaCompra);
-          }
-        }
-      })
-      .on("end", () => {
-        if (pus.length === 0) {
-          return {
-            min: "0.00",
-            q1: "0.00",
-            median: "0.00",
-            q3: "0.00",
-            max: "0.00",
-            mean: "0.00",
-            stdev: "0.00",
-          };
-        }
-
-        const min = ss.min(pus);
-        const q1 = ss.quantile(pus, 0.25);
-        const median = ss.median(pus);
-        const q3 = ss.quantile(pus, 0.75);
-        const max = ss.max(pus);
-        const mean = ss.mean(pus);
-        const stdev = ss.standardDeviation(pus);
-
-        return {
-          min: min.toFixed(2),
-          q1: q1.toFixed(2),
-          median: median.toFixed(2),
-          q3: q3.toFixed(2),
-          max: max.toFixed(2),
-          mean: mean.toFixed(2),
-          stdev: stdev.toFixed(2),
-        };
-      });
-  } catch (error) {
-    throw new Error(`Erro ao baixar o arquivo: ${error}`);
-  }
+    })
+    .catch((error) => {
+      return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
+    });
 }
 
 module.exports = {
