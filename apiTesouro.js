@@ -166,13 +166,12 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
     axiosConfig.headers = {
       "If-Modified-Since": localFileStats.mtime.toUTCString(),
     };
-  } catch (error) {
+  } catch (err) {
     shouldDownload = true;
   }
 
-  let response;
   try {
-    response = await axios.get(url, axiosConfig);
+    const response = await axios.get(url, axiosConfig);
     if (response.status !== 304) {
       shouldDownload = true;
       await new Promise((resolve, reject) => {
@@ -198,8 +197,8 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
     });
   }
 
-  const pus = [];
-  await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
+    const pus = [];
     fs.createReadStream(localFilePath)
       .pipe(csv({ separator: ";" }))
       .on("data", (row) => {
@@ -216,39 +215,37 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         }
       })
       .on("end", () => {
-        resolve();
+        if (pus.length === 0) {
+          resolve({
+            min: "0.00",
+            q1: "0.00",
+            median: "0.00",
+            q3: "0.00",
+            max: "0.00",
+            mean: "0.00",
+            stdev: "0.00",
+          });
+        } else {
+          const min = ss.min(pus);
+          const q1 = ss.quantile(pus, 0.25);
+          const median = ss.median(pus);
+          const q3 = ss.quantile(pus, 0.75);
+          const max = ss.max(pus);
+          const mean = ss.mean(pus);
+          const stdev = ss.standardDeviation(pus);
+
+          resolve({
+            min: min.toFixed(2),
+            q1: q1.toFixed(2),
+            median: median.toFixed(2),
+            q3: q3.toFixed(2),
+            max: max.toFixed(2),
+            mean: mean.toFixed(2),
+            stdev: stdev.toFixed(2),
+          });
+        }
       });
   });
-
-  if (pus.length === 0) {
-    return {
-      min: "0.00",
-      q1: "0.00",
-      median: "0.00",
-      q3: "0.00",
-      max: "0.00",
-      mean: "0.00",
-      stdev: "0.00",
-    };
-  }
-
-  const min = ss.min(pus);
-  const q1 = ss.quantile(pus, 0.25);
-  const median = ss.median(pus);
-  const q3 = ss.quantile(pus, 0.75);
-  const max = ss.max(pus);
-  const mean = ss.mean(pus);
-  const stdev = ss.standardDeviation(pus);
-
-  return {
-    min: min.toFixed(2),
-    q1: q1.toFixed(2),
-    median: median.toFixed(2),
-    q3: q3.toFixed(2),
-    max: max.toFixed(2),
-    mean: mean.toFixed(2),
-    stdev: stdev.toFixed(2),
-  };
 }
 
 module.exports = {
