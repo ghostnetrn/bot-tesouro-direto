@@ -176,7 +176,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         .get(url, axiosConfig)
         .then((response) => {
           if (response.status === 304) {
-            return;
+            return {};
           }
           shouldDownload = true;
           return new Promise((resolve, reject) => {
