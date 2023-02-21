@@ -164,24 +164,29 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
 
     const pus = [];
     await new Promise((resolve, reject) => {
-      fs.createReadStream("PrecoTaxaTesouroDireto.csv")
-        .pipe(csv({ separator: ";" }))
-        .on("data", (row) => {
-          if (
-            row["Tipo Titulo"] === tipoTitulo &&
-            row["Data Vencimento"] === vencimentoTitulo
-          ) {
-            const taxaCompra = parseFloat(
-              row["Taxa Compra Manha"].replace(",", ".")
-            );
-            if (!isNaN(taxaCompra)) {
-              pus.push(taxaCompra);
-            }
+      const rows = csv({
+        separator: ";",
+      });
+
+      rows.on("data", (row) => {
+        if (
+          row["Tipo Titulo"] === tipoTitulo &&
+          row["Data Vencimento"] === vencimentoTitulo
+        ) {
+          const taxaCompra = parseFloat(
+            row["Taxa Compra Manha"].replace(",", ".")
+          );
+          if (!isNaN(taxaCompra)) {
+            pus.push(taxaCompra);
           }
-        })
-        .on("end", () => {
-          resolve();
-        });
+        }
+      });
+
+      rows.on("end", () => {
+        resolve();
+      });
+
+      fs.createReadStream("PrecoTaxaTesouroDireto.csv").pipe(rows);
     });
 
     if (pus.length === 0) {
