@@ -61,7 +61,8 @@ bot.hears("🧾 Teclado", async (ctx) => {
 
 bot.hears("☸ Help", async (ctx) => {
   await ctx.reply(
-    "Visite https://github.com/ghostnetrn/bot-tesouro-direto/issues"
+    "Visite https://github.com/ghostnetrn/bot-tesouro-direto/issues",
+    keyboard
   );
 });
 
