@@ -39,8 +39,8 @@ const keyboard = {
 // Crie um teclado personalizado com um botão para iniciar o bot
 const keyboardStart = Markup.keyboard([
   ["🧾 Teclado"], // Row1 with 2 buttons
-  ["☸ Help"], //, '🔛 Test Mode'], // Row2 with 2 buttons
   ["📈 Gráficos"], // Row3 with 1 button
+  ["☸ Help"], //, '🔛 Test Mode'], // Row2 with 2 buttons
 ])
   //.oneTime()
   .resize();
