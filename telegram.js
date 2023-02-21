@@ -256,7 +256,7 @@ bot.action(/(.+)/i, async (ctx) => {
 
     ctx.replyWithMarkdown(message, keyboard);
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
     ctx.reply("Ocorreu um erro ao buscar as informações do título.", keyboard);
   }
 });
