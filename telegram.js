@@ -162,8 +162,8 @@ bot.action(/maxInvestment_(\d+)/i, async (ctx) => {
 
 bot.action(/(.+)/i, async (ctx) => {
   const titulo = ctx.match[1].trim();
-  ctx.reply('Gerando dados... Por favor, aguarde!')
-  
+  ctx.reply("Gerando dados... Por favor, aguarde!");
+
   try {
     const cotacao = await getTituloInfo(titulo);
     const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
@@ -171,7 +171,30 @@ bot.action(/(.+)/i, async (ctx) => {
     const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
 
     let message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
-    message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}`;
+    message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
+
+    if (
+      cotacao.precoUnitario >= dadostesouro.min &&
+      cotacao.precoUnitario < dadostesouro.q1
+    ) {
+      message += "😡 *J1 - COMPRA PESSÍMA*";
+    } else if (
+      cotacao.precoUnitario >= dadostesouro.q1 &&
+      cotacao.precoUnitario < dadostesouro.median
+    ) {
+      message += "😒 *J2 - COMPRA RUIM*";
+    } else if (
+      cotacao.precoUnitario >= dadostesouro.median &&
+      cotacao.precoUnitario < dadostesouro.q3
+    ) {
+      message += "🫡 *J3 - COMPRA BOA*";
+    } else if (
+      cotacao.precoUnitario >= dadostesouro.q3 &&
+      cotacao.precoUnitario <= dadostesouro.max
+    ) {
+      message += "😀 *J3 - COMPRA ÓTIMA*";
+    }
+
     ctx.replyWithMarkdown(message, keyboard);
   } catch (error) {
     console.error(error.message);
