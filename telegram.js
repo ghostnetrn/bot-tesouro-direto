@@ -231,10 +231,7 @@ bot.action(/(.+)/i, async (ctx) => {
 
     if (cotacao.titulo.toLowerCase().includes("selic")) {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
-    } else if (
-      cotacao.rentabilidadeAnual <= dadostesouro.min ||
-      cotacao.rentabilidadeAnual < dadostesouro.q1
-    ) {
+    } else if (cotacao.rentabilidadeAnual < dadostesouro.q1) {
       message += "😡 *J1 - COMPRA PESSÍMA*";
     } else if (
       cotacao.rentabilidadeAnual >= dadostesouro.q1 &&
@@ -246,10 +243,7 @@ bot.action(/(.+)/i, async (ctx) => {
       cotacao.rentabilidadeAnual < dadostesouro.q3
     ) {
       message += "😗 *J3 - COMPRA BOA*";
-    } else if (
-      cotacao.rentabilidadeAnual >= dadostesouro.q3 ||
-      cotacao.rentabilidadeAnual >= dadostesouro.max
-    ) {
+    } else if (cotacao.rentabilidadeAnual >= dadostesouro.q3) {
       message += "😀 *J4 - COMPRA ÓTIMA*";
     }
 
