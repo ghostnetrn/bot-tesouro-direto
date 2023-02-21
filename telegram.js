@@ -106,32 +106,37 @@ bot.action("titulosBons", async (ctx) => {
 
   try {
     const promises = titulos.map(async (titulo) => {
-      const cotacao = await getTituloInfo(titulo);
-      const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
-      const vencimento = cotacao.vencimento;
-      const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
+      return new Promise(async (resolve) => {
+        const cotacao = await getTituloInfo(titulo);
+        const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
+        const vencimento = cotacao.vencimento;
+        const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
 
-      cotacao.precoUnitario = parseFloat(
-        cotacao.precoUnitario.replace(/[^\d,]/g, "").replace(",", ".")
-      );
+        cotacao.precoUnitario = parseFloat(
+          cotacao.precoUnitario.replace(/[^\d,]/g, "").replace(",", ".")
+        );
 
-      if (
-        cotacao.precoUnitario >= dadostesouro.median &&
-        cotacao.precoUnitario < dadostesouro.q3
-      ) {
-        message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
-        message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
-        message += "🫡 *J3 - COMPRA BOA*\n\n";
-      } else if (
-        cotacao.precoUnitario >= dadostesouro.q3 &&
-        cotacao.precoUnitario <= dadostesouro.max
-      ) {
-        message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
-        message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
-        message += "😀 *J4 - COMPRA ÓTIMA*\n\n";
-      }
+        if (
+          cotacao.precoUnitario >= dadostesouro.median &&
+          cotacao.precoUnitario < dadostesouro.q3
+        ) {
+          message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
+          message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
+          message += "🫡 *J3 - COMPRA BOA*\n\n";
+        } else if (
+          cotacao.precoUnitario >= dadostesouro.q3 &&
+          cotacao.precoUnitario <= dadostesouro.max
+        ) {
+          message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
+          message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
+          message += "😀 *J4 - COMPRA ÓTIMA*\n\n";
+        }
+        resolve(message);
+      });
     });
-    ctx.replyWithMarkdown(message, keyboard);
+    Promisse.all(promises).then(() => {
+      ctx.replyWithMarkdown(message, keyboard);
+    });
   } catch (error) {
     console.error(error.message);
     ctx.reply("Ocorreu um erro ao buscar as informações do título.", keyboard);
