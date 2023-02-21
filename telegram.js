@@ -103,9 +103,10 @@ bot.action("titulosBons", async (ctx) => {
   ctx.reply("Gerando dados... Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
   let message = "Não há títulos bons para comprar!";
-  console.log(titulos);
+
   try {
     const promises = titulos.map(async (titulo) => {
+      console.log(titulo);
       return new Promise(async (resolve) => {
         const cotacao = await getTituloInfo(titulo);
         const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
@@ -131,6 +132,7 @@ bot.action("titulosBons", async (ctx) => {
           message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
           message += "😀 *J4 - COMPRA ÓTIMA*\n\n";
         }
+        console.log(message);
         resolve(message);
       });
     });
