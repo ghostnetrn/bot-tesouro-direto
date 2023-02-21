@@ -112,6 +112,10 @@ bot.action("titulosBons", async (ctx) => {
       const vencimento = cotacao.vencimento;
       const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
 
+      if (cotacao.titulo.toLowerCase().includes("selic")) {
+        continue;
+      }
+
       if (
         cotacao.rentabilidadeAnual >= dadostesouro.median &&
         cotacao.rentabilidadeAnual < dadostesouro.q3
