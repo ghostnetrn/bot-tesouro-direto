@@ -179,6 +179,19 @@ function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
                 }
               })
               .on("end", () => {
+                if (pus.length === 0) {
+                  resolve({
+                    min: "0.00",
+                    q1: "0.00",
+                    median: "0.00",
+                    q3: "0.00",
+                    max: "0.00",
+                    mean: "0.00",
+                    stdev: "0.00",
+                  });
+                  return;
+                }
+
                 const min = ss.min(pus);
                 const q1 = ss.quantile(pus, 0.25);
                 const median = ss.median(pus);
