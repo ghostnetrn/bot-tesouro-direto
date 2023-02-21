@@ -159,26 +159,28 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
   const url = urlarquivo;
   const localFilePath = "PrecoTaxaTesouroDireto.csv";
   const axiosConfig = {};
-  let shouldDownload = false;
 
   try {
     const localFileStats = await fs.promises.stat(localFilePath);
     axiosConfig.headers = {
       "If-Modified-Since": localFileStats.mtime.toUTCString(),
     };
-  } catch (err) {
-    shouldDownload = true;
-  }
+  } catch (error) {}
 
   try {
     const response = await axios.get(url, axiosConfig);
-    if (response.status !== 304) {
-      shouldDownload = true;
+
+    if (response.status === 304) {
+      console.log("Arquivo já está atualizado");
+    } else {
       await new Promise((resolve, reject) => {
         response.data
           .pipe(fs.createWriteStream(localFilePath))
           .on("finish", () => {
             resolve();
+          })
+          .on("error", (error) => {
+            reject(`Erro ao salvar o arquivo: ${error}`);
           });
       });
     }
@@ -186,66 +188,57 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
     return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
   }
 
-  if (shouldDownload) {
-    await new Promise((resolve, reject) => {
-      fs.createReadStream(localFilePath)
-        .pipe(csv({ separator: ";" }))
-        .on("data", () => {})
-        .on("end", () => {
-          resolve();
-        });
-    });
+  const pus = [];
+  try {
+    const stream = fs
+      .createReadStream(localFilePath)
+      .pipe(csv({ separator: ";" }));
+    for await (const row of stream) {
+      if (
+        row["Tipo Titulo"] === tipoTitulo &&
+        row["Data Vencimento"] === vencimentoTitulo
+      ) {
+        const taxaCompra = parseFloat(
+          row["Taxa Compra Manha"].replace(",", ".")
+        );
+        if (!isNaN(taxaCompra) || taxaCompra !== 0 || taxaCompra !== null) {
+          pus.push(taxaCompra);
+        }
+      }
+    }
+  } catch (error) {
+    return Promise.reject(`Erro ao ler o arquivo: ${error}`);
   }
 
-  return new Promise((resolve, reject) => {
-    const pus = [];
-    fs.createReadStream(localFilePath)
-      .pipe(csv({ separator: ";" }))
-      .on("data", (row) => {
-        if (
-          row["Tipo Titulo"] === tipoTitulo &&
-          row["Data Vencimento"] === vencimentoTitulo
-        ) {
-          const taxaCompra = parseFloat(
-            row["Taxa Compra Manha"].replace(",", ".")
-          );
-          if (!isNaN(taxaCompra) || taxaCompra !== 0 || taxaCompra !== null) {
-            pus.push(taxaCompra);
-          }
-        }
-      })
-      .on("end", () => {
-        if (pus.length === 0) {
-          resolve({
-            min: "0.00",
-            q1: "0.00",
-            median: "0.00",
-            q3: "0.00",
-            max: "0.00",
-            mean: "0.00",
-            stdev: "0.00",
-          });
-        } else {
-          const min = ss.min(pus);
-          const q1 = ss.quantile(pus, 0.25);
-          const median = ss.median(pus);
-          const q3 = ss.quantile(pus, 0.75);
-          const max = ss.max(pus);
-          const mean = ss.mean(pus);
-          const stdev = ss.standardDeviation(pus);
+  if (pus.length === 0) {
+    return {
+      min: "0.00",
+      q1: "0.00",
+      median: "0.00",
+      q3: "0.00",
+      max: "0.00",
+      mean: "0.00",
+      stdev: "0.00",
+    };
+  }
 
-          resolve({
-            min: min.toFixed(2),
-            q1: q1.toFixed(2),
-            median: median.toFixed(2),
-            q3: q3.toFixed(2),
-            max: max.toFixed(2),
-            mean: mean.toFixed(2),
-            stdev: stdev.toFixed(2),
-          });
-        }
-      });
-  });
+  const min = ss.min(pus);
+  const q1 = ss.quantile(pus, 0.25);
+  const median = ss.median(pus);
+  const q3 = ss.quantile(pus, 0.75);
+  const max = ss.max(pus);
+  const mean = ss.mean(pus);
+  const stdev = ss.standardDeviation(pus);
+
+  return {
+    min: min.toFixed(2),
+    q1: q1.toFixed(2),
+    median: median.toFixed(2),
+    q3: q3.toFixed(2),
+    max: max.toFixed(2),
+    mean: mean.toFixed(2),
+    stdev: stdev.toFixed(2),
+  };
 }
 
 module.exports = {
