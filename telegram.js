@@ -103,7 +103,7 @@ bot.action("titulosBons", async (ctx) => {
   ctx.reply("Gerando dados... Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
   let message = "Não há títulos bons para comprar!";
-
+  console.log(titulos);
   try {
     const promises = titulos.map(async (titulo) => {
       return new Promise(async (resolve) => {
@@ -134,6 +134,7 @@ bot.action("titulosBons", async (ctx) => {
         resolve(message);
       });
     });
+
     Promise.all(promises).then(() => {
       ctx.replyWithMarkdown(message, keyboard);
     });
