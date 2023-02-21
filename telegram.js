@@ -343,5 +343,4 @@ setInterval(
 );
 
 // Inicia o bot
-verificarRentabilidade();
 bot.launch();
