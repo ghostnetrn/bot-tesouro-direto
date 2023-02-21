@@ -155,90 +155,84 @@ async function listarTitulos() {
   }
 }
 
+const fs = require("fs");
+const axios = require("axios");
+const csv = require("csv-parser");
+const ss = require("simple-statistics");
+
 async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
   const url = urlarquivo;
-  const localFilePath = "PrecoTaxaTesouroDireto.csv";
-  const axiosConfig = {};
+  const localFile = "PrecoTaxaTesouroDireto.csv";
 
-  try {
-    const localFileStats = await fs.promises.stat(localFilePath);
-    axiosConfig.headers = {
-      "If-Modified-Since": localFileStats.mtime.toUTCString(),
-    };
-  } catch (error) {}
+  // Verifica se o arquivo local existe
+  const localFileExists = fs.existsSync(localFile);
 
-  try {
-    const response = await axios.get(url, axiosConfig);
+  // Verifica se o arquivo local está atualizado com o arquivo remoto
+  const remoteFileModifiedTime = (await axios.head(url)).headers[
+    "last-modified"
+  ];
+  const localFileModifiedTime = localFileExists
+    ? fs.statSync(localFile).mtime.toUTCString()
+    : null;
+  const isLocalFileUpdated = localFileModifiedTime === remoteFileModifiedTime;
 
-    if (response.status === 304) {
-      console.log("Arquivo já está atualizado");
-    } else {
-      await new Promise((resolve, reject) => {
-        response.data
-          .pipe(fs.createWriteStream(localFilePath))
-          .on("finish", () => {
-            resolve();
-          })
-          .on("error", (error) => {
-            reject(`Erro ao salvar o arquivo: ${error}`);
-          });
-      });
-    }
-  } catch (error) {
-    return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
+  // Baixa o arquivo remoto se o arquivo local não existir ou não estiver atualizado
+  if (!localFileExists || !isLocalFileUpdated) {
+    const response = await axios.get(url, { responseType: "stream" });
+    response.data.pipe(fs.createWriteStream(localFile));
   }
 
-  const pus = [];
-  try {
-    const stream = fs
-      .createReadStream(localFilePath)
-      .pipe(csv({ separator: ";" }));
-    for await (const row of stream) {
-      if (
-        row["Tipo Titulo"] === tipoTitulo &&
-        row["Data Vencimento"] === vencimentoTitulo
-      ) {
-        const taxaCompra = parseFloat(
-          row["Taxa Compra Manha"].replace(",", ".")
-        );
-        if (!isNaN(taxaCompra) || taxaCompra !== 0 || taxaCompra !== null) {
-          pus.push(taxaCompra);
+  // Lê o arquivo local e calcula as estatísticas
+  return new Promise((resolve, reject) => {
+    const pus = [];
+    fs.createReadStream(localFile)
+      .pipe(csv({ separator: ";" }))
+      .on("data", (row) => {
+        if (
+          row["Tipo Titulo"] === tipoTitulo &&
+          row["Data Vencimento"] === vencimentoTitulo
+        ) {
+          const taxaCompra = parseFloat(
+            row["Taxa Compra Manha"].replace(",", ".")
+          );
+          if (!isNaN(taxaCompra) || taxaCompra !== 0 || taxaCompra !== null) {
+            pus.push(taxaCompra);
+          }
         }
-      }
-    }
-  } catch (error) {
-    return Promise.reject(`Erro ao ler o arquivo: ${error}`);
-  }
+      })
+      .on("end", () => {
+        if (pus.length === 0) {
+          resolve({
+            min: "0.00",
+            q1: "0.00",
+            median: "0.00",
+            q3: "0.00",
+            max: "0.00",
+            mean: "0.00",
+            stdev: "0.00",
+          });
+          return;
+        }
 
-  if (pus.length === 0) {
-    return {
-      min: "0.00",
-      q1: "0.00",
-      median: "0.00",
-      q3: "0.00",
-      max: "0.00",
-      mean: "0.00",
-      stdev: "0.00",
-    };
-  }
+        const min = ss.min(pus);
+        const q1 = ss.quantile(pus, 0.25);
+        const median = ss.median(pus);
+        const q3 = ss.quantile(pus, 0.75);
+        const max = ss.max(pus);
+        const mean = ss.mean(pus);
+        const stdev = ss.standardDeviation(pus);
 
-  const min = ss.min(pus);
-  const q1 = ss.quantile(pus, 0.25);
-  const median = ss.median(pus);
-  const q3 = ss.quantile(pus, 0.75);
-  const max = ss.max(pus);
-  const mean = ss.mean(pus);
-  const stdev = ss.standardDeviation(pus);
-
-  return {
-    min: min.toFixed(2),
-    q1: q1.toFixed(2),
-    median: median.toFixed(2),
-    q3: q3.toFixed(2),
-    max: max.toFixed(2),
-    mean: mean.toFixed(2),
-    stdev: stdev.toFixed(2),
-  };
+        resolve({
+          min: min.toFixed(2),
+          q1: q1.toFixed(2),
+          median: median.toFixed(2),
+          q3: q3.toFixed(2),
+          max: max.toFixed(2),
+          mean: mean.toFixed(2),
+          stdev: stdev.toFixed(2),
+        });
+      });
+  });
 }
 
 module.exports = {
