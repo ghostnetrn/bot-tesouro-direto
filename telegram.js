@@ -323,9 +323,12 @@ async function verificarRentabilidade() {
     }
 
     if (message === "")
-      await ctx.replyWithMarkdown(
+      await bot.telegram.sendMessage(
+        process.env.CHAT_ID,
         "Não foram encontrados títulos bons para comprar",
-        keyboard
+        {
+          parse_mode: "HTML",
+        }
       );
   } catch (error) {
     console.error(error.message);
