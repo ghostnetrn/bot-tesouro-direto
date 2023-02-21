@@ -116,9 +116,8 @@ bot.action("titulosBons", async (ctx) => {
         continue;
       }
 
-      cotacao.rentabilidadeAnual = parseFloat(
-        cotacao.rentabilidadeAnual.match(/\d+\.\d+/)[0]
-      );
+      console.log(cotacao.rentabilidadeAnual);
+      console.log(dadostesouro.median);
 
       if (
         cotacao.rentabilidadeAnual >= dadostesouro.median &&
