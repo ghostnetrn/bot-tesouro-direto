@@ -174,7 +174,7 @@ function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         .map((row) => {
           const cols = row.split(";");
           if (cols[0] === tipoTitulo && cols[2] === vencimentoTitulo) {
-            const taxaCompra = parseFloat(cols[6].replace(",", "."));
+            const taxaCompra = parseFloat(cols[3].replace(",", "."));
             stats.data.push(taxaCompra);
             stats.min = Math.min(stats.min, taxaCompra);
             stats.max = Math.max(stats.max, taxaCompra);
