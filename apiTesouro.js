@@ -190,7 +190,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
           const taxaCompra = parseFloat(
             row["Taxa Compra Manha"].replace(",", ".")
           );
-          if (!isNaN(taxaCompra) || taxaCompra !== 0 || taxaCompra !== null) {
+          if (!isNaN(taxaCompra) && taxaCompra !== 0) {
             pus.push(taxaCompra);
           }
         }
