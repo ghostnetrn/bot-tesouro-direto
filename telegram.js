@@ -282,6 +282,55 @@ async function verificarRentabilidade() {
       parse_mode: "HTML",
     });
   }
+
+  // listar títulos bons para comprar
+  const titulosBons = await listarTitulosComInvestimentoMinimo();
+  let message = "";
+
+  try {
+    for (const titulo of titulosBons) {
+      const cotacao = await getTituloInfo(titulo);
+      const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
+      const vencimento = cotacao.vencimento;
+      const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
+
+      cotacao.precoUnitario = parseFloat(
+        cotacao.precoUnitario.replace(/[^\d,]/g, "").replace(",", ".")
+      );
+
+      if (
+        cotacao.precoUnitario >= dadostesouro.median &&
+        cotacao.precoUnitario < dadostesouro.q3
+      ) {
+        message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
+        message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
+        message += "😗 <b>J3 - COMPRA BOA</b>\n\n";
+      } else if (
+        cotacao.precoUnitario >= dadostesouro.q3 &&
+        cotacao.precoUnitario <= dadostesouro.max
+      ) {
+        message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
+        message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
+        message += "😀 <b>J4 - COMPRA ÓTIMA</b>\n\n";
+      }
+
+      if (message !== "") {
+        await bot.telegram.sendMessage(process.env.CHAT_ID, message, {
+          parse_mode: "HTML",
+        });
+        message = "";
+      }
+    }
+
+    if (message === "")
+      await ctx.replyWithMarkdown(
+        "Não foram encontrados títulos bons para comprar",
+        keyboard
+      );
+  } catch (error) {
+    console.error(error.message);
+    ctx.reply("Ocorreu um erro ao buscar as informações do título.", keyboard);
+  }
 }
 
 // Chamar a função verificarRentabilidade() periodicamente usando setInterval()
@@ -291,4 +340,5 @@ setInterval(
 );
 
 // Inicia o bot
+verificarRentabilidade();
 bot.launch();
