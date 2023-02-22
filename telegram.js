@@ -104,6 +104,7 @@ bot.action("titulosBons", async (ctx) => {
   ctx.reply("Gerando dados... Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
   let message = "";
+  let messageSent = false;
 
   try {
     for (const titulo of titulos) {
@@ -137,15 +138,17 @@ bot.action("titulosBons", async (ctx) => {
 
       if (message !== "") {
         await ctx.replyWithMarkdown(message, keyboard);
+        messageSent = true;
         message = "";
       }
     }
 
-    if (message === "")
+    if (!messageSent) {
       await ctx.replyWithMarkdown(
         "Não foram encontrados títulos bons para comprar",
         keyboard
       );
+    }
   } catch (error) {
     console.error(error.message);
     ctx.reply("Ocorreu um erro ao buscar as informações do título.", keyboard);
