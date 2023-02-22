@@ -105,8 +105,7 @@ bot.action("titulosBons", async (ctx) => {
   const titulos = await listarTitulosComInvestimentoMinimo();
   let message = "";
   let messageSent = false;
-  let count = 0;
-  
+
   try {
     for (const titulo of titulos) {
       const cotacao = await getTituloInfo(titulo);
@@ -136,31 +135,30 @@ bot.action("titulosBons", async (ctx) => {
       }
 
       if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
-        message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
-        message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
-        message += "😗 *J3 - COMPRA BOA*\n\n";
+        message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
+        message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
+        message += "😗 <b>J3 - COMPRA BOA</b>\n\n";
       } else if (taxa >= dadostesouro.q3 || taxa >= dadostesouro.max) {
-        message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
-        message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
-        message += "😀 *J4 - COMPRA ÓTIMA*\n\n";
+        message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
+        message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
+        message += "😀 <b>J4 - COMPRA ÓTIMA</b>\n\n";
       }
 
       if (message !== "") {
         await ctx.replyWithHTML(message, keyboard);
         messageSent = true;
         message = "";
-        count++;
       }
     }
-    
+
     if (messageSent) {
-      await ctx.replyWithMarkdownV2(
-        "*Todos os títulos foram enviados.*",
+      await ctx.replyWithHTML(
+        "<b>Todos os títulos foram enviados.</b>",
         keyboard
       );
     } else if (!messageSent) {
-      await ctx.replyWithMarkdownV2(
-        "*Não foram encontrados títulos para comprar*",
+      await ctx.replyWithHTML(
+        "<b>Não foram encontrados títulos para comprar</b>",
         keyboard
       );
     }
