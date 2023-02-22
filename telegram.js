@@ -240,6 +240,11 @@ bot.action(/(.+)/i, async (ctx) => {
     const cotacao = await getTituloInfo(titulo);
     const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
     const vencimento = cotacao.vencimento;
+
+    if (tituloDados.toLowerCase().includes("renda+")) {
+      tituloDados = "NTN-B1";
+    }
+
     const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
 
     let message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
