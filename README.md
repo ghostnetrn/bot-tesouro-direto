@@ -33,6 +33,13 @@ Utilizei como base a planilha apresentada neste vídeo: [https://www.youtube.com
     
     - ALERTA_PERIODO_MINUTOS=720 // tempo em minutos para alertar
 
+    ```bash
+    # Executar
+    $ npm start
+
+    # Usando Docker
+    $ docker-compose up -d
+    ```
 ## 🌟 Features
 
 - [x] Integração com Telegram
