@@ -101,7 +101,7 @@ bot.action("all", async (ctx) => {
 });
 
 bot.action("titulosBons", async (ctx) => {
-  ctx.replyWithMarkdownV2("*Gerando dados\\.\\.\\.* Por favor, aguarde\\!");
+  ctx.replyWithHTML("<b>Gerando dados...</b> Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
   let message = "";
   let messageSent = false;
@@ -146,7 +146,7 @@ bot.action("titulosBons", async (ctx) => {
       }
 
       if (message !== "") {
-        await ctx.replyWithMarkdownV2(message, keyboard);
+        await ctx.replyWithHTML(message, keyboard);
         messageSent = true;
         message = "";
         count++;
