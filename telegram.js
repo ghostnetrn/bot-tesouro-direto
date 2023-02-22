@@ -101,11 +101,11 @@ bot.action("all", async (ctx) => {
 });
 
 bot.action("titulosBons", async (ctx) => {
-  ctx.reply("Gerando dados... Por favor, aguarde!");
+  ctx.replyWithMarkdownV2("*Gerando dados...* Por favor, aguarde!");
   const titulos = await listarTitulosComInvestimentoMinimo();
   let message = "";
   let messageSent = false;
-  let count = 0; 
+  let count = 0;
 
   try {
     for (const titulo of titulos) {
@@ -149,19 +149,22 @@ bot.action("titulosBons", async (ctx) => {
         await ctx.replyWithMarkdown(message, keyboard);
         messageSent = true;
         message = "";
-        count++; 
+        count++;
       }
     }
-
-    if (count === titulos.length) { 
-      await ctx.replyWithMarkdown("*Todos os títulos bons foram enviados.*", keyboard);
+    console.log(count);
+    console.log(titulos.length);
+    if (count === titulos.length) {
+      await ctx.replyWithMarkdown(
+        "*Todos os títulos bons foram enviados.*",
+        keyboard
+      );
     } else if (!messageSent) {
       await ctx.replyWithMarkdown(
         "*Não foram encontrados títulos bons para comprar*",
         keyboard
       );
     }
-    
   } catch (error) {
     console.error(error.message);
     ctx.reply("Ocorreu um erro ao buscar as informações do título.", keyboard);
