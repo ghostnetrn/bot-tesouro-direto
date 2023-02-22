@@ -106,7 +106,7 @@ bot.action("titulosBons", async (ctx) => {
   let message = "";
   let messageSent = false;
   let count = 0;
-
+  
   try {
     for (const titulo of titulos) {
       const cotacao = await getTituloInfo(titulo);
@@ -146,22 +146,21 @@ bot.action("titulosBons", async (ctx) => {
       }
 
       if (message !== "") {
-        await ctx.replyWithMarkdown(message, keyboard);
+        await ctx.replyWithMarkdownV2(message, keyboard);
         messageSent = true;
         message = "";
         count++;
       }
     }
-    console.log(count);
-    console.log(titulos.length);
-    if (count === titulos.length) {
-      await ctx.replyWithMarkdown(
-        "*Todos os títulos bons foram enviados.*",
+    
+    if (messageSent) {
+      await ctx.replyWithMarkdownV2(
+        "*Todos os títulos foram enviados.*",
         keyboard
       );
     } else if (!messageSent) {
-      await ctx.replyWithMarkdown(
-        "*Não foram encontrados títulos bons para comprar*",
+      await ctx.replyWithMarkdownV2(
+        "*Não foram encontrados títulos para comprar*",
         keyboard
       );
     }
