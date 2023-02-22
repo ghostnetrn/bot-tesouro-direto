@@ -5,8 +5,7 @@ const { format } = require("date-fns");
 const urlApi = process.env.URL_API;
 const path = require("path");
 const arquivoCsv = path.join(__dirname, "PrecoTaxaTesouroDireto.csv");
-const urlArquivo =
-  "https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv";
+const urlArquivo = process.env.URL_FILE_TESOURO;
 
 // statistics
 const fs = require("fs");
@@ -52,17 +51,19 @@ async function getTituloInfo(bondName) {
             currency: "BRL",
           }),
           vencimento: format(new Date(mtrtyDt), "dd/MM/yyyy"),
+          rentabilidadeAnual: anulInvstmtRate,
         };
 
-        if (currBondName.toLowerCase().includes("selic")) {
-          info.rentabilidadeAnual = "SELIC + " + anulInvstmtRate;
-        } else if (currBondName.toLowerCase().includes("ipca")) {
-          info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
-        } else if (currBondName.toLowerCase().includes("renda")) {
-          info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
-        } else {
-          info.rentabilidadeAnual = anulInvstmtRate;
-        }
+        // if (currBondName.toLowerCase().includes("selic")) {
+        //   info.rentabilidadeAnual = "SELIC + " + anulInvstmtRate;
+        // } else if (currBondName.toLowerCase().includes("ipca")) {
+        //   info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
+        // } else if (currBondName.toLowerCase().includes("renda")) {
+        //   info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
+        // } else {
+        //   info.rentabilidadeAnual = anulInvstmtRate;
+        // }
+
         return info;
       }
     }
