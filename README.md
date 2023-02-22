@@ -21,9 +21,9 @@ Utilizei como base a planilha apresentada neste vídeo: [https://www.youtube.com
 
 ## 💾 Configurar e executar
  
-- TELEGRAM_BOT_TOKEN=1234567890:ABCDEFGHIJKLMNOPQRSTUVWXY-Zabcdefghijklmnopqrstu // token do bot Telegram https://canaltech.com.br/apps/como-criar-um-bot-no-telegram-botfather/
+- TELEGRAM_BOT_TOKEN=1234567890:ABCDEFu // Comom criar bot Telegram https://canaltech.com.br/apps/como-criar-um-bot-no-telegram-botfather/
     
-- CHAT_ID=98765432111111 // seu id do Telegram https://github.com/nadam/userinfobot
+- CHAT_ID=98765432111111 // Obter id do Telegram https://github.com/nadam/userinfobot
     
 - URL_API=https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json
     
