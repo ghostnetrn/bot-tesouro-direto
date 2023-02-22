@@ -24,8 +24,10 @@ Utilizei como base a planilha apresentada neste vídeo: [https://www.youtube.com
     # Inserir os dados das variáveis
     $ nano .env
 
-    `TELEGRAM_BOT_TOKEN=
-    CHAT_ID= // seu id do Telegram https://github.com/nadam/userinfobot
+    `
+    TELEGRAM_BOT_TOKEN=1234567890:ABCDEFGHIJKLMNOPQRSTUVWXY-Zabcdefghijklmnopqrstu
+ // token do bot Telegram https://canaltech.com.br/apps/como-criar-um-bot-no-telegram-botfather/
+    CHAT_ID=98765432111111 // seu id do Telegram https://github.com/nadam/userinfobot
     URL_API=https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json
     URL_FILE_TESOURO=https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv
     ALERTA_RENTABILIDADE=13 // taxa para alertar diariamente
