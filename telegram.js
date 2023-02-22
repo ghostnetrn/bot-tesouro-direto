@@ -240,6 +240,7 @@ bot.action(/(.+)/i, async (ctx) => {
     const cotacao = await getTituloInfo(titulo);
     let tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
     const vencimento = cotacao.vencimento;
+    let taxa;
 
     if (tituloDados.toLowerCase().includes("renda+")) {
       tituloDados = "NTN-B1";
@@ -254,13 +255,13 @@ bot.action(/(.+)/i, async (ctx) => {
       taxa = parseFloat(cotacao.rentabilidadeAnual.replace(/[^\d.-]/g, ""));
     }
 
-    console.log(taxa)
-    console.log(typeof taxa)
+    console.log(taxa);
+    console.log(typeof taxa);
 
-    console.log(cotacao.rentabilidadeAnual)
-    console.log(typeof cotacao.rentabilidadeAnual)
-    
-    console.log(taxa < dadostesouro.q1)
+    console.log(cotacao.rentabilidadeAnual);
+    console.log(typeof cotacao.rentabilidadeAnual);
+
+    console.log(taxa < dadostesouro.q1);
 
     if (cotacao.titulo.toLowerCase().includes("selic")) {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
