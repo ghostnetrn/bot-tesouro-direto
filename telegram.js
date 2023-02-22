@@ -261,7 +261,7 @@ bot.action(/(.+)/i, async (ctx) => {
     console.log(cotacao.rentabilidadeAnual);
     console.log(typeof cotacao.rentabilidadeAnual);
 
-    console.log(taxa < dadostesouro.q1);
+    console.log(taxa >= dadostesouro.q3);
 
     if (cotacao.titulo.toLowerCase().includes("selic")) {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
