@@ -54,16 +54,16 @@ async function getTituloInfo(bondName) {
           rentabilidadeAnual: anulInvstmtRate,
         };
 
-        // if (currBondName.toLowerCase().includes("selic")) {
-        //   info.rentabilidadeAnual = "SELIC + " + anulInvstmtRate;
-        // } else if (currBondName.toLowerCase().includes("ipca")) {
-        //   info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
-        // } else if (currBondName.toLowerCase().includes("renda")) {
-        //   info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
-        // } else {
-        //   info.rentabilidadeAnual = anulInvstmtRate;
-        // }
-
+        if (currBondName.toLowerCase().includes("selic")) {
+          info.rentabilidadeAnual = "SELIC + " + anulInvstmtRate;
+        } else if (currBondName.toLowerCase().includes("ipca")) {
+          info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
+        } else if (currBondName.toLowerCase().includes("renda")) {
+          info.rentabilidadeAnual = "IPCA + " + anulInvstmtRate;
+        } else {
+          info.rentabilidadeAnual = anulInvstmtRate;
+        }
+        console.log(info);
         return info;
       }
     }
