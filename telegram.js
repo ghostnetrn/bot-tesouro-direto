@@ -238,7 +238,7 @@ bot.action(/(.+)/i, async (ctx) => {
 
   try {
     const cotacao = await getTituloInfo(titulo);
-    const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
+    let tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
     const vencimento = cotacao.vencimento;
 
     if (tituloDados.toLowerCase().includes("renda+")) {
