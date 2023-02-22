@@ -254,6 +254,14 @@ bot.action(/(.+)/i, async (ctx) => {
       taxa = parseFloat(cotacao.rentabilidadeAnual.replace(/[^\d.-]/g, ""));
     }
 
+    console.log(taxa)
+    console.log(typeof taxa)
+
+    console.log(cotacao.rentabilidadeAnual)
+    console.log(typeof cotacao.rentabilidadeAnual)
+    
+    console.log(taxa < dadostesouro.q1)
+
     if (cotacao.titulo.toLowerCase().includes("selic")) {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
     } else if (taxa < dadostesouro.q1) {
