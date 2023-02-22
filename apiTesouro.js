@@ -268,13 +268,13 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         const stdev = ss.standardDeviation(pus);
 
         resolve({
-          min: min.toFixed(2),
-          q1: q1.toFixed(2),
-          median: median.toFixed(2),
-          q3: q3.toFixed(2),
-          max: max.toFixed(2),
-          mean: mean.toFixed(2),
-          stdev: stdev.toFixed(2),
+          min: min.toFixed(2).replace(/([-_*\[\]()~`>#+=|{}.!])/g, "\\$1"),
+          q1: q1.toFixed(2).replace(/([-_*\[\]()~`>#+=|{}.!])/g, "\\$1"),
+          median: median.toFixed(2).replace(/([-_*\[\]()~`>#+=|{}.!])/g, "\\$1"),
+          q3: q3.toFixed(2).replace(/([-_*\[\]()~`>#+=|{}.!])/g, "\\$1"),
+          max: max.toFixed(2).replace(/([-_*\[\]()~`>#+=|{}.!])/g, "\\$1"),
+          mean: mean.toFixed(2).replace(/([-_*\[\]()~`>#+=|{}.!])/g, "\\$1"),
+          stdev: stdev.toFixed(2).replace(/([-_*\[\]()~`>#+=|{}.!])/g, "\\$1"),
         });
       });
   });
