@@ -249,7 +249,7 @@ bot.action(/(.+)/i, async (ctx) => {
     let tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
     const vencimento = cotacao.vencimento;
     let message = ""
-    
+
     if (tituloDados.toLowerCase().includes("renda+")) {
       tituloDados = "NTN-B1";
     }
@@ -290,7 +290,7 @@ bot.action(/(.+)/i, async (ctx) => {
       );
     }
 
-    message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
+    message += `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
     message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
 
     ctx.replyWithMarkdown(message, keyboard);
