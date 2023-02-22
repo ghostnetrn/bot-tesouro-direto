@@ -260,7 +260,7 @@ bot.action(/(.+)/i, async (ctx) => {
 
     console.log(cotacao.rentabilidadeAnual);
     console.log(typeof cotacao.rentabilidadeAnual);
-
+    dadostesouro.q3 = parseFloat(dadostesouro.q3)
     console.log(taxa >= dadostesouro.q3);
 
     if (cotacao.titulo.toLowerCase().includes("selic")) {
