@@ -137,11 +137,11 @@ bot.action("titulosBons", async (ctx) => {
       if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
-        message += "😗 <b>J3 - COMPRA BOA</b>\n\n";
+        message += "😗 <b>J3 - COMPRA BOA</b>\n<u>Entre mediana e 3º quartil</u>";
       } else if (taxa >= dadostesouro.q3 || taxa >= dadostesouro.max) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
-        message += "😀 <b>J4 - COMPRA ÓTIMA</b>\n\n";
+        message += "😀 <b>J4 - COMPRA ÓTIMA</b>\n<u>Entre 3º quartil e máximo</u>";
       }
 
       if (message !== "") {
@@ -260,13 +260,13 @@ bot.action(/(.+)/i, async (ctx) => {
     if (cotacao.titulo.toLowerCase().includes("selic")) {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
     } else if (taxa < dadostesouro.q1) {
-      message += "😡 *J1 - COMPRA PESSÍMA*\nEntre mínimo e 1º quartil";
+      message += "😡 *J1 - COMPRA PESSÍMA*\n_Entre mínimo e 1º quartil_";
     } else if (taxa >= dadostesouro.q1 && taxa < dadostesouro.median) {
-      message += "😒 *J2 - COMPRA RUIM*\nEntre 1º quartil e mediana";
+      message += "😒 *J2 - COMPRA RUIM*\n_Entre 1º quartil e mediana_";
     } else if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
-      message += "😗 *J3 - COMPRA BOA*\nEntre mediana e 3º quartil";
+      message += "😗 *J3 - COMPRA BOA*\n_Entre mediana e 3º quartil_";
     } else if (taxa >= dadostesouro.q3) {
-      message += "😀 *J4 - COMPRA ÓTIMA*\nEntre 3º quartil e máximo";
+      message += "😀 *J4 - COMPRA ÓTIMA*\n_Entre 3º quartil e máximo_";
     }
 
     ctx.replyWithMarkdown(message, keyboard);
@@ -319,11 +319,11 @@ async function verificarRentabilidade() {
       if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
-        message += "😗 <b>J3 - COMPRA BOA</b>\nEntre mediana e 3º quartil";
+        message += "😗 <b>J3 - COMPRA BOA</b>\n<u>Entre mediana e 3º quartil</u>";
       } else if (taxa >= dadostesouro.q3) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
-        message += "😀 <b>J4 - COMPRA ÓTIMA</b>\nEntre 3º quartil e máximo";
+        message += "😀 <b>J4 - COMPRA ÓTIMA</b>\n<u>Entre 3º quartil e máximo</u>";
       }
 
       if (message !== "") {
