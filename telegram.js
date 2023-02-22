@@ -115,7 +115,7 @@ bot.action("titulosBons", async (ctx) => {
 
       if (
         cotacao.titulo.toLowerCase().includes("selic") ||
-        dadostesouro.mean === 0
+        dadostesouro.mean === 0.0
       ) {
         continue;
       }
