@@ -117,9 +117,13 @@ bot.action("titulosBons", async (ctx) => {
         continue;
       }
 
-      console.log(dadostesouro.mean === "0");
-      console.log(dadostesouro.mean === 0);
-      console.log(dadostesouro.mean === 0.0);
+      if (dadostesouro.mean == 0) {
+        console.log(
+          `Dados do tesouro para o título ${tituloDados} estão zerados.`
+        );
+        continue;
+      }
+
       if (
         cotacao.rentabilidadeAnual >= dadostesouro.median &&
         cotacao.rentabilidadeAnual < dadostesouro.q3
