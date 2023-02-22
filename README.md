@@ -19,27 +19,28 @@ Utilizei como base a planilha apresentada neste vídeo: [https://www.youtube.com
     $ npm install
 ```
 
-## Configurar e executar
+## 💾 Configurar e executar
  
-    - TELEGRAM_BOT_TOKEN=1234567890:ABCDEFGHIJKLMNOPQRSTUVWXY-Zabcdefghijklmnopqrstu // token do bot Telegram https://canaltech.com.br/apps/como-criar-um-bot-no-telegram-botfather/
+- TELEGRAM_BOT_TOKEN=1234567890:ABCDEFGHIJKLMNOPQRSTUVWXY-Zabcdefghijklmnopqrstu // token do bot Telegram https://canaltech.com.br/apps/como-criar-um-bot-no-telegram-botfather/
     
-    - CHAT_ID=98765432111111 // seu id do Telegram https://github.com/nadam/userinfobot
+- CHAT_ID=98765432111111 // seu id do Telegram https://github.com/nadam/userinfobot
     
-    - URL_API=https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json
+- URL_API=https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json
     
-    - URL_FILE_TESOURO=https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv
+- URL_FILE_TESOURO=https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv
     
-    - ALERTA_RENTABILIDADE=13 // taxa para alertar diariamente
+- ALERTA_RENTABILIDADE=13 // taxa para alertar diariamente
     
-    - ALERTA_PERIODO_MINUTOS=720 // tempo em minutos para alertar
+- ALERTA_PERIODO_MINUTOS=720 // tempo em minutos para alertar
 
-    ```bash
+```bash
     # Executar
     $ npm start
 
     # Usando Docker
     $ docker-compose up -d
-    ```
+```
+
 ## 🌟 Features
 
 - [x] Integração com Telegram
