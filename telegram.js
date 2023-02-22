@@ -134,7 +134,7 @@ bot.action("titulosBons", async (ctx) => {
         cotacao.rentabilidadeAnual >= dadostesouro.median &&
         cotacao.rentabilidadeAnual < dadostesouro.q3
       ) {
-        cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
+        cotacao.rentabilidadeAnual = getBondName(cotacao.titulo, cotacao.rentabilidadeAnual);
         message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
         message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
         message += "😗 *J3 - COMPRA BOA*\n\n";
@@ -142,7 +142,7 @@ bot.action("titulosBons", async (ctx) => {
         cotacao.rentabilidadeAnual >= dadostesouro.q3 ||
         cotacao.rentabilidadeAnual >= dadostesouro.max
       ) {
-        cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
+        cotacao.rentabilidadeAnual = getBondName(cotacao.titulo, cotacao.rentabilidadeAnual);
         message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
         message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
         message += "😀 *J4 - COMPRA ÓTIMA*\n\n";
@@ -256,22 +256,22 @@ bot.action(/(.+)/i, async (ctx) => {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
     } else if (cotacao.rentabilidadeAnual < dadostesouro.q1) {
       message += "😡 *J1 - COMPRA PESSÍMA*";
-      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
+      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo, cotacao.rentabilidadeAnual);
     } else if (
       cotacao.rentabilidadeAnual >= dadostesouro.q1 &&
       cotacao.rentabilidadeAnual < dadostesouro.median
     ) {
       message += "😒 *J2 - COMPRA RUIM*";
-      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
+      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo, cotacao.rentabilidadeAnual);
     } else if (
       cotacao.rentabilidadeAnual >= dadostesouro.median &&
       cotacao.rentabilidadeAnual < dadostesouro.q3
     ) {
       message += "😗 *J3 - COMPRA BOA*";
-      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
+      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo, cotacao.rentabilidadeAnual);
     } else if (cotacao.rentabilidadeAnual >= dadostesouro.q3) {
       message += "😀 *J4 - COMPRA ÓTIMA*";
-      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
+      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo, cotacao.rentabilidadeAnual);
     }
 
     ctx.replyWithMarkdown(message, keyboard);
@@ -352,7 +352,7 @@ async function verificarRentabilidade() {
   }
 }
 
-async function getBondName(title) {
+async function getBondName(title, anulInvstmtRate) {
   if (title.toLowerCase().includes("selic")) {
     return "SELIC + " + anulInvstmtRate;
   } else if (title.toLowerCase().includes("ipca")) {
