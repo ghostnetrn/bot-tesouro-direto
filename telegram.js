@@ -109,8 +109,16 @@ bot.action("titulosBons", async (ctx) => {
   try {
     for (const titulo of titulos) {
       const cotacao = await getTituloInfo(titulo);
-      const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
-      const vencimento = cotacao.vencimento;
+      let tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
+      let vencimento = cotacao.vencimento;
+
+      // Verifica se o título contém a palavra "Renda+"
+      if (tituloDados.toLowerCase().includes("renda+")) {
+        tituloDados = "NTN-B1";
+        const ano = parseInt(vencimento.split("/")[2]) + 19;
+        vencimento = vencimento.split("/").slice(0, 2).join("/") + "/" + ano;
+      }
+
       const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
 
       if (cotacao.titulo.toLowerCase().includes("selic")) {
