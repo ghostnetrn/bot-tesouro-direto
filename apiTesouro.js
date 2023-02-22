@@ -36,6 +36,7 @@ async function getTituloInfo(bondName) {
 
     for (const bond of parsedData.TrsrBdTradgList) {
       const currBondName = bond.TrsrBd.nm;
+
       if (currBondName.toLowerCase() === bondName.toLowerCase()) {
         const { anulInvstmtRate, minInvstmtAmt, untrInvstmtVal, mtrtyDt } =
           bond.TrsrBd;
@@ -63,7 +64,7 @@ async function getTituloInfo(bondName) {
         } else {
           info.rentabilidadeAnual = anulInvstmtRate;
         }
-        console.log(info);
+
         return info;
       }
     }
