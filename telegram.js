@@ -114,7 +114,10 @@ bot.action("titulosBons", async (ctx) => {
       const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
 
       if (cotacao.titulo.toLowerCase().includes("selic")) {
+        console.log(typeof dadostesouro.mean);
+
         console.log(dadostesouro.mean === 0);
+        console.log(dadostesouro.mean === 0.0);
         continue;
       }
 
