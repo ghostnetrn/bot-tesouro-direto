@@ -21,8 +21,7 @@ Utilizei como base a planilha apresentada neste vídeo: [https://www.youtube.com
 
 ## Configurar e executar
  
-    - TELEGRAM_BOT_TOKEN=1234567890:ABCDEFGHIJKLMNOPQRSTUVWXY-Zabcdefghijklmnopqrstu
- // token do bot Telegram https://canaltech.com.br/apps/como-criar-um-bot-no-telegram-botfather/
+    - TELEGRAM_BOT_TOKEN=1234567890:ABCDEFGHIJKLMNOPQRSTUVWXY-Zabcdefghijklmnopqrstu // token do bot Telegram https://canaltech.com.br/apps/como-criar-um-bot-no-telegram-botfather/
     
     - CHAT_ID=98765432111111 // seu id do Telegram https://github.com/nadam/userinfobot
     
