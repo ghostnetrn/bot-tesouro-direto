@@ -134,6 +134,7 @@ bot.action("titulosBons", async (ctx) => {
         cotacao.rentabilidadeAnual >= dadostesouro.median &&
         cotacao.rentabilidadeAnual < dadostesouro.q3
       ) {
+        cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
         message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
         message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
         message += "😗 *J3 - COMPRA BOA*\n\n";
@@ -141,6 +142,7 @@ bot.action("titulosBons", async (ctx) => {
         cotacao.rentabilidadeAnual >= dadostesouro.q3 ||
         cotacao.rentabilidadeAnual >= dadostesouro.max
       ) {
+        cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
         message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
         message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
         message += "😀 *J4 - COMPRA ÓTIMA*\n\n";
@@ -343,6 +345,18 @@ async function verificarRentabilidade() {
   } catch (error) {
     console.error(error.message);
     ctx.reply("Ocorreu um erro ao buscar as informações do título.", keyboard);
+  }
+}
+
+async function getBondName(title) {
+  if (title.toLowerCase().includes("selic")) {
+    return "SELIC + " + anulInvstmtRate;
+  } else if (title.toLowerCase().includes("ipca")) {
+    return "IPCA + " + anulInvstmtRate;
+  } else if (title.toLowerCase().includes("renda")) {
+    return "IPCA + " + anulInvstmtRate;
+  } else {
+    return anulInvstmtRate;
   }
 }
 
