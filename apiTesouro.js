@@ -156,69 +156,191 @@ async function listarTitulos() {
   }
 }
 
-function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
-  const url = urlArquivo;
+// getTesouroInfo
+const arquivoLocal = "PrecoTaxaTesouroDireto.csv";
 
-  return axios
-    .get(url, { responseType: "stream" })
-    .then((response) => {
-      return new Promise((resolve, reject) => {
-        response.data
-          .pipe(fs.createWriteStream("PrecoTaxaTesouroDireto.csv"))
-          .on("finish", () => {
-            const pus = [];
-            fs.createReadStream("PrecoTaxaTesouroDireto.csv")
-              .pipe(csv({ separator: ";" }))
-              .on("data", (row) => {
-                if (
-                  row["Tipo Titulo"] === tipoTitulo &&
-                  row["Data Vencimento"] === vencimentoTitulo
-                ) {
-                  const taxaCompra = parseFloat(
-                    row["Taxa Compra Manha"].replace(",", ".")
-                  );
-                  pus.push(taxaCompra);
-                }
-              })
-              .on("end", () => {
-                if (pus.length === 0) {
-                  resolve({
-                    min: "0.00",
-                    q1: "0.00",
-                    median: "0.00",
-                    q3: "0.00",
-                    max: "0.00",
-                    mean: "0.00",
-                    stdev: "0.00",
-                  });
-                  return;
-                }
+async function baixarArquivoSeNecessario() {
+  if (!fs.existsSync(arquivoLocal)) {
+    console.log("Iniciando download do arquivo...");
+    const response = await axios.get(urlArquivo, { responseType: "stream" });
 
-                const min = ss.min(pus);
-                const q1 = ss.quantile(pus, 0.25);
-                const median = ss.median(pus);
-                const q3 = ss.quantile(pus, 0.75);
-                const max = ss.max(pus);
-                const mean = ss.mean(pus);
-                const stdev = ss.standardDeviation(pus);
+    console.log("Download do arquivo concluído.");
+    const stream = response.data.pipe(fs.createWriteStream(arquivoLocal));
 
-                resolve({
-                  min: min.toFixed(2),
-                  q1: q1.toFixed(2),
-                  median: median.toFixed(2),
-                  q3: q3.toFixed(2),
-                  max: max.toFixed(2),
-                  mean: mean.toFixed(2),
-                  stdev: stdev.toFixed(2),
-                });
-              });
-          });
+    return new Promise((resolve, reject) => {
+      stream.on("finish", () => {
+        console.log("Arquivo salvo localmente.");
+        resolve();
       });
-    })
-    .catch((error) => {
-      return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
+
+      stream.on("error", (error) => {
+        console.error(`Erro ao salvar o arquivo: ${error}`);
+        reject(error);
+      });
     });
+  }
+
+  const ultimaAtualizacao = await obterDataUltimaAtualizacao();
+
+  if (await arquivoEstaDesatualizado(ultimaAtualizacao)) {
+    console.log("Iniciando download do arquivo...");
+    const response = await axios.get(urlArquivo, { responseType: "stream" });
+
+    console.log("Download do arquivo concluído.");
+    const stream = response.data.pipe(fs.createWriteStream(arquivoLocal));
+
+    return new Promise((resolve, reject) => {
+      stream.on("finish", () => {
+        console.log("Arquivo salvo localmente.");
+        resolve();
+      });
+
+      stream.on("error", (error) => {
+        console.error(`Erro ao salvar o arquivo: ${error}`);
+        reject(error);
+      });
+    });
+  } else {
+    console.log("O arquivo já está atualizado.");
+    return Promise.resolve();
+  }
 }
+
+function obterDataUltimaAtualizacao() {
+  return new Promise((resolve, reject) => {
+    fs.stat(arquivoLocal, (error, stats) => {
+      if (error) {
+        reject(error);
+      } else {
+        const dataAtualizacao = new Date(stats.mtime);
+        resolve(dataAtualizacao);
+      }
+    });
+  });
+}
+
+async function arquivoEstaDesatualizado(ultimaAtualizacao) {
+  const response = await axios.head(urlArquivo);
+  const dataUltimaModificacao = new Date(response.headers["last-modified"]);
+  return dataUltimaModificacao > ultimaAtualizacao;
+}
+
+async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
+  await baixarArquivoSeNecessario();
+
+  return new Promise((resolve, reject) => {
+    const pus = [];
+
+    fs.createReadStream(arquivoLocal)
+      .pipe(csv({ separator: ";" }))
+      .on("data", (row) => {
+        if (
+          row["Tipo Titulo"] === tipoTitulo &&
+          row["Data Vencimento"] === vencimentoTitulo
+        ) {
+          const taxaCompra = parseFloat(
+            row["Taxa Compra Manha"].replace(",", ".")
+          );
+          pus.push(taxaCompra);
+        }
+      })
+      .on("end", () => {
+        if (pus.length === 0) {
+          return resolve({
+            min: "0.00",
+            q1: "0.00",
+            median: "0.00",
+            q3: "0.00",
+            max: "0.00",
+            mean: "0.00",
+            stdev: "0.00",
+          });
+        }
+
+        const min = ss.min(pus);
+        const q1 = ss.quantile(pus, 0.25);
+        const median = ss.median(pus);
+        const q3 = ss.quantile(pus, 0.75);
+        const max = ss.max(pus);
+        const mean = ss.mean(pus);
+        const stdev = ss.standardDeviation(pus);
+
+        resolve({
+          min: min.toFixed(2),
+          q1: q1.toFixed(2),
+          median: median.toFixed(2),
+          q3: q3.toFixed(2),
+          max: max.toFixed(2),
+          mean: mean.toFixed(2),
+          stdev: stdev.toFixed(2),
+        });
+      });
+  });
+}
+
+// function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
+//   const url = urlArquivo;
+
+//   return axios
+//     .get(url, { responseType: "stream" })
+//     .then((response) => {
+//       return new Promise((resolve, reject) => {
+//         response.data
+//           .pipe(fs.createWriteStream("PrecoTaxaTesouroDireto.csv"))
+//           .on("finish", () => {
+//             const pus = [];
+//             fs.createReadStream("PrecoTaxaTesouroDireto.csv")
+//               .pipe(csv({ separator: ";" }))
+//               .on("data", (row) => {
+//                 if (
+//                   row["Tipo Titulo"] === tipoTitulo &&
+//                   row["Data Vencimento"] === vencimentoTitulo
+//                 ) {
+//                   const taxaCompra = parseFloat(
+//                     row["Taxa Compra Manha"].replace(",", ".")
+//                   );
+//                   pus.push(taxaCompra);
+//                 }
+//               })
+//               .on("end", () => {
+//                 if (pus.length === 0) {
+//                   resolve({
+//                     min: "0.00",
+//                     q1: "0.00",
+//                     median: "0.00",
+//                     q3: "0.00",
+//                     max: "0.00",
+//                     mean: "0.00",
+//                     stdev: "0.00",
+//                   });
+//                   return;
+//                 }
+
+//                 const min = ss.min(pus);
+//                 const q1 = ss.quantile(pus, 0.25);
+//                 const median = ss.median(pus);
+//                 const q3 = ss.quantile(pus, 0.75);
+//                 const max = ss.max(pus);
+//                 const mean = ss.mean(pus);
+//                 const stdev = ss.standardDeviation(pus);
+
+//                 resolve({
+//                   min: min.toFixed(2),
+//                   q1: q1.toFixed(2),
+//                   median: median.toFixed(2),
+//                   q3: q3.toFixed(2),
+//                   max: max.toFixed(2),
+//                   mean: mean.toFixed(2),
+//                   stdev: stdev.toFixed(2),
+//                 });
+//               });
+//           });
+//       });
+//     })
+//     .catch((error) => {
+//       return Promise.reject(`Erro ao baixar o arquivo: ${error}`);
+//     });
+// }
 
 module.exports = {
   getTituloInfo,
