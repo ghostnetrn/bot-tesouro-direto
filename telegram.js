@@ -251,10 +251,7 @@ bot.action(/(.+)/i, async (ctx) => {
     message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
 
     if (typeof cotacao.rentabilidadeAnual === "string") {
-      cotacao.rentabilidadeAnual = cotacao.rentabilidadeAnual.replace(
-        /[^\d.-]/g,
-        ""
-      );
+      taxa = cotacao.rentabilidadeAnual.replace(/[^\d.-]/g, "");
     }
 
     if (cotacao.titulo.toLowerCase().includes("selic")) {
@@ -313,10 +310,7 @@ async function verificarRentabilidade() {
       // );
 
       if (typeof cotacao.rentabilidadeAnual === "string") {
-        cotacao.rentabilidadeAnual = cotacao.rentabilidadeAnual.replace(
-          /[^\d.-]/g,
-          ""
-        );
+        taxa = cotacao.rentabilidadeAnual.replace(/[^\d.-]/g, "");
       }
 
       if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
