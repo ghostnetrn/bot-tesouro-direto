@@ -240,9 +240,10 @@ bot.action(/(.+)/i, async (ctx) => {
     const cotacao = await getTituloInfo(titulo);
     let tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
     const vencimento = cotacao.vencimento;
-    let taxa = typeof cotacao.rentabilidadeAnual === "string" 
-      ? parseFloat(cotacao.rentabilidadeAnual.replace(/[^\d.-]/g, ""))
-      : cotacao.rentabilidadeAnual
+    let taxa =
+      typeof cotacao.rentabilidadeAnual === "string"
+        ? parseFloat(cotacao.rentabilidadeAnual.replace(/[^\d.-]/g, ""))
+        : cotacao.rentabilidadeAnual;
 
     if (tituloDados.toLowerCase().includes("renda+")) {
       tituloDados = "NTN-B1";
@@ -252,7 +253,7 @@ bot.action(/(.+)/i, async (ctx) => {
 
     let message = `*Título:* ${cotacao.titulo}\n*Preço unitário:* ${cotacao.precoUnitario}\n*Investimento mínimo:* ${cotacao.investimentoMinimo}\n*Rentabilidade anual:* ${cotacao.rentabilidadeAnual}%\n*Vencimento:* ${cotacao.vencimento}\n\n`;
     message += `*Mínimo:* ${dadostesouro.min}\n*1º quartil:* ${dadostesouro.q1}\n*Mediana:* ${dadostesouro.median}\n*3º quartil:* ${dadostesouro.q3}\n*Máximo:* ${dadostesouro.max}\n*Média:* ${dadostesouro.mean}\n*Desvio padrão:* ${dadostesouro.stdev}\n\n`;
-  
+
     if (cotacao.titulo.toLowerCase().includes("selic")) {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
     } else if (taxa < dadostesouro.q1) {
@@ -303,14 +304,14 @@ async function verificarRentabilidade() {
       const tituloDados = cotacao.titulo.replace(/\s\d+$/, "");
       const vencimento = cotacao.vencimento;
       const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
+      let taxa =
+        typeof cotacao.rentabilidadeAnual === "string"
+          ? parseFloat(cotacao.rentabilidadeAnual.replace(/[^\d.-]/g, ""))
+          : cotacao.rentabilidadeAnual;
 
       // cotacao.rentabilidadeAnual = parseFloat(
       //   cotacao.rentabilidadeAnual.match(/\d+\.\d+/)[0]
       // );
-
-      if (typeof cotacao.rentabilidadeAnual === "string") {
-        taxa = parseFloat(cotacao.rentabilidadeAnual.replace(/[^\d.-]/g, ""));
-      }
 
       if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
