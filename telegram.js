@@ -137,11 +137,13 @@ bot.action("titulosBons", async (ctx) => {
       if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
-        message += "😗 <b>J3 - COMPRA BOA</b>\n<u>Entre mediana e 3º quartil</u>";
+        message +=
+          "😗 <b>J3 - COMPRA BOA</b>\n<i>Entre mediana e 3º quartil</i>";
       } else if (taxa >= dadostesouro.q3 || taxa >= dadostesouro.max) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
-        message += "😀 <b>J4 - COMPRA ÓTIMA</b>\n<u>Entre 3º quartil e máximo</u>";
+        message +=
+          "😀 <b>J4 - COMPRA ÓTIMA</b>\n<i>Entre 3º quartil e máximo</i>";
       }
 
       if (message !== "") {
@@ -319,11 +321,13 @@ async function verificarRentabilidade() {
       if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
-        message += "😗 <b>J3 - COMPRA BOA</b>\n<u>Entre mediana e 3º quartil</u>";
+        message +=
+          "😗 <b>J3 - COMPRA BOA</b>\n<u>Entre mediana e 3º quartil</u>";
       } else if (taxa >= dadostesouro.q3) {
         message = `<b>Título:</b> ${cotacao.titulo}\n<b>Preço unitário:</b> ${cotacao.precoUnitario}\n<b>Investimento mínimo:</b> ${cotacao.investimentoMinimo}\n<b>Rentabilidade anual:</b> ${cotacao.rentabilidadeAnual}%\n<b>Vencimento:</b> ${cotacao.vencimento}\n\n`;
         message += `<b>Mínimo:</b> ${dadostesouro.min}\n<b>1º quartil:</b> ${dadostesouro.q1}\n<b>Mediana:</b> ${dadostesouro.median}\n<b>3º quartil:</b> ${dadostesouro.q3}\n<b>Máximo:</b> ${dadostesouro.max}\n<b>Média:</b> ${dadostesouro.mean}\n<b>Desvio padrão:</b> ${dadostesouro.stdev}\n\n`;
-        message += "😀 <b>J4 - COMPRA ÓTIMA</b>\n<u>Entre 3º quartil e máximo</u>";
+        message +=
+          "😀 <b>J4 - COMPRA ÓTIMA</b>\n<u>Entre 3º quartil e máximo</u>";
       }
 
       if (message !== "") {
