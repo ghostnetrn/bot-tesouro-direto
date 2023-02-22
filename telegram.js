@@ -117,8 +117,9 @@ bot.action("titulosBons", async (ctx) => {
         continue;
       }
 
-      console.log("mean === '0' " + dadostesouro.mean === "0");
+      console.log(dadostesouro.mean === "0");
       console.log(dadostesouro.mean === 0);
+      console.log(dadostesouro.mean === 0.0);
       if (
         cotacao.rentabilidadeAnual >= dadostesouro.median &&
         cotacao.rentabilidadeAnual < dadostesouro.q3
