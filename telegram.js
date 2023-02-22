@@ -118,7 +118,8 @@ bot.action("titulosBons", async (ctx) => {
         const ano = parseInt(vencimento.split("/")[2]) + 19;
         vencimento = vencimento.split("/").slice(0, 2).join("/") + "/" + ano;
       }
-
+      console.log(tituloDados);
+      console.log(vencimento);
       const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
 
       if (cotacao.titulo.toLowerCase().includes("selic")) {
