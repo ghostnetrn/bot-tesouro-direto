@@ -256,18 +256,22 @@ bot.action(/(.+)/i, async (ctx) => {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
     } else if (cotacao.rentabilidadeAnual < dadostesouro.q1) {
       message += "😡 *J1 - COMPRA PESSÍMA*";
+      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
     } else if (
       cotacao.rentabilidadeAnual >= dadostesouro.q1 &&
       cotacao.rentabilidadeAnual < dadostesouro.median
     ) {
       message += "😒 *J2 - COMPRA RUIM*";
+      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
     } else if (
       cotacao.rentabilidadeAnual >= dadostesouro.median &&
       cotacao.rentabilidadeAnual < dadostesouro.q3
     ) {
       message += "😗 *J3 - COMPRA BOA*";
+      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
     } else if (cotacao.rentabilidadeAnual >= dadostesouro.q3) {
       message += "😀 *J4 - COMPRA ÓTIMA*";
+      cotacao.rentabilidadeAnual = getBondName(cotacao.titulo);
     }
 
     ctx.replyWithMarkdown(message, keyboard);
