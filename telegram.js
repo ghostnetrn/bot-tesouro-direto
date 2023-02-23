@@ -402,15 +402,13 @@ setInterval(function () {
   const horaAtualBR = dataAtualBR.getHours();
   const minutoAtualBR = dataAtualBR.getMinutes();
 
-  // Exibe a data atual no horário de Brasília no console para fins de depuração
-  console.log(dataAtualBR.toLocaleString("pt-BR"));
-
   // Coloque aqui o código que verifica a rentabilidade
   if (ehDiaUtil(dataAtualBR)) {
     if (
       horaAtualBR === horaVerificacao1 &&
       minutoAtualBR === minutoVerificacao1
     ) {
+      console.log(dataAtualBR.toLocaleString("pt-BR"));
       verificarRentabilidade();
     }
   }
