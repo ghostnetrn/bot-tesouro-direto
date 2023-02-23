@@ -5,7 +5,8 @@ Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
 
 Utilizei como base a planilha apresentada neste vídeo: [https://www.youtube.com/watch?v=VqcGwlY3Jz4&t=239s&ab_channel=Excel%C3%AAncianoBolso](https://www.youtube.com/watch?v=VqcGwlY3Jz4&t=239s&ab_channel=Excel%C3%AAncianoBolso)
 
-![Canal no Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/tesourodiretobrasil)
+
 
 ## 🗂 Como baixar e instalar o projeto
 
