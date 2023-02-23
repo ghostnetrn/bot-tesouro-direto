@@ -399,7 +399,7 @@ setInterval(function() {
   // Obtém a hora atual no fuso horário da máquina virtual
   const horaAtualVM = dataAtual.getHours();
   const minutoAtualVM = dataAtual.getMinutes();
-
+  verificarRentabilidade();
   // Cria uma nova data usando a hora atual no fuso horário do Brasil
   const dataAtualBR = new Date(dataAtual.toLocaleString("pt-BR"));
   const horaAtualBR = dataAtualBR.getHours();
