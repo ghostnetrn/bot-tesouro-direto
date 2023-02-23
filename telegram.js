@@ -371,7 +371,6 @@ async function verificarRentabilidade() {
 
 // Define o intervalo de verificação
 const intervaloVerificacao = parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60 * 1000;
-console.log(intervaloVerificacao, intervaloVerificacao)
 // Define as horas e minutos para as verificações desejadas no horário de Brasília
 const horaVerificacao1 = 12;
 const minutoVerificacao1 = 36;
@@ -406,7 +405,8 @@ setInterval(function() {
 
   // Exibe a data atual no horário de Brasília no console para fins de depuração
   //console.log(dataAtualBR.toLocaleString("pt-BR"));
-
+    console.log(ehDiaUtil(dataAtualBR))
+    console.log(horaAtualBR, minutoAtualBR)
   // Coloque aqui o código que verifica a rentabilidade
   if (ehDiaUtil(dataAtualBR)) {
     if ((horaAtualBR === horaVerificacao1 && minutoAtualBR === minutoVerificacao1) ||
