@@ -373,7 +373,7 @@ async function verificarRentabilidade() {
 const intervaloVerificacao = parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60 * 1000;
 // Define as horas e minutos para as verificações desejadas no horário de Brasília
 const horaVerificacao1 = 12;
-const minutoVerificacao1 = 36;
+const minutoVerificacao1 = 42;
 const horaVerificacao2 = 13;
 const minutoVerificacao2 = 30;
 
