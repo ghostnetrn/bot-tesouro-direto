@@ -374,6 +374,6 @@ setInterval(
   verificarRentabilidade,
   parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60 * 1000
 );
-verificarRentabilidade();
+
 // Inicia o bot
 bot.launch();
