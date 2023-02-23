@@ -369,11 +369,55 @@ async function verificarRentabilidade() {
   }
 }
 
+// Verificar a hora e executar a função verificarRentabilidade() se for o caso
+// Define o intervalo de verificação como 1 minuto
+const intervaloVerificacao = 60 * 1000;
+
+// Define as horas e minutos para as verificações desejadas no horário de Brasília
+const horaVerificacao1 = 9;
+const minutoVerificacao1 = 14;
+const horaVerificacao2 = 13;
+const minutoVerificacao2 = 30;
+
+// Define a função que será chamada pelo setInterval()
+function verificarRentabilidade() {
+  // Coloque aqui o código que verifica a rentabilidade
+
+  // Exibe a hora atual no console para fins de depuração
+  console.log(new Date().toLocaleString("pt-BR"));
+}
+
+// Define uma função para verificar se o dia atual é um dia útil
+function ehDiaUtil(data) {
+  const diaSemana = data.getDay();
+  return diaSemana !== 0 && diaSemana !== 6;
+}
+
+// Define a função que será chamada pelo setInterval() com base no intervalo de verificação
+setInterval(function() {
+  const dataAtual = new Date();
+  // Obtém a hora atual no fuso horário da máquina virtual
+  const horaAtualVM = dataAtual.getHours();
+  const minutoAtualVM = dataAtual.getMinutes();
+
+  // Cria uma nova data usando a hora atual no fuso horário do Brasil
+  const dataAtualBR = new Date(dataAtual.toLocaleString("pt-BR"));
+  const horaAtualBR = dataAtualBR.getHours();
+  const minutoAtualBR = dataAtualBR.getMinutes();
+
+  if (ehDiaUtil(dataAtualBR)) {
+    if ((horaAtualBR === horaVerificacao1 && minutoAtualBR === minutoVerificacao1) ||
+        (horaAtualBR === horaVerificacao2 && minutoAtualBR === minutoVerificacao2)) {
+      verificarRentabilidade();
+    }
+  }
+}, intervaloVerificacao);
+
 // Chamar a função verificarRentabilidade() periodicamente usando setInterval()
-setInterval(
-  verificarRentabilidade,
-  parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60 * 1000
-);
+// setInterval(
+//   verificarRentabilidade,
+//   parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60 * 1000
+// );
 
 // Inicia o bot
 bot.launch();
