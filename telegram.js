@@ -374,7 +374,7 @@ const intervaloVerificacao = parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60
 
 // Define as horas e minutos para as verificações desejadas no horário de Brasília
 const horaVerificacao1 = 11;
-const minutoVerificacao1 = 10;
+const minutoVerificacao1 = 9;
 const horaVerificacao2 = 13;
 const minutoVerificacao2 = 30;
 
