@@ -370,12 +370,11 @@ async function verificarRentabilidade() {
 }
 
 // Define o intervalo de verificação
-const intervaloVerificacao = parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60 * 1000;
+const intervaloVerificacao =
+  parseFloat(process.env.ALERTA_PERIODO_MINUTOS) * 60 * 1000;
 // Define as horas e minutos para as verificações desejadas no horário de Brasília
-const horaVerificacao1 = 12;
-const minutoVerificacao1 = 42;
-const horaVerificacao2 = 13;
-const minutoVerificacao2 = 30;
+const horaVerificacao1 = 11;
+const minutoVerificacao1 = 30;
 
 // Define uma função para verificar se o dia atual é um dia útil
 function ehDiaUtil(data) {
@@ -384,7 +383,7 @@ function ehDiaUtil(data) {
 }
 
 // Define a função que será chamada pelo setInterval() com base no intervalo de verificação
-setInterval(function() {
+setInterval(function () {
   const dataAtual = new Date();
   // Obtém a hora atual no fuso horário da máquina virtual
   const horaAtualVM = dataAtual.getHours();
@@ -404,13 +403,14 @@ setInterval(function() {
   const minutoAtualBR = dataAtualBR.getMinutes();
 
   // Exibe a data atual no horário de Brasília no console para fins de depuração
-  //console.log(dataAtualBR.toLocaleString("pt-BR"));
-    console.log(ehDiaUtil(dataAtualBR))
-    console.log(horaAtualBR, minutoAtualBR)
+  console.log(dataAtualBR.toLocaleString("pt-BR"));
+
   // Coloque aqui o código que verifica a rentabilidade
   if (ehDiaUtil(dataAtualBR)) {
-    if ((horaAtualBR === horaVerificacao1 && minutoAtualBR === minutoVerificacao1) ||
-        (horaAtualBR === horaVerificacao2 && minutoAtualBR === minutoVerificacao2)) {
+    if (
+      horaAtualBR === horaVerificacao1 &&
+      minutoAtualBR === minutoVerificacao1
+    ) {
       verificarRentabilidade();
     }
   }
