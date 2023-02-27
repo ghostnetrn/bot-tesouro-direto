@@ -1,9 +1,7 @@
-const https = require("https");
 const axios = require("axios");
-const csv = require("csv-parser");
 const fs = require("fs");
-const arquivoJson = "./tesouro.json";
-const arquivoCsv = "./PrecoTaxaTesouroDireto.csv";
+const arquivoJson = "tesouro.json";
+const arquivoCsv = "PrecoTaxaTesouroDireto.csv";
 
 const URL_API =
   "https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json";
@@ -14,20 +12,20 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 async function baixarArquivoSeNecessario(arquivo, url) {
   if (!fs.existsSync(arquivo)) {
-    console.log("Iniciando download do arquivo...");
+    console.log(`Iniciando download do arquivo ${arquivo}...`);
     const response = await axios.get(url, { responseType: "stream" });
 
-    console.log("Download do arquivo concluído.");
+    console.log(`Download do ${arquivo} concluído.`);
     const stream = response.data.pipe(fs.createWriteStream(arquivo));
 
     return new Promise((resolve, reject) => {
       stream.on("finish", () => {
-        console.log("Arquivo salvo localmente.");
+        console.log(`${arquivo} salvo localmente.`);
         resolve();
       });
 
       stream.on("error", (error) => {
-        console.error(`Erro ao salvar o arquivo: ${error}`);
+        console.error(`Erro ao salvar o ${arquivo}: ${error}`);
         reject(error);
       });
     });
@@ -54,7 +52,7 @@ async function baixarArquivoSeNecessario(arquivo, url) {
       });
     });
   } else {
-    console.log("O arquivo já está atualizado.");
+    console.log(`O ${arquivo} já está atualizado.`);
     return Promise.resolve();
   }
 }
@@ -81,4 +79,4 @@ async function arquivoEstaDesatualizado(url, ultimaAtualizacao) {
 (async () => {
   await baixarArquivoSeNecessario(arquivoJson, URL_API);
   await baixarArquivoSeNecessario(arquivoCsv, URL_FILE_TESOURO);
-})()
+})();

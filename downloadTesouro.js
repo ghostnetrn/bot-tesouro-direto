@@ -1,6 +1,4 @@
-const https = require("https");
 const axios = require("axios");
-const csv = require("csv-parser");
 const fs = require("fs");
 const arquivoJson = "tesouro.json";
 const arquivoCsv = "PrecoTaxaTesouroDireto.csv";
@@ -12,30 +10,35 @@ const URL_FILE_TESOURO =
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
-// Baixa o arquivo JSON da API
-https
-  .get(URL_API, (res) => {
-    let data = "";
-    res.on("data", (chunk) => {
-      data += chunk;
-    });
-    res.on("end", () => {
-      // Salva o arquivo JSON
-      fs.writeFileSync(arquivoJson, data);
-      console.log("Arquivo tesouro.json salvo com sucesso!");
-    });
-  })
-  .on("error", (err) => {
-    console.error(err);
-  });
+async function baixarArquivoSeNecessario(arquivo, url) {
+  if (!fs.existsSync(arquivo)) {
+    console.log(`Iniciando download do arquivo ${arquivo}...`);
+    const response = await axios.get(url, { responseType: "stream" });
 
-// Baixa o arquivo CSV
-axios
-  .get(URL_FILE_TESOURO, { responseType: "stream" })
-  .then((response) => {
-    const stream = response.data.pipe(
-      fs.createWriteStream(arquivoCsv)
-    );
+    console.log(`Download do ${arquivo} concluído.`);
+    const stream = response.data.pipe(fs.createWriteStream(arquivo));
+
+    return new Promise((resolve, reject) => {
+      stream.on("finish", () => {
+        console.log(`${arquivo} salvo localmente.`);
+        resolve();
+      });
+
+      stream.on("error", (error) => {
+        console.error(`Erro ao salvar o ${arquivo}: ${error}`);
+        reject(error);
+      });
+    });
+  }
+
+  const ultimaAtualizacao = await obterDataUltimaAtualizacao(arquivo);
+
+  if (await arquivoEstaDesatualizado(url, ultimaAtualizacao)) {
+    console.log("Iniciando download do arquivo...");
+    const response = await axios.get(url, { responseType: "stream" });
+
+    console.log("Download do arquivo concluído.");
+    const stream = response.data.pipe(fs.createWriteStream(arquivo));
 
     return new Promise((resolve, reject) => {
       stream.on("finish", () => {
@@ -48,7 +51,32 @@ axios
         reject(error);
       });
     });
-  })
-  .catch((err) => {
-    console.error(err);
+  } else {
+    console.log(`O ${arquivo} já está atualizado.`);
+    return Promise.resolve();
+  }
+}
+
+function obterDataUltimaAtualizacao(arquivo) {
+  return new Promise((resolve, reject) => {
+    fs.stat(arquivo, (error, stats) => {
+      if (error) {
+        reject(error);
+      } else {
+        const dataAtualizacao = new Date(stats.mtime);
+        resolve(dataAtualizacao);
+      }
+    });
   });
+}
+
+async function arquivoEstaDesatualizado(url, ultimaAtualizacao) {
+  const response = await axios.head(url);
+  const dataUltimaModificacao = new Date(response.headers["last-modified"]);
+  return dataUltimaModificacao > ultimaAtualizacao;
+}
+
+(async () => {
+  await baixarArquivoSeNecessario(arquivoJson, URL_API);
+  await baixarArquivoSeNecessario(arquivoCsv, URL_FILE_TESOURO);
+})();
