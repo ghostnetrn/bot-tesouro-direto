@@ -14,3 +14,6 @@ jobs:
           node-version: "16"
       - run: npm install
       - run: node downloadTesouro.js
+      - run: git add PrecoTaxaTesouroDireto.csv tesouro.json
+      - run: git commit -m "Atualizar Tesouro Direto"
+      - run: git push
