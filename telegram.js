@@ -261,13 +261,13 @@ bot.action(/(.+)/i, async (ctx) => {
 
     if (cotacao.titulo.toLowerCase().includes("selic")) {
       message += "😠 Este título não está dentro dos parâmetros de escolha.";
-    } else if (taxa < dadostesouro.q1) {
+    } else if (taxa < dadostesouro.q1 && taxa > dadostesouro.min) {
       message += "😡 *J1 - COMPRA PESSÍMA*\n_Entre mínimo e 1º quartil_";
-    } else if (taxa >= dadostesouro.q1 && taxa < dadostesouro.median) {
+    } else if (taxa <= dadostesouro.median && taxa > dadostesouro.q1) {
       message += "😒 *J2 - COMPRA RUIM*\n_Entre 1º quartil e mediana_";
-    } else if (taxa >= dadostesouro.median && taxa < dadostesouro.q3) {
+    } else if (taxa <= dadostesouro.q3 && taxa > dadostesouro.median) {
       message += "😗 *J3 - COMPRA BOA*\n_Entre mediana e 3º quartil_";
-    } else if (taxa >= dadostesouro.q3) {
+    } else if (taxa <= dadostesouro.max && taxa > dadostesouro.q3) {
       message += "😀 *J4 - COMPRA ÓTIMA*\n_Entre 3º quartil e máximo_";
     }
 
