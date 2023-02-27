@@ -14,7 +14,7 @@ https.get(URL_API, (res) => {
   });
   res.on('end', () => {
     // Salva o arquivo JSON
-    fs.writeFileSync('tesouro.json', data);
+    fs.writeFileSync('./docs/tesouro.json', data);
     console.log('Arquivo tesouro.json salvo com sucesso!');
   });
 }).on('error', (err) => {
@@ -31,7 +31,7 @@ axios.get(URL_FILE_TESOURO, { responseType: 'stream' })
     });
     stream.on('end', () => {
       // Salva o objeto JavaScript como um arquivo JSON
-      fs.writeFileSync('PrecoTaxaTesouroDireto.json', JSON.stringify(data));
+      fs.writeFileSync('./docs/PrecoTaxaTesouroDireto.json', JSON.stringify(data));
       console.log('Arquivo PrecoTaxaTesouroDireto.json salvo com sucesso!');
     });
   })
