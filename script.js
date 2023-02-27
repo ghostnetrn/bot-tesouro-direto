@@ -4,7 +4,7 @@
     const data = await response.json();
     const treasuryBonds = data.response;
     const tbody = document.getElementById("treasuryBondsTableBody");
-
+    
     for (const bond of treasuryBonds.TrsrBdTradgList) {
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
