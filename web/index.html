@@ -5,6 +5,7 @@
     <title>Tabela Tesouro</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-statistics/7.8.3/simple-statistics.min.js"></script>
   </head>
   <body>
     <h1>Tabela</h1>
@@ -14,8 +15,16 @@
           <th>Código</th>
           <th>Nome</th>
           <th>Vencimento</th>
-          <th>Investimento Mínimo</th>
+          <th>Invest. Mínimo</th>
           <th>Taxa de Juros</th>
+          <th>Mínimo</th>
+          <th>1º Quartil</th>
+          <th>Mediana</th>
+          <th>3º Quartil</th>
+          <th>Máximo</th>
+          <th>Média</th>
+          <th>Desvio Padrão</th>
+          <th>Janela</th>
         </tr>
       </thead>
       <tbody id="treasuryBondsTableBody">
