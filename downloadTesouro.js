@@ -2,6 +2,8 @@ const https = require("https");
 const axios = require("axios");
 const csv = require("csv-parser");
 const fs = require("fs");
+const arquivoJson = "tesouro.json";
+const arquivoCsv = "PrecoTaxaTesouroDireto.csv";
 
 const URL_API =
   "https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json";
@@ -19,7 +21,7 @@ https
     });
     res.on("end", () => {
       // Salva o arquivo JSON
-      fs.writeFileSync("./tesouro.json", data);
+      fs.writeFileSync(arquivoJson, data);
       console.log("Arquivo tesouro.json salvo com sucesso!");
     });
   })
@@ -32,7 +34,7 @@ axios
   .get(URL_FILE_TESOURO, { responseType: "stream" })
   .then((response) => {
     const stream = response.data.pipe(
-      fs.createWriteStream("./PrecoTaxaTesouroDireto.csv")
+      fs.createWriteStream(arquivoCsv)
     );
 
     return new Promise((resolve, reject) => {
