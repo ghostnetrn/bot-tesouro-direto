@@ -2,7 +2,7 @@ name: Atualizar Tesouro Direto
 
 on:
   schedule:
-    - cron: "* * * * *"
+    - cron: '*/3 * * * *'
 
 jobs:
   update-tesouro-direto:
@@ -18,3 +18,4 @@ jobs:
         run: npm install
       - name: Run Script
         run: node downloadTesouro.js
+        working-directory: ./docs
