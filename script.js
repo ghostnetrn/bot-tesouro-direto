@@ -87,7 +87,10 @@
       $('#tesouro').DataTable({
         paging: false,
         ordering: true,
-    });
+        language: {
+          search: "Procurar"
+        }
+    })
   });
   } catch (error) {
     console.error(error);
