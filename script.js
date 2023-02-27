@@ -82,6 +82,13 @@
         tbody.appendChild(tr);
       }
     }
+
+    $(document).ready(function () {
+      $('#tesouro').DataTable({
+        paging: false,
+        ordering: true,
+    });
+  });
   } catch (error) {
     console.error(error);
   }
@@ -142,8 +149,3 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
     stdev: stdev.toFixed(2),
   };
 }
-
-(async () => {
-  const dados = await getTesouroInfo("Tesouro Prefixado", "01/01/2029");
-  console.log(dados);
-})();
