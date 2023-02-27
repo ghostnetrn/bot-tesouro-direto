@@ -19,7 +19,7 @@ https
     });
     res.on("end", () => {
       // Salva o arquivo JSON
-      fs.writeFileSync("./docs/tesouro.json", data);
+      fs.writeFileSync("./tesouro.json", data);
       console.log("Arquivo tesouro.json salvo com sucesso!");
     });
   })
@@ -32,7 +32,7 @@ axios
   .get(URL_FILE_TESOURO, { responseType: "stream" })
   .then((response) => {
     const stream = response.data.pipe(
-      fs.createWriteStream("./docs/PrecoTaxaTesouroDireto.csv")
+      fs.createWriteStream("./PrecoTaxaTesouroDireto.csv")
     );
 
     return new Promise((resolve, reject) => {
