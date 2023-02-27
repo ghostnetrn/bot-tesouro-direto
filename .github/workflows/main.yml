@@ -2,7 +2,7 @@ name: Atualizar Tesouro Direto
 
 on:
   schedule:
-    - cron: "* * * * *"
+    - cron: "* */3 * * *"
 
 jobs:
   update-tesouro-direto:
