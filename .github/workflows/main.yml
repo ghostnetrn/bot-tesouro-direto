@@ -16,6 +16,13 @@ jobs:
       - run: node downloadTesouro.js
       - run: git config user.email "ghostnetrn@gmail.com"
       - run: git config user.name "BotTesouro"
-      - run: git add PrecoTaxaTesouroDireto.csv tesouro.json
-      - run: git commit -m "Atualizar Tesouro Direto"
-      - run: git push
+      - run: git status --porcelain
+        id: check_changes
+      - run: |
+          if [ -n "$(git status --porcelain)" ]; then 
+            git add PrecoTaxaTesouroDireto.csv tesouro.json
+            git commit -m "Atualizar Tesouro Direto"
+            git push
+          else
+            echo "No changes detected. Skipping commit and push."
+          fi
