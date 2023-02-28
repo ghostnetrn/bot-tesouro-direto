@@ -66,7 +66,6 @@
       if (minInvstmtAmt > 0) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-  <td>${info.index}</td>
   <td>${info.titulo}</td>
   <td>${vencimento}</td>
   <td>${info.investimentoMinimo}</td>
