@@ -100,6 +100,7 @@
       $("#tesouro").DataTable({
         paging: false,
         ordering: true,
+        order: [[12, 'desc']],
         language: {
           search: "Procurar",
         },
