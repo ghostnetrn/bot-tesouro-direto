@@ -103,6 +103,11 @@
         language: {
           search: "Procurar",
         },
+        createdRow: function ( row, data, index ) {
+          if (data[12].includes('J4')) {
+            $('td:eq(12)', row).css('background-color', '#ADFF2F');
+          }
+        }
       });
     });
   } catch (error) {
