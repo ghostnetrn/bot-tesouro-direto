@@ -1,18 +1,19 @@
-table {
-  border-collapse: collapse;
-  width: 100%;
+.bold-text {
+  font-weight: bold;
 }
 
-th, td {
-  text-align: left;
-  padding: 8px;
+.janela-otima {
+  color: green;
 }
 
-th {
-  background-color: #4CAF50;
-  color: white;
+.janela-boa {
+  color: blue;
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2;
+.janela-ruim {
+  color: orange;
+}
+
+.janela-pessima {
+  color: red;
 }

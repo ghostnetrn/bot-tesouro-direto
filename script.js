@@ -4,7 +4,7 @@
     const data = await response.json();
     const treasuryBonds = data.response;
     const tbody = document.getElementById("treasuryBondsTableBody");
-    
+
     for (const bond of treasuryBonds.TrsrBdTradgList) {
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
@@ -65,33 +65,46 @@
 
       if (minInvstmtAmt > 0) {
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${info.index}</td>
-                  <td>${info.titulo}</td>
-                  <td>${vencimento}</td>
-                  <td>${info.investimentoMinimo}</td>
-                  <td>${info.rentabilidadeAnual}</td>
-                  <td>${dt.min}</td>
-                  <td>${dt.q1}</td>
-                  <td>${dt.median}</td>
-                  <td>${dt.q3}</td>
-                  <td>${dt.max}</td>
-                  <td>${dt.mean}</td>
-                  <td>${dt.stdev}</td>
-                  <td>${janela}</td>
-                  `;
+        tr.innerHTML = `
+  <td>${info.index}</td>
+  <td>${info.titulo}</td>
+  <td>${vencimento}</td>
+  <td>${info.investimentoMinimo}</td>
+  <td>${info.rentabilidadeAnual}</td>
+  <td>${dt.min}</td>
+  <td>${dt.q1}</td>
+  <td>${dt.median}</td>
+  <td>${dt.q3}</td>
+  <td>${dt.max}</td>
+  <td>${dt.mean}</td>
+  <td>${dt.stdev}</td>
+  <td>
+    ${
+      janela.endsWith("ÓTIMA")
+        ? `<strong style="color:green">${janela}</strong>`
+        : janela.endsWith("BOA")
+        ? `<strong style="color:blue">${janela}</strong>`
+        : janela.endsWith("RUIM")
+        ? `<strong style="color:orange">${janela}</strong>`
+        : janela.endsWith("PÉSSIMA")
+        ? `<strong style="color:red">${janela}</strong>`
+        : janela
+    }
+  </td>
+`;
         tbody.appendChild(tr);
       }
     }
 
     $(document).ready(function () {
-      $('#tesouro').DataTable({
+      $("#tesouro").DataTable({
         paging: false,
         ordering: true,
         language: {
-          search: "Procurar"
-        }
-    })
-  });
+          search: "Procurar",
+        },
+      });
+    });
   } catch (error) {
     console.error(error);
   }
