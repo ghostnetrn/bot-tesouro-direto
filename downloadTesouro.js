@@ -63,12 +63,13 @@ function obterDataUltimaAtualizacao(arquivo) {
       if (error) {
         reject(error);
       } else {
-        const dataAtualizacao = new Date(stats.mtime);
+        const dataAtualizacao = new Date(stats.mtime.getTime() + "0"); // adiciona um zero ao final para transformar em timestamp em milissegundos
         resolve(dataAtualizacao);
       }
     });
   });
 }
+
 
 async function arquivoEstaDesatualizado(url, ultimaAtualizacao) {
   const response = await axios.head(url);
