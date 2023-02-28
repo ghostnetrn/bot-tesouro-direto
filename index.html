@@ -14,9 +14,10 @@
     <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>    
   </head>
   <body>
-      <h1 class="text-center">Tabela Tesouro Direto</h1>
+      <div class="p-3 mb-2 bg-success text-white display-3 text-center">Tabela Tesouro Direto</div>
+      <div class="table-responsive">
         <table id="tesouro" class="table table-striped" style="width:100%">
-          <thead>
+          <thead class="table-success">
             <tr>
               <th>Código</th>
               <th>Nome</th>
@@ -36,6 +37,7 @@
           <tbody id="treasuryBondsTableBody">
           </tbody>
         </table>
+      </div>
 
 
     <!-- Adicionando Bootstrap JS -->
