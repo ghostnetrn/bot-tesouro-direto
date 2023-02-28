@@ -67,7 +67,9 @@
         const tr = document.createElement("tr");
         tr.innerHTML = `
   <td>${info.index}</td>
-  <td>${info.titulo}</td>
+  <td><a href="https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm" target="_blank">${
+    info.titulo
+  }</a></td>
   <td>${vencimento}</td>
   <td>${info.investimentoMinimo}</td>
   <td>${info.rentabilidadeAnual}</td>
@@ -100,15 +102,15 @@
       $("#tesouro").DataTable({
         paging: false,
         ordering: true,
-        order: [[12, 'desc']],
+        order: [[12, "desc"]],
         language: {
           search: "Procurar",
         },
-        createdRow: function ( row, data, index ) {
-          if (data[12].includes('J4')) {
-            $('td:eq(12)', row).css('background-color', '#ADFF2F');
+        createdRow: function (row, data, index) {
+          if (data[12].includes("J4")) {
+            $("td:eq(12)", row).css("background-color", "#ADFF2F");
           }
-        }
+        },
       });
     });
   } catch (error) {
