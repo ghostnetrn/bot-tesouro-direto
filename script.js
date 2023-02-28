@@ -76,8 +76,16 @@
   <td>${dt.min}</td>
   <td>${dt.q1}</td>
   <td>${dt.median}</td>
-  <td>${dt.q3}</td>
-  <td>${dt.max}</td>
+  <td>
+  <strong style="color: ${
+    Math.abs(anulInvstmtRate - dt.q3) < Math.abs(anulInvstmtRate - dt.max) ? 'green' : 'black'
+  }">${dt.q3}</strong>
+</td>
+  <td>
+  <strong style="color: ${
+    Math.abs(anulInvstmtRate - dt.max) < Math.abs(anulInvstmtRate - dt.q3) ? 'green' : 'black'
+  }">${dt.max}</strong>
+</td>
   <td>${dt.mean}</td>
   <td>${dt.stdev}</td>
   <td>
