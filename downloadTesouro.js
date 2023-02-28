@@ -11,7 +11,7 @@ const URL_FILE_TESOURO =
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 async function baixarArquivoSeNecessario(arquivo, url) {
-  if (!fs.existsSync(arquivo)) {
+  if (!fs.existsSync(arquivo) || arquivo.endsWith('.json')) {
     console.log(`Iniciando download do arquivo ${arquivo}...`);
     const response = await axios.get(url, { responseType: "stream" });
 
