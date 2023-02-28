@@ -82,8 +82,8 @@
   }">${dt.q3}</strong>
 </td>
   <td>
-  <strong style="color: ${
-    Math.abs(anulInvstmtRate - dt.max) < Math.abs(anulInvstmtRate - dt.q3) ? 'green' : 'black'
+  <strong style="background-color: ${
+    Math.abs(anulInvstmtRate - dt.max) < Math.abs(anulInvstmtRate - dt.q3) ? '#ADFF2F' : ''
   }">${dt.max}</strong>
 </td>
   <td>${dt.mean}</td>
