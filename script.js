@@ -121,7 +121,7 @@
         },
       });
     });
-  } catch (error) { // Showing 1 to 19 of 19 entries
+  } catch (error) { 
     console.error(error);
   }
 })();
