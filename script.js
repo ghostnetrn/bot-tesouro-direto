@@ -112,8 +112,8 @@
         ordering: true,
         order: [[12, "desc"]],
         language: {
-          search: "Procurar",
-        },
+          url: 'https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json',
+      },
         createdRow: function (row, data, index) {
           if (data[12].includes("J4")) {
             $("td:eq(12)", row).css("background-color", "#ADFF2F");
@@ -121,7 +121,7 @@
         },
       });
     });
-  } catch (error) {
+  } catch (error) { // Showing 1 to 19 of 19 entries
     console.error(error);
   }
 })();
