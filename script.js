@@ -8,6 +8,8 @@
     for (const bond of treasuryBonds.TrsrBdTradgList) {
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
+      
+if (currBondName.toLowerCase().includes("renda")) continue 
 
       const { anulInvstmtRate, minInvstmtAmt, untrInvstmtVal, mtrtyDt } =
         bond.TrsrBd;
