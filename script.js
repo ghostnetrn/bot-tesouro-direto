@@ -8,8 +8,12 @@
     for (const bond of treasuryBonds.TrsrBdTradgList) {
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
-      
-if (currBondName.toLowerCase().includes("renda")) continue 
+
+      if (
+        currBondName.toLowerCase().includes("renda") ||
+        currBondName.toLowerCase().includes("selic")
+      )
+        continue;
 
       const { anulInvstmtRate, minInvstmtAmt, untrInvstmtVal, mtrtyDt } =
         bond.TrsrBd;
@@ -80,12 +84,16 @@ if (currBondName.toLowerCase().includes("renda")) continue
   <td>${dt.median}</td>
   <td>
   <strong style="color: ${
-    Math.abs(anulInvstmtRate - dt.q3) < Math.abs(anulInvstmtRate - dt.max) ? 'green' : 'black'
+    Math.abs(anulInvstmtRate - dt.q3) < Math.abs(anulInvstmtRate - dt.max)
+      ? "green"
+      : "black"
   }">${dt.q3}</strong>
 </td>
   <td>
   <strong style="background-color: ${
-    Math.abs(anulInvstmtRate - dt.max) < Math.abs(anulInvstmtRate - dt.q3) ? '#ADFF2F' : ''
+    Math.abs(anulInvstmtRate - dt.max) < Math.abs(anulInvstmtRate - dt.q3)
+      ? "#ADFF2F"
+      : ""
   }">${dt.max}</strong>
 </td>
   <td>${dt.mean}</td>
@@ -114,8 +122,8 @@ if (currBondName.toLowerCase().includes("renda")) continue
         ordering: true,
         order: [[12, "desc"]],
         language: {
-          url: 'https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json',
-      },
+          url: "https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json",
+        },
         createdRow: function (row, data, index) {
           if (data[12].includes("J4")) {
             $("td:eq(12)", row).css("background-color", "#ADFF2F");
@@ -123,7 +131,7 @@ if (currBondName.toLowerCase().includes("renda")) continue
         },
       });
     });
-  } catch (error) { 
+  } catch (error) {
     console.error(error);
   }
 })();
