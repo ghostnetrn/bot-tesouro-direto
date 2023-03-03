@@ -9,11 +9,7 @@
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
 
-      if (
-        currBondName.toLowerCase().includes("renda") ||
-        currBondName.toLowerCase().includes("selic")
-      )
-        continue;
+      if (currBondName.toLowerCase().includes("selic")) continue;
 
       const { anulInvstmtRate, minInvstmtAmt, untrInvstmtVal, mtrtyDt } =
         bond.TrsrBd;
@@ -205,7 +201,7 @@ xhr.open("GET", url);
 xhr.responseType = "text";
 
 // Adiciona um evento de carregamento à requisição
-xhr.onload = function() {
+xhr.onload = function () {
   // Obtém a data de modificação do cabeçalho HTTP "Last-Modified"
   let dataModificacao = new Date(xhr.getResponseHeader("Last-Modified"));
 
