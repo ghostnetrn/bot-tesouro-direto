@@ -191,3 +191,33 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
     stdev: stdev.toFixed(2),
   };
 }
+
+// Cria uma nova requisição XMLHttpRequest
+let xhr = new XMLHttpRequest();
+
+// Define a URL do arquivo "PrecoTaxaTesouroDireto.csv"
+let url = "PrecoTaxaTesouroDireto.csv";
+
+// Abre a requisição com o método GET
+xhr.open("GET", url);
+
+// Define o tipo de resposta esperado como "text"
+xhr.responseType = "text";
+
+// Adiciona um evento de carregamento à requisição
+xhr.onload = function() {
+  // Obtém a data de modificação do cabeçalho HTTP "Last-Modified"
+  let dataModificacao = new Date(xhr.getResponseHeader("Last-Modified"));
+
+  // Formata a data como uma string legível
+  let dataFormatada = dataModificacao.toLocaleString();
+
+  // Seleciona o elemento HTML onde a data será exibida
+  let spanDataModificacao = document.getElementById("data-atualizacao");
+
+  // Define o conteúdo do elemento como a data formatada
+  spanDataModificacao.textContent = dataFormatada;
+};
+
+// Envia a requisição
+xhr.send();
