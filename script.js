@@ -74,7 +74,7 @@
   }</a></td>
   <td>${vencimento}</td>
   <td>${info.investimentoMinimo}</td>
-  <td>${info.rentabilidadeAnual}</td>
+  <td>${info.rentabilidadeAnual}%</td>
   <td>${dt.min}</td>
   <td>${dt.q1}</td>
   <td>${dt.median}</td>
