@@ -1,82 +1,83 @@
-const axios = require("axios");
-const fs = require("fs");
-const arquivoJson = "tesouro.json";
-const arquivoCsv = "PrecoTaxaTesouroDireto.csv";
+async function getTesouroRange(
+  tipoTitulo,
+  vencimentoTitulo,
+  startDate,
+  endDate
+) {
+  const url = "PrecoTaxaTesouroDireto.csv";
 
-const URL_API =
-  "https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json";
-const URL_FILE_TESOURO =
-  "https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv";
+  const response = await fetch(url);
+  const buffer = await response.arrayBuffer();
+  const decoder = new TextDecoder("iso-8859-1");
+  const csvData = decoder.decode(buffer);
 
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+  const rows = csvData.split("\n");
+  const headers = rows[0].split(";");
+  const pus = [];
 
-async function baixarArquivoSeNecessario(arquivo, url) {
-  if (!fs.existsSync(arquivo)) {
-    console.log(`Iniciando download do arquivo ${arquivo}...`);
-    const response = await axios.get(url, { responseType: "stream" });
+  const dataBaseIndex = headers.indexOf("Data Base");
+  const tipoTituloIndex = headers.indexOf("Tipo Titulo");
+  const vencimentoTituloIndex = headers.indexOf("Data Vencimento");
+  const taxaCompraIndex = headers.indexOf("Taxa Compra Manha");
 
-    console.log(`Download do ${arquivo} concluído.`);
-    const stream = response.data.pipe(fs.createWriteStream(arquivo));
+  const startDateDate = new Date(startDate);
+  const endDateDate = new Date(endDate);
 
-    return new Promise((resolve, reject) => {
-      stream.on("finish", () => {
-        console.log(`${arquivo} salvo localmente.`);
-        resolve();
-      });
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i].split(";");
+    const dataBase = row[dataBaseIndex];
 
-      stream.on("error", (error) => {
-        console.error(`Erro ao salvar o ${arquivo}: ${error}`);
-        reject(error);
-      });
-    });
-  }
+    if (!dataBase) continue;
 
-  const ultimaAtualizacao = await obterDataUltimaAtualizacao(arquivo);
+    const [dia, mes, ano] = dataBase.split("/");
+    const dataBaseDate = new Date(`${ano}-${mes}-${dia}`);
 
-  if (await arquivoEstaDesatualizado(url, ultimaAtualizacao)) {
-    console.log("Iniciando download do arquivo...");
-    const response = await axios.get(url, { responseType: "stream" });
-
-    console.log("Download do arquivo concluído.");
-    const stream = response.data.pipe(fs.createWriteStream(arquivo));
-
-    return new Promise((resolve, reject) => {
-      stream.on("finish", () => {
-        console.log("Arquivo salvo localmente.");
-        resolve();
-      });
-
-      stream.on("error", (error) => {
-        console.error(`Erro ao salvar o arquivo: ${error}`);
-        reject(error);
-      });
-    });
-  } else {
-    console.log(`O ${arquivo} já está atualizado.`);
-    return Promise.resolve();
-  }
-}
-
-function obterDataUltimaAtualizacao(arquivo) {
-  return new Promise((resolve, reject) => {
-    fs.stat(arquivo, (error, stats) => {
-      if (error) {
-        reject(error);
-      } else {
-        const dataAtualizacao = new Date(stats.mtime);
-        resolve(dataAtualizacao);
+    // Comparar se a data da coluna "Data Base" está dentro do intervalo definido
+    if (dataBaseDate >= startDateDate && dataBaseDate <= endDateDate) {
+      if (
+        row[tipoTituloIndex] === tipoTitulo &&
+        row[vencimentoTituloIndex] === vencimentoTitulo
+      ) {
+        const taxaCompra = parseFloat(row[taxaCompraIndex].replace(",", "."));
+        pus.push(taxaCompra);
       }
-    });
+    }
+  }
+
+  if (pus.length === 0) {
+    return {
+      min: "0.00",
+      q1: "0.00",
+      median: "0.00",
+      q3: "0.00",
+      max: "0.00",
+      mean: "0.00",
+      stdev: "0.00",
+    };
+  }
+
+  const min = ss.min(pus);
+  const q1 = ss.quantile(pus, 0.25);
+  const median = ss.median(pus);
+  const q3 = ss.quantile(pus, 0.75);
+  const max = ss.max(pus);
+  const mean = ss.mean(pus);
+  const stdev = ss.standardDeviation(pus);
+
+  console.log ({
+    min: min.toFixed(2),
+    q1: q1.toFixed(2),
+    median: median.toFixed(2),
+    q3: q3.toFixed(2),
+    max: max.toFixed(2),
+    mean: mean.toFixed(2),
+    stdev: stdev.toFixed(2),
   });
 }
 
-async function arquivoEstaDesatualizado(url, ultimaAtualizacao) {
-  const response = await axios.head(url);
-  const dataUltimaModificacao = new Date(response.headers["last-modified"]);
-  return dataUltimaModificacao > ultimaAtualizacao;
-}
-
-(async () => {
-  await baixarArquivoSeNecessario(arquivoJson, URL_API);
-  await baixarArquivoSeNecessario(arquivoCsv, URL_FILE_TESOURO);
-})();
+getTesouroRange(
+  "Tesouro IPCA+",
+  "15/05/2035",
+  "02/01/2020",
+  "04/03/2023"
+)
