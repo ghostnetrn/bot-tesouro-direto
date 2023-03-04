@@ -21,3 +21,8 @@
 .janela-pessima {
   color: red;
 }
+
+.input-group {
+  max-width: 330px; 
+  padding-left: 16px;
+}
