@@ -243,7 +243,7 @@ $("#daterange").daterangepicker({
     "Últimos 4 anos": [moment().subtract(4, "years"), moment()],
     "Último ano": [moment().subtract(1, "years"), moment()],
   },
-  //autoUpdateInput: false,
+  autoUpdateInput: false,
   //startDate: null,
   // endDate: null,
   locale: {
