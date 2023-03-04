@@ -276,7 +276,11 @@ $("#daterange").daterangepicker({
 $("#daterange").on("apply.daterangepicker", async function (ev, picker) {
   const startDate = picker.startDate;
   const endDate = picker.endDate;
-
+  $(this).val(
+    picker.startDate.format("DD/MM/YYYY") +
+      " - " +
+      picker.endDate.format("DD/MM/YYYY")
+  );
   await getData(startDate, endDate);
 });
 
