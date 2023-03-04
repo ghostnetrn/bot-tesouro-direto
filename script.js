@@ -460,11 +460,11 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         language: {
           url: "https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json",
         },
-        // createdRow: function (row, data, index) {
-        //   if (data[12].includes("J4")) {
-        //     $("td:eq(12)", row).css("background-color", "#ADFF2F");
-        //   }
-        // },
+        createdRow: function (row, data, index) {
+          if (data[12].includes("J4")) {
+            $("td:eq(12)", row).css("background-color", "#ADFF2F");
+          }
+        },
       });
     });
   } catch (error) {
