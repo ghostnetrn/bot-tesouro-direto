@@ -1,11 +1,19 @@
+var tabela = "";
+
 async function getData(startDate, endDate) {
+  tabela.destroy();
   try {
     const response = await fetch("tesouro.json");
     const data = await response.json();
     const treasuryBonds = data.response;
-    const tbody = document.getElementById("treasuryBondsTableBody");
+    let tbody = document.getElementById("treasuryBondsTableBody");
 
-    tbody.innerHTML = "";
+    if (tbody !== null) {
+      tbody.innerHTML = "";
+    } else {
+      tbody = document.createElement("tbody");
+      tbody.id = "treasuryBondsTableBody";
+    }
 
     for (const bond of treasuryBonds.TrsrBdTradgList) {
       const currBondName = bond.TrsrBd.nm;
@@ -118,6 +126,21 @@ async function getData(startDate, endDate) {
         tbody.appendChild(tr);
       }
     }
+
+    tabela = $("#tesouro").DataTable({
+      retrieve: true,
+      paging: false,
+      ordering: true,
+      order: [[12, "desc"]],
+      language: {
+        url: "https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json",
+      },
+      createdRow: function (row, data, index) {
+        if (data[12].includes("J4")) {
+          $("td:eq(12)", row).css("background-color", "#ADFF2F");
+        }
+      },
+    });
   } catch (error) {
     console.error(error);
   }
@@ -145,8 +168,8 @@ async function getTesouroRange(
   const vencimentoTituloIndex = headers.indexOf("Data Vencimento");
   const taxaCompraIndex = headers.indexOf("Taxa Compra Manha");
 
-  const startDateDate = startDate
-  const endDateDate = endDate
+  const startDateDate = startDate;
+  const endDateDate = endDate;
 
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i].split(";");
@@ -230,8 +253,8 @@ xhr.onload = function () {
 // Envia a requisição
 xhr.send();
 
-$(document).ready(function() {
-  $('#reset-btn').on('click', function() {
+$(document).ready(function () {
+  $("#reset-btn").on("click", function () {
     location.reload();
   });
 });
@@ -383,7 +406,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
       }
 
       const mtrtyDate = new Date(mtrtyDt);
-      
+
       const dia = mtrtyDate.getDate().toString().padStart(2, "0");
       const mes = (mtrtyDate.getMonth() + 1).toString().padStart(2, "0");
       const ano = mtrtyDate.getFullYear().toString();
@@ -456,20 +479,18 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
       }
     }
 
-    $(document).ready(function () {
-      $("#tesouro").DataTable({
-        paging: false,
-        ordering: true,
-        order: [[12, "desc"]],
-        language: {
-          url: "https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json",
-        },
-        createdRow: function (row, data, index) {
-          if (data[12].includes("J4")) {
-            $("td:eq(12)", row).css("background-color", "#ADFF2F");
-          }
-        },
-      });
+    tabela = $("#tesouro").DataTable({
+      paging: false,
+      ordering: true,
+      order: [[12, "desc"]],
+      language: {
+        url: "https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json",
+      },
+      createdRow: function (row, data, index) {
+        if (data[12].includes("J4")) {
+          $("td:eq(12)", row).css("background-color", "#ADFF2F");
+        }
+      },
     });
   } catch (error) {
     console.error(error);
