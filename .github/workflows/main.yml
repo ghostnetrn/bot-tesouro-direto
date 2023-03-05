@@ -15,12 +15,12 @@ jobs:
       - run: npm install
       - run: node downloadTesouro.js
       - run: |
-          if [[ -n $(git status -s) ]]; then
+          if git diff-index --quiet HEAD --; then
+            echo "No changes detected. Nothing to commit."
+          else
             git config user.email "ghostnetrn@gmail.com"
             git config user.name "BotTesouro"
             git add PrecoTaxaTesouroDireto.csv tesouro.json
             git commit -m "Atualizar Tesouro Direto"
             git push
-          else
-            echo "No changes detected. Nothing to commit."
           fi
