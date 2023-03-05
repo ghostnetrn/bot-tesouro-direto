@@ -15,9 +15,19 @@ async function getData(startDate, endDate) {
       tbody.id = "treasuryBondsTableBody";
     }
 
-    for (const bond of treasuryBonds.TrsrBdTradgList) {
+    alerta.innerHTML = alerta.innerHTML.replace(
+      "Gerando histórico completo! Aguarde.",
+      "Gerando histórico do período! Aguarde."
+    );
+    alerta.style.display = "block";
+
+    for (const [indice, bond] of treasuryBonds.TrsrBdTradgList.entries()) {
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
+
+      alerta_progresso.style.width = `${
+        (indice / treasuryBonds.TrsrBdTradgList.length) * 100
+      }%`;
 
       if (currBondName.toLowerCase().includes("selic")) continue;
 
@@ -126,6 +136,8 @@ async function getData(startDate, endDate) {
         tbody.appendChild(tr);
       }
     }
+
+    alerta.style.display = "none";
 
     tabela = $("#tesouro").DataTable({
       retrieve: true,
@@ -304,7 +316,7 @@ $("#daterange").on("apply.daterangepicker", async function (ev, picker) {
       " - " +
       picker.endDate.format("DD/MM/YYYY")
   );
-  buttonEnable()
+  buttonEnable();
   await getData(startDate, endDate);
 });
 
@@ -367,19 +379,21 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
 
 (async function () {
   try {
-    buttonEnable()
+    buttonEnable();
     const response = await fetch("tesouro.json");
     const data = await response.json();
     const treasuryBonds = data.response;
     const tbody = document.getElementById("treasuryBondsTableBody");
-    alerta.style.display = 'block';
+    alerta.style.display = "block";
 
     for (const [indice, bond] of treasuryBonds.TrsrBdTradgList.entries()) {
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
 
-      alerta_progresso.style.width = `${(indice / treasuryBonds.TrsrBdTradgList.length) * 100}%`;
-      
+      alerta_progresso.style.width = `${
+        (indice / treasuryBonds.TrsrBdTradgList.length) * 100
+      }%`;
+
       if (currBondName.toLowerCase().includes("selic")) continue;
 
       const { anulInvstmtRate, minInvstmtAmt, untrInvstmtVal, mtrtyDt } =
@@ -497,7 +511,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         }
       },
     });
-    alerta.style.display = 'none';
+    alerta.style.display = "none";
   } catch (error) {
     console.error(error);
   }
@@ -518,4 +532,3 @@ function buttonEnable() {
     });
   });
 }
-
