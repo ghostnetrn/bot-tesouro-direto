@@ -304,6 +304,7 @@ $("#daterange").on("apply.daterangepicker", async function (ev, picker) {
       " - " +
       picker.endDate.format("DD/MM/YYYY")
   );
+  buttonEnable()
   await getData(startDate, endDate);
 });
 
@@ -366,12 +367,14 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
 
 (async function () {
   try {
+    buttonEnable()
     const response = await fetch("tesouro.json");
     const data = await response.json();
     const treasuryBonds = data.response;
     const tbody = document.getElementById("treasuryBondsTableBody");
 
     for (const bond of treasuryBonds.TrsrBdTradgList) {
+      alerta.style.display = 'block';
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
 
@@ -492,7 +495,25 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         }
       },
     });
+    alerta.style.display = 'none';
   } catch (error) {
     console.error(error);
   }
 })();
+
+function buttonEnable() {
+  $(document).ready(function () {
+    // Obtenha o botão e o input
+    var btn = $("#reset-btn");
+    var input = $("#daterange");
+
+    // Desabilita o botão se o input estiver vazio
+    btn.prop("disabled", input.val() === "");
+
+    // Habilita ou desabilita o botão conforme o input é alterado
+    input.on("input", function () {
+      btn.prop("disabled", $(this).val() === "");
+    });
+  });
+}
+
