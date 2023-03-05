@@ -372,9 +372,9 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
     const data = await response.json();
     const treasuryBonds = data.response;
     const tbody = document.getElementById("treasuryBondsTableBody");
+    alerta.style.display = 'block';
 
     for (const bond of treasuryBonds.TrsrBdTradgList) {
-      alerta.style.display = 'block';
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
 
