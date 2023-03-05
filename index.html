@@ -17,16 +17,35 @@
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   </head>
   <body>
-      <div class="p-3 mb-2 bg-success text-white display-3 text-center">Tabela Tesouro Direto</div>    
-      <div class="d-flex align-items-center">
-        <span class="badge text-bg-primary">Última atualização: </span>
-        <span id="data-atualizacao"></span>
-        <div class="input-group">
+    <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">Tesouro Direto</a>
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.tesourodireto.com.br/titulos/calculadora.htm" target="_blank">Calculadora</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm" target="_blank">Títulos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.tesourodireto.com.br/simulador/" target="_blank">Simulador</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search">
+          <div class="input-group">
             <span class="input-group-text">Período:</span>
             <input type="text" class="form-control" id="daterange">
             <button type="button" class="btn btn-secondary" id="reset-btn">Ver histórico completo</button>
         </div>
-    </div>
+        </form>
+      </div>
+    </nav>
+    
+    <button type="button" class="btn btn-primary position-relative mt-5 top-300 start-0 sticky-top">
+      Última atualização: <span id="data-atualizacao" class="badge rounded-pill bg-secondary"></span>
+    </button>
+    
+  
     <div id="alerta" class="alert alert-warning text-center fw-bold fs-3" role="alert">
       Gerando histórico completo! Aguarde.
       <div class="progress" role="progressbar" aria-label="Warning example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
