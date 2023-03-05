@@ -374,10 +374,12 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
     const tbody = document.getElementById("treasuryBondsTableBody");
     alerta.style.display = 'block';
 
-    for (const bond of treasuryBonds.TrsrBdTradgList) {
+    for (const [indice, bond] of treasuryBonds.TrsrBdTradgList.entries()) {
       const currBondName = bond.TrsrBd.nm;
       const index = bond.TrsrBd.cd;
 
+      alerta_progresso.style.width = `${(indice / treasuryBonds.TrsrBdTradgList.length) * 100}%`;
+      
       if (currBondName.toLowerCase().includes("selic")) continue;
 
       const { anulInvstmtRate, minInvstmtAmt, untrInvstmtVal, mtrtyDt } =
