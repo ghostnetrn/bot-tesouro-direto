@@ -14,8 +14,13 @@ jobs:
           node-version: "16"
       - run: npm install
       - run: node downloadTesouro.js
-      - run: git config user.email "ghostnetrn@gmail.com"
-      - run: git config user.name "BotTesouro"
-      - run: git add PrecoTaxaTesouroDireto.csv tesouro.json
-      - run: git commit -m "Atualizar Tesouro Direto"
-      - run: git push
+      - run: |
+          if [[ -n $(git status -s) ]]; then
+            git config user.email "ghostnetrn@gmail.com"
+            git config user.name "BotTesouro"
+            git add PrecoTaxaTesouroDireto.csv tesouro.json
+            git commit -m "Atualizar Tesouro Direto"
+            git push
+          else
+            echo "No changes detected. Nothing to commit."
+          fi
