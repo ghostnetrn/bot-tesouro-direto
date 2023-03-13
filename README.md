@@ -3,6 +3,9 @@
 Retornar as informações de um título específico do Tesouro Direto.
 Fonte: https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm
 
+> Site funcionando: https://ghostnetrn.github.io/bot-tesouro-direto/
+
+
 ## 🗂 Como baixar e instalar o projeto
 
 ```bash
