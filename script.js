@@ -398,7 +398,11 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
         (indice / treasuryBonds.TrsrBdTradgList.length) * 100
       }%`;
 
-      if (currBondName.toLowerCase().includes("selic")) continue;
+      if (
+        currBondName.toLowerCase().includes("selic") ||
+        currBondName.toLowerCase().includes("renda+")
+      )
+        continue;
 
       const { anulInvstmtRate, minInvstmtAmt, untrInvstmtVal, mtrtyDt } =
         bond.TrsrBd;
