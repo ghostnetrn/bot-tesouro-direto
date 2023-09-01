@@ -117,7 +117,10 @@ bot.action("titulosBons", async (ctx) => {
           : cotacao.rentabilidadeAnual;
 
       // Verifica se o título contém a palavra "Renda+"
-      if (tituloDados.toLowerCase().includes("renda+")) {
+      if (
+        tituloDados.toLowerCase().includes("renda+") ||
+        tituloDados.toLowerCase().includes("educa+")
+      ) {
         //tituloDados = "NTN-B1";
         continue;
       }
@@ -317,7 +320,7 @@ async function verificarRentabilidade() {
       // Verifica se o título contém a palavra "Renda+"
       if (tituloDados.toLowerCase().includes("renda+")) {
         //tituloDados = "NTN-B1";
-        continue
+        continue;
       }
 
       const dadostesouro = await getTesouroInfo(tituloDados, vencimento);
