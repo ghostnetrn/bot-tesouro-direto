@@ -318,7 +318,10 @@ async function verificarRentabilidade() {
           : cotacao.rentabilidadeAnual;
 
       // Verifica se o título contém a palavra "Renda+"
-      if (tituloDados.toLowerCase().includes("renda+")) {
+      if (
+        tituloDados.toLowerCase().includes("renda+") ||
+        tituloDados.toLowerCase().includes("educa+")
+      ) {
         //tituloDados = "NTN-B1";
         continue;
       }
