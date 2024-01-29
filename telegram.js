@@ -118,7 +118,7 @@ bot.action("titulosBons", async (ctx) => {
 
       // Verifica se o título contém a palavra "Renda+"
       if (
-        tituloDados.toLowerCase().includes("renda+") ||
+       // tituloDados.toLowerCase().includes("renda+") ||
         tituloDados.toLowerCase().includes("educa+")
       ) {
         //tituloDados = "NTN-B1";
@@ -319,8 +319,8 @@ async function verificarRentabilidade() {
 
       // Verifica se o título contém a palavra "Renda+"
       if (
-        tituloDados.toLowerCase().includes("renda+") ||
-        tituloDados.toLowerCase().includes("educa+") ||
+        //tituloDados.toLowerCase().includes("renda+") ||
+        //tituloDados.toLowerCase().includes("educa+") ||
         tituloDados.toLowerCase().includes("semestrais")
       ) {
         //tituloDados = "NTN-B1";
