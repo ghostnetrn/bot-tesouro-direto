@@ -31,7 +31,7 @@ async function getData(startDate, endDate) {
 
       if (
         currBondName.toLowerCase().includes("selic") ||
-        currBondName.toLowerCase().includes("renda+") ||
+        //currBondName.toLowerCase().includes("renda+") ||
         currBondName.toLowerCase().includes("educa+") 
       )
         continue;
@@ -401,7 +401,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
 
       if (
         currBondName.toLowerCase().includes("selic") ||
-        currBondName.toLowerCase().includes("renda+") ||
+       // currBondName.toLowerCase().includes("renda+") ||
         currBondName.toLowerCase().includes("educa+")
       )
         continue;
