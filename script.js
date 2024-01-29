@@ -74,7 +74,8 @@ async function getData(startDate, endDate) {
       let tituloDados = currBondName.replace(/\s\d+$/, "");
 
       if (tituloDados.toLowerCase().includes("renda+")) {
-        tituloDados = "NTN-B1";
+        //tituloDados = "NTN-B1";
+		tituloDados = "Tesouro Renda+ Aposentadoria Extra";
       }
 
       const dt = await getTesouroRange(
