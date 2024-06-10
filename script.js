@@ -3,7 +3,9 @@ var tabela = "";
 async function getData(startDate, endDate) {
   tabela.destroy();
   try {
-    const response = await fetch("tesouro.json");
+    const response = await fetch(
+      "https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json"
+    );
     const data = await response.json();
     const treasuryBonds = data.response;
     let tbody = document.getElementById("treasuryBondsTableBody");
@@ -32,7 +34,7 @@ async function getData(startDate, endDate) {
       if (
         currBondName.toLowerCase().includes("selic") ||
         //currBondName.toLowerCase().includes("renda+") ||
-        currBondName.toLowerCase().includes("educa+") 
+        currBondName.toLowerCase().includes("educa+")
       )
         continue;
 
@@ -75,7 +77,7 @@ async function getData(startDate, endDate) {
 
       if (tituloDados.toLowerCase().includes("renda+")) {
         //tituloDados = "NTN-B1";
-		tituloDados = "Tesouro Renda+ Aposentadoria Extra";
+        tituloDados = "Tesouro Renda+ Aposentadoria Extra";
       }
 
       const dt = await getTesouroRange(
@@ -402,7 +404,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
 
       if (
         currBondName.toLowerCase().includes("selic") ||
-       // currBondName.toLowerCase().includes("renda+") ||
+        // currBondName.toLowerCase().includes("renda+") ||
         currBondName.toLowerCase().includes("educa+")
       )
         continue;
@@ -447,7 +449,7 @@ async function getTesouroInfo(tipoTitulo, vencimentoTitulo) {
 
       if (tituloDados.toLowerCase().includes("renda+")) {
         //tituloDados = "NTN-B1";
-		tituloDados = "Tesouro Renda+ Aposentadoria Extra";
+        tituloDados = "Tesouro Renda+ Aposentadoria Extra";
       }
 
       const dt = await getTesouroInfo(tituloDados, vencimento);
