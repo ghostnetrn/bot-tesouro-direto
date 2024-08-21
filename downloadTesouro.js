@@ -4,6 +4,8 @@ const fs = require("fs");
 const arquivoJson = "tesouro.json";
 const arquivoCsv = "PrecoTaxaTesouroDireto.csv";
 
+// process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
 const URL_API =
   "https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json";
 const URL_FILE_TESOURO =
