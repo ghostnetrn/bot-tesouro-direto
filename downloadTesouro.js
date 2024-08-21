@@ -28,6 +28,9 @@ async function downloadJsonViaPuppeteer(url, arquivo) {
       "Referer": "https://www.tesourodireto.com.br/",
       "Origin": "https://www.tesourodireto.com.br"
     });
+
+    const cookies = await page.cookies();
+    await page.setCookie(...cookies);
     // Navegar diretamente para a URL da API
     const response = await page.goto(url, {
       waitUntil: "networkidle2", // Espera até que a rede esteja ociosa
