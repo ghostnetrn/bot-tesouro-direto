@@ -1,5 +1,6 @@
 const axios = require("axios");
 const fs = require("fs");
+
 const arquivoJson = "tesouro.json";
 const arquivoCsv = "PrecoTaxaTesouroDireto.csv";
 
@@ -12,25 +13,37 @@ process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 async function downloadArquivo(arquivo, url) {
   console.log(`Iniciando download do arquivo ${arquivo}...`);
-  const response = await axios.get(url, { responseType: "stream" });
+  try {
+    const response = await axios.get(url, { responseType: "stream" });
 
-  console.log(`Download do ${arquivo} concluído.`);
-  const stream = response.data.pipe(fs.createWriteStream(arquivo));
+    console.log(`Download do ${arquivo} concluído.`);
+    const stream = response.data.pipe(fs.createWriteStream(arquivo));
 
-  return new Promise((resolve, reject) => {
-    stream.on("finish", () => {
-      console.log(`${arquivo} salvo localmente.`);
-      resolve();
+    return new Promise((resolve, reject) => {
+      stream.on("finish", () => {
+        console.log(`${arquivo} salvo localmente.`);
+        resolve();
+      });
+
+      stream.on("error", (error) => {
+        console.error(`Erro ao salvar o ${arquivo}: ${error}`);
+        reject(error);
+      });
     });
-
-    stream.on("error", (error) => {
-      console.error(`Erro ao salvar o ${arquivo}: ${error}`);
-      reject(error);
-    });
-  });
+  } catch (error) {
+    console.error(`Erro ao baixar o arquivo ${arquivo}:`, error);
+    throw error;
+  }
 }
 
 (async () => {
-  await downloadArquivo(arquivoJson, URL_API);
-  await downloadArquivo(arquivoCsv, URL_FILE_TESOURO);
+  try {
+    await Promise.all([
+      downloadArquivo(arquivoJson, URL_API),
+      downloadArquivo(arquivoCsv, URL_FILE_TESOURO),
+    ]);
+    console.log("Todos os downloads foram concluídos.");
+  } catch (error) {
+    console.error("Falha no download:", error);
+  }
 })();
