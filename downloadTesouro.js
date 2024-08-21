@@ -23,6 +23,9 @@ async function downloadJsonViaPuppeteer(url, arquivo) {
     await page.setUserAgent(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
     );
+    await page.setExtraHTTPHeaders({
+      "Accept-Language": "en-US,en;q=0.9",
+    });
     // Navegar diretamente para a URL da API
     const response = await page.goto(url, {
       waitUntil: "networkidle2", // Espera até que a rede esteja ociosa
