@@ -3,7 +3,8 @@ name: Atualizar Tesouro Direto
 on:
   schedule:
     - cron: "*/90 * * * *" # Executa a cada 90 minutos
-
+permissions:
+  contents: write
 jobs:
   scheduled-job:
     runs-on: ubuntu-latest
