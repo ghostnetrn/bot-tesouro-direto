@@ -21,10 +21,12 @@ async function downloadJsonViaPuppeteer(url, arquivo) {
 
     // Configurar o User-Agent e outros cabeçalhos para emular um navegador real
     await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     );
     await page.setExtraHTTPHeaders({
       "Accept-Language": "en-US,en;q=0.9",
+      "Referer": "https://www.tesourodireto.com.br/",
+      "Origin": "https://www.tesourodireto.com.br"
     });
     // Navegar diretamente para a URL da API
     const response = await page.goto(url, {
