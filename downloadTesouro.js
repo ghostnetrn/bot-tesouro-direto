@@ -16,6 +16,7 @@ async function downloadJsonViaPuppeteer(url, arquivo) {
     console.log(`Iniciando download do arquivo ${arquivo} via Puppeteer...`);
     browser = await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      headless: true, // Certifique-se de que está em headless para ambientes de CI/CD
     });
     const page = await browser.newPage();
 
@@ -29,8 +30,12 @@ async function downloadJsonViaPuppeteer(url, arquivo) {
       "Origin": "https://www.tesourodireto.com.br"
     });
 
+    // Visitar a página principal para capturar cookies
+    await page.goto("https://www.tesourodireto.com.br", { waitUntil: "networkidle2" });
+
     const cookies = await page.cookies();
     await page.setCookie(...cookies);
+
     // Navegar diretamente para a URL da API
     const response = await page.goto(url, {
       waitUntil: "networkidle2", // Espera até que a rede esteja ociosa
