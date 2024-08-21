@@ -2,23 +2,60 @@ name: Atualizar Tesouro Direto
 
 on:
   schedule:
-    - cron: "*/90 * * * *"
+    - cron: "*/90 * * * *" # Executa a cada 90 minutos
 
 jobs:
   scheduled-job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: "16"
+
+      # Instalação das dependências necessárias para o Puppeteer
+      - name: Install Puppeteer dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgconf-2-4 \
+            libx11-xcb1 \
+            libnss3 \
+            libxcomposite1 \
+            libxcursor1 \
+            libxdamage1 \
+            libxi6 \
+            libxtst6 \
+            libpangocairo-1.0-0 \
+            libxrandr2 \
+            libasound2 \
+            libpango1.0-0 \
+            libatk1.0-0 \
+            libatk-bridge2.0-0 \
+            libcups2 \
+            libdrm2 \
+            libdbus-1-3 \
+            libx11-6 \
+            libgbm1 \
+            libxshmfence1 \
+            libxext6 \
+            libxfixes3 \
+            libxrender1 \
+            libcairo2 \
+            libxinerama1 \
+            libgl1-mesa-glx
+
       - run: npm install
+
       - run: node downloadTesouro.js
-      - run: |
-          if ! git diff-index --quiet HEAD --; then 
+
+      - name: Commit and Push Changes
+        run: |
+          if ! git diff-index --quiet HEAD --; then
             git config user.email "ghostnetrn@gmail.com"
             git config user.name "BotTesouro"
             git add PrecoTaxaTesouroDireto.csv tesouro.json
-            git commit -m "Atualizar Tesouro Direto" --allow-empty
+            git commit -m "Atualizar Tesouro Direto"
             git push
           fi
