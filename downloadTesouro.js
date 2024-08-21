@@ -9,12 +9,15 @@ const URL_API =
 const URL_FILE_TESOURO =
   "https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv";
 
-// process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
-
 async function downloadArquivo(arquivo, url) {
   console.log(`Iniciando download do arquivo ${arquivo}...`);
   try {
-    const response = await axios.get(url, { responseType: "stream" });
+    const response = await axios.get(url, {
+      responseType: "stream",
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+      }
+    });
 
     console.log(`Download do ${arquivo} concluído.`);
     const stream = response.data.pipe(fs.createWriteStream(arquivo));
@@ -31,7 +34,7 @@ async function downloadArquivo(arquivo, url) {
       });
     });
   } catch (error) {
-    console.error(`Erro ao baixar o arquivo ${arquivo}:`, error);
+    console.error(`Erro ao baixar o arquivo ${arquivo}:`, error.message);
     throw error;
   }
 }
@@ -44,6 +47,6 @@ async function downloadArquivo(arquivo, url) {
     ]);
     console.log("Todos os downloads foram concluídos.");
   } catch (error) {
-    console.error("Falha no download:", error);
+    console.error("Falha no download:", error.message);
   }
 })();
