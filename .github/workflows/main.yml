@@ -24,6 +24,7 @@ jobs:
 
       - name: Commit and Push Changes
         run: |
+          git diff-index --quiet HEAD -- || true
           if ! git diff-index --quiet HEAD --; then
             git config user.email "ghostnetrn@gmail.com"
             git config user.name "BotTesouro"
