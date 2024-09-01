@@ -35,9 +35,4 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: /usr/bin/bash -e
-
-      - name: Handle clean working directory
-        if: ${{ always() }}
-        run: echo "No changes detected, skipping commit."
-        shell: /usr/bin/bash -e
+        shell: bash
