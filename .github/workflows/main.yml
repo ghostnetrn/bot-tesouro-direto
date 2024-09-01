@@ -2,7 +2,7 @@ name: Atualizar Tesouro Direto
 
 on:
   schedule:
-    - cron: "*/90 * * * *" # Executa a cada 90 minutos
+    - cron: "*/3 * * * *" # Executa a cada 90 minutos
 
 permissions:
   contents: write
