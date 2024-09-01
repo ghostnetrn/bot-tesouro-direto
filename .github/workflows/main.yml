@@ -33,3 +33,4 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: /usr/bin/bash -e {0} || true
