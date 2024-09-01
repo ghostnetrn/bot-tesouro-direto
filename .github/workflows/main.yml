@@ -29,6 +29,7 @@ jobs:
 
           if git diff-index --quiet HEAD --; then
             echo "Nenhuma mudança a ser comitada."
+            exit 0
           else
             git add PrecoTaxaTesouroDireto.csv tesouro.json
             git commit -m "Atualizar Tesouro Direto"
