@@ -28,6 +28,8 @@ jobs:
             git add PrecoTaxaTesouroDireto.csv tesouro.json
             git commit -m "Atualizar Tesouro Direto"
             git push
+          else
+            echo "Nenhuma mudança a ser comitada."
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
