@@ -3,8 +3,10 @@ name: Atualizar Tesouro Direto
 on:
   schedule:
     - cron: "*/90 * * * *" # Executa a cada 90 minutos
+
 permissions:
   contents: write
+
 jobs:
   scheduled-job:
     runs-on: ubuntu-latest
@@ -33,4 +35,9 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: /usr/bin/bash -e {0} || true
+        shell: /usr/bin/bash -e
+
+      - name: Handle clean working directory
+        if: ${{ always() }}
+        run: echo "No changes detected, skipping commit."
+        shell: /usr/bin/bash -e
