@@ -35,6 +35,7 @@ jobs:
             git commit -m "Atualizar Tesouro Direto"
             git push
           fi
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
