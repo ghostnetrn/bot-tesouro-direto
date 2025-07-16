@@ -516,6 +516,26 @@ a:hover {
   font-size: 0.875rem;
 }
 
+.disclaimer {
+  background-color: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  text-align: left;
+}
+
+.disclaimer p {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.disclaimer strong {
+  color: var(--color-warning);
+}
+
 /* Responsive */
 @media (max-width: 991px) {
   .header-container {
