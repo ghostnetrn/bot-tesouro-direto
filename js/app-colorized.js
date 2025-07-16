@@ -7,6 +7,37 @@
 let tabela;
 let isDarkTheme = false;
 
+// Helper functions for text formatting with line breaks
+function formatTitleWithLineBreak(title) {
+  // Put "Tesouro" on first line, rest on second line
+  if (title.startsWith('Tesouro ')) {
+    const parts = title.split(' ');
+    return `Tesouro<br>${parts.slice(1).join(' ')}`;
+  }
+  return title;
+}
+
+function formatRateWithLineBreak(rate) {
+  // Put "IPCA+" on first line, percentage on second line
+  if (typeof rate === 'string' && rate.includes('IPCA +')) {
+    const parts = rate.split(' + ');
+    return `IPCA+<br>${parts[1]}`;
+  } else if (typeof rate === 'string' && rate.includes('SELIC +')) {
+    const parts = rate.split(' + ');
+    return `SELIC+<br>${parts[1]}`;
+  }
+  return rate;
+}
+
+function formatWindowWithLineBreak(windowText) {
+  // Put first word on first line, rest on second line
+  const parts = windowText.split(' ');
+  if (parts.length > 1) {
+    return `${parts[0]}<br>${parts.slice(1).join(' ')}`;
+  }
+  return windowText;
+}
+
 // DOM Elements
 const themeToggle = document.getElementById('theme-toggle');
 const mobileMenuToggle = document.getElementById('mobile-menu-toggle');

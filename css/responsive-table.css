@@ -78,62 +78,79 @@
     display: none;
   }
 
-  /* Optimize column widths for desktop */
+  /* Desktop optimization - readable fonts like the image */
   .table th,
   .table td {
-    padding: var(--spacing-sm) var(--spacing-xs);
-    font-size: 0.8rem;
+    padding: var(--spacing-sm);
+    font-size: 0.95rem;
   }
 
-  /* Make numeric columns more compact */
+  /* Keep numeric columns readable and well-spaced */
   .table .numeric {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     white-space: nowrap;
   }
 
-  /* Optimize status column */
-  .status {
-    font-size: 0.65rem;
-    padding: 0.2rem 0.5rem;
+  /* Allow controlled line breaks in specific columns */
+  .table th:nth-child(1),
+  .table td:nth-child(1),
+  .table th:nth-child(4),
+  .table td:nth-child(4),
+  .table th:nth-child(12),
+  .table td:nth-child(12) {
+    white-space: normal;
+    line-height: 1.2;
   }
 
-  /* Set specific column widths to prevent overflow */
+  /* Status column with good visibility */
+  .status {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+  }
+
+  /* Flexible table layout that adapts to screen size */
+  .table {
+    table-layout: auto;
+    width: 100%;
+  }
+
+  /* Compact column widths with line breaks */
   .table th:nth-child(1) {
-    width: 12%;
-  } /* Nome */
+    min-width: 90px;
+  } /* Nome - compacto com quebra de linha */
   .table th:nth-child(2) {
-    width: 8%;
+    min-width: 85px;
   } /* Vencimento */
   .table th:nth-child(3) {
-    width: 8%;
+    min-width: 90px;
   } /* Invest. Mínimo */
   .table th:nth-child(4) {
-    width: 8%;
-  } /* Última Taxa */
+    min-width: 70px;
+  } /* Última Taxa - compacto com quebra de linha */
   .table th:nth-child(5) {
-    width: 6%;
+    min-width: 65px;
   } /* Mínimo */
   .table th:nth-child(6) {
-    width: 6%;
+    min-width: 70px;
   } /* 1º Quartil */
   .table th:nth-child(7) {
-    width: 6%;
+    min-width: 65px;
   } /* Mediana */
   .table th:nth-child(8) {
-    width: 6%;
+    min-width: 70px;
   } /* 3º Quartil */
   .table th:nth-child(9) {
-    width: 6%;
+    min-width: 65px;
   } /* Máximo */
   .table th:nth-child(10) {
-    width: 6%;
+    min-width: 65px;
   } /* Média */
   .table th:nth-child(11) {
-    width: 8%;
+    min-width: 75px;
   } /* Desvio Padrão */
   .table th:nth-child(12) {
-    width: 10%;
-  } /* Janela */
+    min-width: 85px;
+  } /* Janela - compacto com quebra de linha */
 }
 
 /* Tablet View - Horizontal Scroll */
