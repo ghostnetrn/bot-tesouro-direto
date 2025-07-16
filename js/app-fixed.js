@@ -1,6 +1,6 @@
 /**
  * Tesouro Direto - Modern Financial UI
- * Main JavaScript file
+ * Main JavaScript file - Fixed version without ID column
  */
 
 // Global variables
@@ -132,7 +132,7 @@ function initDashboard() {
 }
 
 // Update dashboard with data
-function updateDashboard(data) {
+function updateDashboard() {
   if (!dashboardElement) return;
 
   // Process data for dashboard
@@ -142,12 +142,12 @@ function updateDashboard(data) {
   const tableRows = document.querySelectorAll('#treasuryBondsTableBody tr');
   tableRows.forEach(row => {
     const cells = row.querySelectorAll('td');
-    if (cells.length >= 13) {
-      const title = cells[1].textContent.trim();
-      const maturity = cells[2].textContent.trim();
+    if (cells.length >= 12) {
+      const title = cells[0].textContent.trim();
+      const maturity = cells[1].textContent.trim();
 
       // Extrair a taxa corretamente, lidando com formatos diferentes (IPCA+, SELIC+, etc.)
-      let rateText = cells[4].textContent.trim();
+      let rateText = cells[3].textContent.trim();
       let rate;
 
       if (rateText.includes('IPCA +') || rateText.includes('SELIC +')) {
@@ -168,7 +168,7 @@ function updateDashboard(data) {
         rate = 0;
       }
 
-      const windowText = cells[12].textContent.trim();
+      const windowText = cells[11].textContent.trim();
 
       let windowQuality = 0;
       if (windowText.includes('ÓTIMA')) windowQuality = 4;
@@ -397,7 +397,6 @@ async function getData(startDate, endDate) {
       if (minInvstmtAmt > 0 && tableBody) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${info.index}</td>
           <td><a href="https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm" target="_blank">${info.titulo}</a></td>
           <td>${vencimento}</td>
           <td class="numeric">${info.investimentoMinimo}</td>
@@ -425,7 +424,7 @@ async function getData(startDate, endDate) {
     tabela = $("#tesouro").DataTable({
       paging: false,
       ordering: true,
-      order: [[12, "desc"]],
+      order: [[11, "desc"]], // Updated column index for sorting (was 12)
       language: {
         url: "https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json",
       }
@@ -642,7 +641,7 @@ function initDateRangePicker() {
   });
 
   // Apply date range
-  $(dateRangeInput).on('apply.daterangepicker', async function (ev, picker) {
+  $(dateRangeInput).on('apply.daterangepicker', async function (_, picker) {
     const startDate = picker.startDate;
     const endDate = picker.endDate;
 
@@ -768,7 +767,6 @@ async function loadInitialData() {
       if (minInvstmtAmt > 0 && tableBody) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${info.index}</td>
           <td><a href="https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm" target="_blank">${info.titulo}</a></td>
           <td>${vencimento}</td>
           <td class="numeric">${info.investimentoMinimo}</td>
@@ -796,7 +794,7 @@ async function loadInitialData() {
     tabela = $("#tesouro").DataTable({
       paging: false,
       ordering: true,
-      order: [[12, "desc"]],
+      order: [[11, "desc"]], // Updated column index for sorting (was 12)
       language: {
         url: "https://cdn.datatables.net/plug-ins/1.13.3/i18n/pt-BR.json",
       }

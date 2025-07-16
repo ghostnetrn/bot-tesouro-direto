@@ -24,6 +24,7 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/modern.css" />
+    <link rel="stylesheet" href="css/responsive-table.css" />
 
     <!-- JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
@@ -164,22 +165,34 @@
 
         <!-- Table -->
         <div class="table-container fade-in">
+          <div
+            class="table-scroll-hint"
+            role="alert"
+            aria-live="polite"
+            tabindex="0"
+          >
+            <i class="fas fa-arrows-left-right" aria-hidden="true"></i>
+            <span>Deslize horizontalmente para ver todas as colunas</span>
+            <span class="sr-only"
+              >A tabela pode ser rolada horizontalmente para visualizar todas as
+              informações</span
+            >
+          </div>
           <table id="tesouro" class="table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Vencimento</th>
-                <th>Invest. Mínimo</th>
-                <th>Última Taxa</th>
-                <th>Mínimo</th>
-                <th>1º Quartil</th>
-                <th>Mediana</th>
-                <th>3º Quartil</th>
-                <th>Máximo</th>
-                <th>Média</th>
-                <th>Desvio Padrão</th>
-                <th>Janela</th>
+                <th class="priority-high">Nome</th>
+                <th class="priority-medium">Vencimento</th>
+                <th class="priority-medium">Invest. Mínimo</th>
+                <th class="priority-high">Última Taxa</th>
+                <th class="priority-low">Mínimo</th>
+                <th class="priority-low">1º Quartil</th>
+                <th class="priority-medium">Mediana</th>
+                <th class="priority-medium">3º Quartil</th>
+                <th class="priority-medium">Máximo</th>
+                <th class="priority-low">Média</th>
+                <th class="priority-low">Desvio Padrão</th>
+                <th class="priority-high">Janela</th>
               </tr>
             </thead>
             <tbody id="treasuryBondsTableBody">
@@ -279,6 +292,7 @@
     </footer>
 
     <!-- JavaScript -->
-    <script src="js/app.js"></script>
+    <script src="js/app-fixed.js"></script>
+    <script src="js/responsive-table.js"></script>
   </body>
 </html>

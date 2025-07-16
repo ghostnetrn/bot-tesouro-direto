@@ -3,79 +3,135 @@
  * Responsive Table CSS
  */
 
-/* Mobile First Approach */
+/* Enhanced Table Responsiveness */
 .table-container {
   width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   position: relative;
   margin-bottom: var(--spacing-xl);
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
 }
 
-/* Table Scroll Indicator */
-.table-scroll-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Table Scroll Hint */
+.table-scroll-hint {
+  display: none;
+  text-align: center;
   padding: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 0;
   color: var(--color-text-secondary);
   font-size: 0.875rem;
-  background-color: var(--color-background-secondary);
-  border-radius: var(--radius-md);
-  animation: pulse 2s infinite;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.table-scroll-indicator i {
-  margin-right: var(--spacing-xs);
+.table-scroll-hint i {
+  animation: scroll-hint 1.5s infinite;
 }
 
-@keyframes pulse {
+@keyframes scroll-hint {
   0% {
-    opacity: 0.7;
+    transform: translateX(-5px);
   }
   50% {
-    opacity: 1;
+    transform: translateX(5px);
   }
   100% {
-    opacity: 0.7;
+    transform: translateX(-5px);
   }
 }
 
-/* Responsive Table */
-.responsive-table {
+/* Base Table Styles */
+.table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  margin-bottom: var(--spacing-lg);
 }
 
-/* Mobile View - Card Layout */
-@media (max-width: 767px) {
+/* Column Priority System */
+.table .priority-high {
+  /* These columns will always be visible */
+  position: relative;
+  z-index: 2;
+}
+
+.table .priority-medium {
+  /* These columns will be hidden on very small screens */
+  position: relative;
+  z-index: 1;
+}
+
+.table .priority-low {
+  /* These columns will be hidden first on small screens */
+  position: relative;
+  z-index: 0;
+}
+
+/* Responsive Breakpoints - Desktop and Tablet Landscape */
+@media (min-width: 992px) {
   .table-container {
     overflow-x: visible;
   }
 
-  .table-scroll-indicator {
+  .table-scroll-hint {
     display: none;
   }
+}
 
-  .responsive-table,
-  .responsive-table thead,
-  .responsive-table tbody,
-  .responsive-table th,
-  .responsive-table td,
-  .responsive-table tr {
+/* Tablet View - Horizontal Scroll */
+@media (min-width: 768px) and (max-width: 991px) {
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    min-width: 900px;
+  }
+
+  .table-scroll-hint {
     display: block;
   }
 
-  .responsive-table thead tr {
+  .table th,
+  .table td {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* Mobile View - Card Layout */
+@media (max-width: 767px) {
+  /* Hide the scroll hint since we're using cards */
+  .table-scroll-hint {
+    display: none;
+  }
+
+  /* Reset container overflow */
+  .table-container {
+    overflow-x: visible;
+    padding: 0;
+  }
+
+  /* Transform table to cards */
+  .table,
+  .table thead,
+  .table tbody,
+  .table th,
+  .table td,
+  .table tr {
+    display: block;
+  }
+
+  /* Hide table headers */
+  .table thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
 
-  .responsive-table tr {
+  /* Style each row as a card */
+  .table tbody tr {
     margin-bottom: var(--spacing-md);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
@@ -84,7 +140,8 @@
     overflow: hidden;
   }
 
-  .responsive-table td {
+  /* Style each cell */
+  .table td {
     position: relative;
     padding: var(--spacing-sm) var(--spacing-md);
     padding-left: 50%;
@@ -93,11 +150,13 @@
     min-height: 30px;
   }
 
-  .responsive-table td:last-child {
+  .table td:last-child {
     border-bottom: none;
   }
 
-  .responsive-table td:before {
+  /* Add labels before each cell */
+  .table td:before {
+    content: attr(data-label);
     position: absolute;
     top: var(--spacing-sm);
     left: var(--spacing-md);
@@ -108,125 +167,89 @@
     font-weight: 600;
   }
 
-  /* Add data labels */
-  .responsive-table td:nth-of-type(1):before {
-    content: "ID";
-  }
-  .responsive-table td:nth-of-type(2):before {
-    content: "Nome";
-  }
-  .responsive-table td:nth-of-type(3):before {
-    content: "Vencimento";
-  }
-  .responsive-table td:nth-of-type(4):before {
-    content: "Invest. Mínimo";
-  }
-  .responsive-table td:nth-of-type(5):before {
-    content: "Última Taxa";
-  }
-  .responsive-table td:nth-of-type(6):before {
-    content: "Mínimo";
-  }
-  .responsive-table td:nth-of-type(7):before {
-    content: "1º Quartil";
-  }
-  .responsive-table td:nth-of-type(8):before {
-    content: "Mediana";
-  }
-  .responsive-table td:nth-of-type(9):before {
-    content: "3º Quartil";
-  }
-  .responsive-table td:nth-of-type(10):before {
-    content: "Máximo";
-  }
-  .responsive-table td:nth-of-type(11):before {
-    content: "Média";
-  }
-  .responsive-table td:nth-of-type(12):before {
-    content: "Desvio Padrão";
-  }
-  .responsive-table td:nth-of-type(13):before {
-    content: "Janela";
-  }
-
-  /* Hide less important columns on mobile */
-  .responsive-table td.mobile-hide {
-    display: none;
-  }
-
   /* Make sure the status indicator is centered */
-  .responsive-table td:last-child {
+  .table td:last-child {
     text-align: center;
     padding-left: var(--spacing-md);
   }
 
-  .responsive-table td:last-child .status {
+  .table td:last-child .status {
     display: inline-flex;
     width: 100%;
     justify-content: center;
   }
-}
 
-/* Tablet View - Horizontal Scroll */
-@media (min-width: 768px) and (max-width: 1199px) {
-  .table-container {
-    overflow-x: auto;
-  }
-
-  .table-scroll-indicator {
-    display: flex;
-  }
-
-  .responsive-table {
-    min-width: 900px;
-  }
-}
-
-/* Desktop View - Full Table */
-@media (min-width: 1200px) {
-  .table-scroll-indicator {
+  /* Hide low priority columns on mobile */
+  .table td.priority-low {
     display: none;
   }
-}
 
-/* Compact View Option */
-.compact-view .responsive-table td,
-.compact-view .responsive-table th {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: 0.875rem;
-}
-
-/* View Toggle Button */
-.view-toggle {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: var(--spacing-sm);
-}
-
-.view-toggle-btn {
-  background-color: var(--color-background-secondary);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.view-toggle-btn i {
-  margin-right: var(--spacing-xs);
-}
-
-.view-toggle-btn:hover {
-  background-color: var(--color-border);
-}
-
-/* Essential Columns for Mobile */
-@media (max-width: 767px) {
-  .mobile-essential {
-    font-weight: 600;
-    background-color: rgba(0, 0, 0, 0.02);
+  /* Optimize font sizes for mobile */
+  .table td {
+    font-size: 0.9rem;
   }
+
+  .table td.numeric {
+    font-size: 0.85rem;
+  }
+
+  .status {
+    padding: 2px 6px;
+    font-size: 0.7rem;
+  }
+}
+
+/* Very Small Mobile View - Further Optimization */
+@media (max-width: 480px) {
+  /* Hide medium priority columns on very small screens */
+  .table td.priority-medium {
+    display: none;
+  }
+
+  .table td {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.85rem;
+  }
+
+  .table td:before {
+    font-size: 0.85rem;
+  }
+}
+
+/* Accessibility Enhancements */
+.table-container:focus-within {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (forced-colors: active) {
+  .table th {
+    border: 1px solid CanvasText;
+  }
+
+  .table td {
+    border: 1px solid CanvasText;
+  }
+
+  .table-scroll-hint {
+    border: 1px solid CanvasText;
+  }
+
+  .table tbody tr {
+    border: 2px solid CanvasText;
+  }
+}
+
+/* Screen reader only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
