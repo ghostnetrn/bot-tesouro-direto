@@ -453,16 +453,16 @@ async function getData(startDate, endDate) {
       let statusClass = "";
 
       if (anulInvstmtRate < dt.q1 && anulInvstmtRate > dt.min) {
-        janela = "COMPRA PÉSSIMA";
+        janela = "COMPRA<br>PÉSSIMA";
         statusClass = "status-terrible";
       } else if (anulInvstmtRate <= dt.median && anulInvstmtRate > dt.q1) {
-        janela = "COMPRA RUIM";
+        janela = "COMPRA<br>RUIM";
         statusClass = "status-bad";
       } else if (anulInvstmtRate <= dt.q3 && anulInvstmtRate > dt.median) {
-        janela = "COMPRA BOA";
+        janela = "COMPRA<br>BOA";
         statusClass = "status-good";
       } else if (anulInvstmtRate <= dt.max && anulInvstmtRate > dt.q3) {
-        janela = "COMPRA ÓTIMA";
+        janela = "COMPRA<br>ÓTIMA";
         statusClass = "status-optimal";
       }
 
@@ -827,16 +827,16 @@ async function loadInitialData() {
       let statusClass = "";
 
       if (anulInvstmtRate < dt.q1 && anulInvstmtRate > dt.min) {
-        janela = "COMPRA PÉSSIMA";
+        janela = "COMPRA<br>PÉSSIMA";
         statusClass = "status-terrible";
       } else if (anulInvstmtRate <= dt.median && anulInvstmtRate > dt.q1) {
-        janela = "COMPRA RUIM";
+        janela = "COMPRA<br>RUIM";
         statusClass = "status-bad";
       } else if (anulInvstmtRate <= dt.q3 && anulInvstmtRate > dt.median) {
-        janela = "COMPRA BOA";
+        janela = "COMPRA<br>BOA";
         statusClass = "status-good";
       } else if (anulInvstmtRate <= dt.max && anulInvstmtRate > dt.q3) {
-        janela = "COMPRA ÓTIMA";
+        janela = "COMPRA<br>ÓTIMA";
         statusClass = "status-optimal";
       }
 
