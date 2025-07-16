@@ -205,10 +205,20 @@
         <div class="card fade-in">
           <div class="card-header">
             <i class="fas fa-info-circle card-icon"></i>
-            <h5 class="card-title">Legenda de Janelas de Compra</h5>
+            <h5 class="card-title">Legenda e Interpretação</h5>
           </div>
           <div class="card-body">
-            <div style="display: flex; flex-wrap: wrap; gap: 1rem">
+            <h6 style="margin-bottom: 1rem; color: var(--color-primary)">
+              Janelas de Compra
+            </h6>
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+              "
+            >
               <div style="display: flex; align-items: center; gap: 0.5rem">
                 <span class="status status-optimal">COMPRA ÓTIMA</span>
                 <span>Taxa próxima ao máximo histórico</span>
@@ -225,6 +235,75 @@
                 <span class="status status-terrible">COMPRA PÉSSIMA</span>
                 <span>Taxa próxima ao mínimo histórico</span>
               </div>
+            </div>
+
+            <h6 style="margin-bottom: 1rem; color: var(--color-primary)">
+              Cores das Taxas na Tabela
+            </h6>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem">
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span
+                  style="
+                    background-color: #16a34a;
+                    color: white;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                    font-weight: bold;
+                    font-size: 0.8rem;
+                  "
+                  >8.25</span
+                >
+                <span
+                  ><strong>Fundo Verde:</strong> Taxa mais próxima do máximo
+                  histórico (melhor momento para investir)</span
+                >
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span
+                  style="color: #16a34a; font-weight: bold; font-size: 0.9rem"
+                  >6.94</span
+                >
+                <span
+                  ><strong>Texto Verde:</strong> Taxa próxima do 3º quartil (boa
+                  oportunidade)</span
+                >
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span
+                  style="color: #dc2626; font-weight: bold; font-size: 0.9rem"
+                  >4.85</span
+                >
+                <span
+                  ><strong>Texto Vermelho:</strong> Taxa próxima do mínimo ou 1º
+                  quartil (momento menos favorável)</span
+                >
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span
+                  style="color: #0ea5e9; font-weight: bold; font-size: 0.9rem"
+                  >6.26</span
+                >
+                <span
+                  ><strong>Texto Azul:</strong> Taxa próxima da média
+                  histórica</span
+                >
+              </div>
+            </div>
+
+            <div
+              style="
+                margin-top: 1rem;
+                padding: 0.75rem;
+                background-color: rgba(22, 163, 74, 0.1);
+                border-left: 4px solid #16a34a;
+                border-radius: 4px;
+              "
+            >
+              <p style="margin: 0; font-size: 0.875rem">
+                <strong>💡 Dica:</strong> Valores com fundo verde indicam as
+                melhores oportunidades de investimento no momento, pois
+                representam taxas próximas aos máximos históricos do título.
+              </p>
             </div>
           </div>
         </div>
