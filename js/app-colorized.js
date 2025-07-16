@@ -1,6 +1,6 @@
 /**
  * Tesouro Direto - Modern Financial UI
- * Main JavaScript file - Fixed version without ID column
+ * Main JavaScript file - With value-based colorization
  */
 
 // Global variables
@@ -438,11 +438,15 @@ async function getData(startDate, endDate) {
       // Create table row
       if (minInvstmtAmt > 0 && tableBody) {
         const tr = document.createElement("tr");
+
+        // Determine color class based on proximity to reference values
+        const colorClass = getColorClassByProximity(anulInvstmtRate, dt);
+
         tr.innerHTML = `
           <td><a href="https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm" target="_blank">${info.titulo}</a></td>
           <td>${vencimento}</td>
           <td class="numeric">${info.investimentoMinimo}</td>
-          <td class="numeric">${info.rentabilidadeAnual}%</td>
+          <td class="numeric ${colorClass}">${info.rentabilidadeAnual}%</td>
           <td class="numeric">${dt.min}</td>
           <td class="numeric">${dt.q1}</td>
           <td class="numeric">${dt.median}</td>
@@ -808,11 +812,15 @@ async function loadInitialData() {
       // Create table row
       if (minInvstmtAmt > 0 && tableBody) {
         const tr = document.createElement("tr");
+
+        // Determine color class based on proximity to reference values
+        const colorClass = getColorClassByProximity(anulInvstmtRate, dt);
+
         tr.innerHTML = `
           <td><a href="https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm" target="_blank">${info.titulo}</a></td>
           <td>${vencimento}</td>
           <td class="numeric">${info.investimentoMinimo}</td>
-          <td class="numeric">${info.rentabilidadeAnual}%</td>
+          <td class="numeric ${colorClass}">${info.rentabilidadeAnual}%</td>
           <td class="numeric">${dt.min}</td>
           <td class="numeric">${dt.q1}</td>
           <td class="numeric">${dt.median}</td>

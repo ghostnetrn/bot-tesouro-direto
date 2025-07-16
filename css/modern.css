@@ -405,15 +405,54 @@ a:hover {
 }
 
 .table th {
-  background-color: rgba(0, 0, 0, 0.03);
   font-weight: 600;
-  text-align: left;
+  text-align: center;
   padding: var(--spacing-md);
   border-bottom: 2px solid var(--color-border);
   position: sticky;
   top: 0;
   z-index: 10;
+  color: white;
+  font-size: 0.875rem;
 }
+
+/* Cabeçalho colorido conforme a imagem */
+.table th:nth-child(1) {
+  background-color: #f59e0b;
+} /* Última Taxa - Amarelo */
+.table th:nth-child(2) {
+  background-color: #f59e0b;
+} /* Vencimento - Amarelo */
+.table th:nth-child(3) {
+  background-color: #f59e0b;
+} /* Invest. Mínimo - Amarelo */
+.table th:nth-child(4) {
+  background-color: #f59e0b;
+} /* Última Taxa - Amarelo */
+.table th:nth-child(5) {
+  background-color: #dc2626;
+} /* Mínimo - Vermelho */
+.table th:nth-child(6) {
+  background-color: #dc2626;
+} /* 1º Quartil - Vermelho */
+.table th:nth-child(7) {
+  background-color: #6b7280;
+} /* Mediana - Cinza */
+.table th:nth-child(8) {
+  background-color: #16a34a;
+} /* 3º Quartil - Verde */
+.table th:nth-child(9) {
+  background-color: #16a34a;
+} /* Máximo - Verde */
+.table th:nth-child(10) {
+  background-color: #0ea5e9;
+} /* Média - Azul */
+.table th:nth-child(11) {
+  background-color: #f59e0b;
+} /* Desvio Padrão - Amarelo */
+.table th:nth-child(12) {
+  background-color: #f59e0b;
+} /* Janela - Amarelo */
 
 .table td {
   padding: var(--spacing-md);
@@ -661,4 +700,32 @@ a:hover {
 
 .daterangepicker .btn {
   border-radius: var(--radius-md);
+}
+/* Classes para colorização baseada na proximidade dos valores */
+.value-closest-to-max {
+  background-color: #16a34a !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+.value-closest-to-q3 {
+  color: #16a34a !important;
+  font-weight: bold;
+}
+
+.value-closest-to-min {
+  color: #dc2626 !important;
+  font-weight: bold;
+}
+
+.value-closest-to-median {
+  color: inherit;
+}
+
+.value-closest-to-q1 {
+  color: #dc2626 !important;
+}
+
+.value-closest-to-mean {
+  color: #0ea5e9 !important;
 }
