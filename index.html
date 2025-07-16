@@ -1,92 +1,284 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
-    <meta charset="UTF-8">
-    <title>Tabela Tesouro Direto</title>
-    <!-- Adicionando CSS Bootstrap -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Análise Tesouro Direto | Dashboard Financeiro</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="td-logo.svg" />
+
+    <!-- CSS Libraries -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/modern.css" />
+
+    <!-- JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-statistics/7.8.3/simple-statistics.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>    
-    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>    
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/bot-tesouro-direto"><img src="td-logo.svg" alt="Logo" width="100%" height="21px" class="d-inline-block align-text-top"></a>
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <li class="nav-item">
-            <a class="nav-link" href="https://www.tesourodireto.com.br/titulos/calculadora.htm" target="_blank">Calculadora</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm" target="_blank">Títulos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://www.tesourodireto.com.br/simulador/" target="_blank">Simulador</a>
-          </li>
-        </ul>
-        <form class="d-flex" role="search">
-          <div class="input-group">
-            <span class="input-group-text">Período:</span>
-            <input type="text" class="form-control" id="daterange">
-            <button type="button" class="btn btn-secondary" id="reset-btn">Ver histórico completo</button>
-        </div>
-        </form>
-      </div>
-    </nav>
-    
-    <button type="button" class="btn btn-primary position-relative mt-5 top-300 start-0 sticky-top">
-      Última atualização: <span id="data-atualizacao" class="badge rounded-pill bg-secondary"></span>
-    </button>
-    
-  
-    <div id="alerta" class="alert alert-warning text-center fw-bold fs-3" role="alert">
-      Gerando histórico completo! Aguarde.
-      <div class="progress" role="progressbar" aria-label="Warning example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-        <div id="alerta_progresso" class="progress-bar bg-warning" style="width: 100%"></div>
-      </div>
-    </div>
-      <div class="table-responsive">                
-        <table id="tesouro" class="table table-striped" style="width:100%">
-          <thead class="table-success">
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Vencimento</th>
-              <th>Invest. Mínimo</th>
-              <th class="bg-warning text-bg-warning">Última Taxa</th>
-              <th class="bg-danger text-bg-danger">Mínimo</th>
-              <th class="bg-danger text-bg-danger">1º Quartil</th>
-              <th class="bg-secondary text-bg-danger">Mediana</th>
-              <th class="bg-success text-white">3º Quartil</th>
-              <th class="bg-success text-white">Máximo</th>
-              <th class="bg-info text-white">Média</th>
-              <th class="bg-warning text-bg-warning">Desvio Padrão</th>
-              <th class="bg-success text-white">Janela</th>
-            </tr>
-          </thead>
-          <tbody id="treasuryBondsTableBody">
-          </tbody>
-        </table>
-      </div>
+    <!-- Header -->
+    <header class="header">
+      <div class="container header-container">
+        <a href="/" class="logo">
+          <img src="td-logo.svg" alt="Tesouro Direto" />
+          <span>Análise de Investimentos</span>
+        </a>
 
-      <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-          <p class="fw-bold">💾 Fonte dos dados: </p>
-          <p><span class="text-muted">🔎 <a href='https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json' target="_blank">https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json</a></span></p>
-          <p><span class="text-muted">🔎 <a href='https://www.tesourotransparente.gov.br/ckan/dataset/taxas-dos-titulos-ofertados-pelo-tesouro-direto/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1' target="_blank">https://www.tesourotransparente.gov.br/ckan/dataset/taxas-dos-titulos-ofertados-pelo-tesouro-direto/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1 </span></p>
-          <p><span class="text-muted">🔎 Visite também: <a href="https://calculadorarsc.com" target="_blank">https://calculadorarsc.com</a></p>
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <div id="nav" class="nav">
+          <ul class="nav-list">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="https://www.tesourodireto.com.br/titulos/calculadora.htm"
+                target="_blank"
+              >
+                <i class="fas fa-calculator"></i> Calculadora
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm"
+                target="_blank"
+              >
+                <i class="fas fa-chart-line"></i> Títulos
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="https://www.tesourodireto.com.br/simulador/"
+                target="_blank"
+              >
+                <i class="fas fa-coins"></i> Simulador
+              </a>
+            </li>
+            <li class="nav-item">
+              <button
+                id="theme-toggle"
+                class="theme-toggle"
+                aria-label="Alternar tema"
+              >
+                <i id="theme-icon" class="fas fa-moon"></i>
+              </button>
+            </li>
+          </ul>
+
+          <div class="date-filter">
+            <input
+              type="text"
+              id="daterange"
+              class="date-filter-input"
+              placeholder="Selecione um período"
+            />
+            <button type="button" id="reset-btn" class="reset-btn">
+              <i class="fas fa-sync-alt"></i> Histórico completo
+            </button>
+          </div>
         </div>
-      </footer>
-    <!-- Adicionando Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard fade-in">
+          <!-- Last Update Card -->
+          <div class="card slide-up">
+            <div class="card-header">
+              <i class="fas fa-clock card-icon"></i>
+              <h5 class="card-title">Última Atualização</h5>
+            </div>
+            <div class="card-body" id="last-update">
+              <div class="skeleton" style="width: 80%"></div>
+              <div class="skeleton" style="width: 60%"></div>
+            </div>
+          </div>
+
+          <!-- Best Opportunities Card -->
+          <div class="card slide-up">
+            <div class="card-header">
+              <i class="fas fa-star card-icon"></i>
+              <h5 class="card-title">Melhores Oportunidades</h5>
+            </div>
+            <div class="card-body" id="best-opportunities">
+              <div class="skeleton" style="width: 80%"></div>
+              <div class="skeleton" style="width: 60%"></div>
+              <div class="skeleton" style="width: 70%"></div>
+            </div>
+          </div>
+
+          <!-- Market Overview Card -->
+          <div class="card slide-up">
+            <div class="card-header">
+              <i class="fas fa-chart-pie card-icon"></i>
+              <h5 class="card-title">Visão Geral do Mercado</h5>
+            </div>
+            <div class="card-body" id="market-overview">
+              <div class="skeleton" style="width: 80%"></div>
+              <div class="skeleton" style="width: 60%"></div>
+              <div class="skeleton" style="width: 70%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert -->
+        <div id="alerta" class="alert alert-warning fade-in">
+          <h4 class="alert-title">Gerando histórico completo! Aguarde.</h4>
+          <p>
+            Estamos processando os dados do Tesouro Direto. Este processo pode
+            levar alguns segundos.
+          </p>
+          <div class="progress">
+            <div
+              id="alerta_progresso"
+              class="progress-bar"
+              style="width: 100%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container fade-in">
+          <table id="tesouro" class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Vencimento</th>
+                <th>Invest. Mínimo</th>
+                <th>Última Taxa</th>
+                <th>Mínimo</th>
+                <th>1º Quartil</th>
+                <th>Mediana</th>
+                <th>3º Quartil</th>
+                <th>Máximo</th>
+                <th>Média</th>
+                <th>Desvio Padrão</th>
+                <th>Janela</th>
+              </tr>
+            </thead>
+            <tbody id="treasuryBondsTableBody">
+              <!-- Table data will be loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Legend -->
+        <div class="card fade-in">
+          <div class="card-header">
+            <i class="fas fa-info-circle card-icon"></i>
+            <h5 class="card-title">Legenda de Janelas de Compra</h5>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem">
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="status status-optimal">COMPRA ÓTIMA</span>
+                <span>Taxa próxima ao máximo histórico</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="status status-good">COMPRA BOA</span>
+                <span>Taxa entre a mediana e o 3º quartil</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="status status-bad">COMPRA RUIM</span>
+                <span>Taxa entre o 1º quartil e a mediana</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="status status-terrible">COMPRA PÉSSIMA</span>
+                <span>Taxa próxima ao mínimo histórico</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h6 class="footer-title">Fonte dos dados</h6>
+            <ul class="footer-links">
+              <li>
+                <a
+                  href="https://www.tesourodireto.com.br/json/br/com/b3/tesourodireto/service/api/treasurybondsinfo.json"
+                  target="_blank"
+                >
+                  <i class="fas fa-database"></i> API Tesouro Direto
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.tesourotransparente.gov.br/ckan/dataset/taxas-dos-titulos-ofertados-pelo-tesouro-direto/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1"
+                  target="_blank"
+                >
+                  <i class="fas fa-file-csv"></i> Histórico de Taxas
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h6 class="footer-title">Links úteis</h6>
+            <ul class="footer-links">
+              <li>
+                <a
+                  href="https://www.tesourodireto.com.br/titulos/calculadora.htm"
+                  target="_blank"
+                >
+                  <i class="fas fa-calculator"></i> Calculadora Tesouro
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm"
+                  target="_blank"
+                >
+                  <i class="fas fa-chart-line"></i> Preços e Taxas
+                </a>
+              </li>
+              <li>
+                <a href="https://calculadorarsc.com" target="_blank">
+                  <i class="fas fa-external-link-alt"></i> Calculadora RSC
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© 2025 Análise Tesouro Direto | Desenvolvido para investidores</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
   </body>
 </html>

@@ -1,0 +1,232 @@
+/* 
+ * Tesouro Direto - Modern Financial UI
+ * Responsive Table CSS
+ */
+
+/* Mobile First Approach */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Table Scroll Indicator */
+.table-scroll-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  background-color: var(--color-background-secondary);
+  border-radius: var(--radius-md);
+  animation: pulse 2s infinite;
+}
+
+.table-scroll-indicator i {
+  margin-right: var(--spacing-xs);
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* Responsive Table */
+.responsive-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Mobile View - Card Layout */
+@media (max-width: 767px) {
+  .table-container {
+    overflow-x: visible;
+  }
+
+  .table-scroll-indicator {
+    display: none;
+  }
+
+  .responsive-table,
+  .responsive-table thead,
+  .responsive-table tbody,
+  .responsive-table th,
+  .responsive-table td,
+  .responsive-table tr {
+    display: block;
+  }
+
+  .responsive-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .responsive-table tr {
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .responsive-table td {
+    position: relative;
+    padding: var(--spacing-sm) var(--spacing-md);
+    padding-left: 50%;
+    text-align: right;
+    border-bottom: 1px solid var(--color-border);
+    min-height: 30px;
+  }
+
+  .responsive-table td:last-child {
+    border-bottom: none;
+  }
+
+  .responsive-table td:before {
+    position: absolute;
+    top: var(--spacing-sm);
+    left: var(--spacing-md);
+    width: 45%;
+    padding-right: var(--spacing-sm);
+    white-space: nowrap;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  /* Add data labels */
+  .responsive-table td:nth-of-type(1):before {
+    content: "ID";
+  }
+  .responsive-table td:nth-of-type(2):before {
+    content: "Nome";
+  }
+  .responsive-table td:nth-of-type(3):before {
+    content: "Vencimento";
+  }
+  .responsive-table td:nth-of-type(4):before {
+    content: "Invest. Mínimo";
+  }
+  .responsive-table td:nth-of-type(5):before {
+    content: "Última Taxa";
+  }
+  .responsive-table td:nth-of-type(6):before {
+    content: "Mínimo";
+  }
+  .responsive-table td:nth-of-type(7):before {
+    content: "1º Quartil";
+  }
+  .responsive-table td:nth-of-type(8):before {
+    content: "Mediana";
+  }
+  .responsive-table td:nth-of-type(9):before {
+    content: "3º Quartil";
+  }
+  .responsive-table td:nth-of-type(10):before {
+    content: "Máximo";
+  }
+  .responsive-table td:nth-of-type(11):before {
+    content: "Média";
+  }
+  .responsive-table td:nth-of-type(12):before {
+    content: "Desvio Padrão";
+  }
+  .responsive-table td:nth-of-type(13):before {
+    content: "Janela";
+  }
+
+  /* Hide less important columns on mobile */
+  .responsive-table td.mobile-hide {
+    display: none;
+  }
+
+  /* Make sure the status indicator is centered */
+  .responsive-table td:last-child {
+    text-align: center;
+    padding-left: var(--spacing-md);
+  }
+
+  .responsive-table td:last-child .status {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Tablet View - Horizontal Scroll */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .table-scroll-indicator {
+    display: flex;
+  }
+
+  .responsive-table {
+    min-width: 900px;
+  }
+}
+
+/* Desktop View - Full Table */
+@media (min-width: 1200px) {
+  .table-scroll-indicator {
+    display: none;
+  }
+}
+
+/* Compact View Option */
+.compact-view .responsive-table td,
+.compact-view .responsive-table th {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.875rem;
+}
+
+/* View Toggle Button */
+.view-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-sm);
+}
+
+.view-toggle-btn {
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.view-toggle-btn i {
+  margin-right: var(--spacing-xs);
+}
+
+.view-toggle-btn:hover {
+  background-color: var(--color-border);
+}
+
+/* Essential Columns for Mobile */
+@media (max-width: 767px) {
+  .mobile-essential {
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+}
