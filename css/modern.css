@@ -416,16 +416,19 @@ a:hover {
   font-size: 0.875rem;
 }
 
-/* Cabeçalho colorido conforme a imagem */
+/* Cabeçalho colorido conforme solicitado */
 .table th:nth-child(1) {
-  background-color: #f59e0b;
-} /* Última Taxa - Amarelo */
+  background-color: #2364d3;
+  color: white;
+} /* Nome - Cinza claro */
 .table th:nth-child(2) {
-  background-color: #f59e0b;
-} /* Vencimento - Amarelo */
+  background-color: #2364d3;
+  color: white;
+} /* Vencimento - Cinza claro */
 .table th:nth-child(3) {
-  background-color: #f59e0b;
-} /* Invest. Mínimo - Amarelo */
+  background-color: #2364d3;
+  color: white;
+} /* Invest. Mínimo - Cinza claro */
 .table th:nth-child(4) {
   background-color: #f59e0b;
 } /* Última Taxa - Amarelo */
@@ -451,8 +454,9 @@ a:hover {
   background-color: #f59e0b;
 } /* Desvio Padrão - Amarelo */
 .table th:nth-child(12) {
-  background-color: #f59e0b;
-} /* Janela - Amarelo */
+  background-color: #2364d3;
+  color: white;
+} /* Janela - Cinza claro */
 
 .table td {
   padding: var(--spacing-md);
