@@ -623,10 +623,6 @@ a:hover {
     grid-template-columns: 1fr;
   }
 
-  .table-container {
-    overflow-x: auto;
-  }
-
   .footer-content {
     flex-direction: column;
   }

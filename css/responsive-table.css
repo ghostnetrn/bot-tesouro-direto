@@ -77,6 +77,63 @@
   .table-scroll-hint {
     display: none;
   }
+
+  /* Optimize column widths for desktop */
+  .table th,
+  .table td {
+    padding: var(--spacing-sm) var(--spacing-xs);
+    font-size: 0.8rem;
+  }
+
+  /* Make numeric columns more compact */
+  .table .numeric {
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  /* Optimize status column */
+  .status {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  /* Set specific column widths to prevent overflow */
+  .table th:nth-child(1) {
+    width: 12%;
+  } /* Nome */
+  .table th:nth-child(2) {
+    width: 8%;
+  } /* Vencimento */
+  .table th:nth-child(3) {
+    width: 8%;
+  } /* Invest. Mínimo */
+  .table th:nth-child(4) {
+    width: 8%;
+  } /* Última Taxa */
+  .table th:nth-child(5) {
+    width: 6%;
+  } /* Mínimo */
+  .table th:nth-child(6) {
+    width: 6%;
+  } /* 1º Quartil */
+  .table th:nth-child(7) {
+    width: 6%;
+  } /* Mediana */
+  .table th:nth-child(8) {
+    width: 6%;
+  } /* 3º Quartil */
+  .table th:nth-child(9) {
+    width: 6%;
+  } /* Máximo */
+  .table th:nth-child(10) {
+    width: 6%;
+  } /* Média */
+  .table th:nth-child(11) {
+    width: 8%;
+  } /* Desvio Padrão */
+  .table th:nth-child(12) {
+    width: 10%;
+  } /* Janela */
 }
 
 /* Tablet View - Horizontal Scroll */
