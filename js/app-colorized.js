@@ -241,7 +241,7 @@ function updateDashboard() {
         rate = 0;
       }
 
-      const windowText = cells[11].textContent.trim();
+      const windowText = cells[11].innerHTML.trim();
 
       let windowQuality = 0;
       if (windowText.includes('ÓTIMA')) windowQuality = 4;
@@ -282,7 +282,7 @@ function updateDashboard() {
           opp.windowQuality === 3 ? 'status-good' :
             opp.windowQuality === 2 ? 'status-bad' : 'status-terrible';
 
-        const windowText = opp.windowText.replace('J4 - ', '').replace('J3 - ', '').replace('J2 - ', '').replace('J1 - ', '');
+        const windowText = opp.windowText.replace('J4 - ', '').replace('J3 - ', '').replace('J2 - ', '').replace('J1 - ', '').replace('<br>', ' ');
 
         html += `
           <li class="opportunity-item">
@@ -931,6 +931,43 @@ function initApp() {
   // Load initial data
   loadInitialData();
 }
+
+// Customize DataTables search box
+function customizeSearchBox() {
+  // Wait for DataTables to be initialized
+  setTimeout(() => {
+    const searchInput = $('.dataTables_filter input[type="search"]');
+    if (searchInput.length) {
+      searchInput.attr('placeholder', 'Buscar títulos, taxas ou vencimentos...');
+    }
+  }, 100);
+}
+
+// Fix mobile status text spacing
+function fixMobileStatusText() {
+  // Check if we're on mobile
+  if (window.innerWidth <= 767) {
+    // Find all status elements and replace <br> with space
+    $('.status').each(function () {
+      const $this = $(this);
+      const html = $this.html();
+      if (html.includes('<br>')) {
+        $this.html(html.replace('<br>', ' '));
+      }
+    });
+  }
+}
+
+// Auto-customize search box when DataTables are created
+$(document).on('init.dt', function () {
+  customizeSearchBox();
+  fixMobileStatusText();
+});
+
+// Fix mobile status text on window resize
+$(window).on('resize', function () {
+  fixMobileStatusText();
+});
 
 // Run when DOM is loaded
 document.addEventListener('DOMContentLoaded', initApp);

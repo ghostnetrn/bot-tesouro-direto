@@ -480,7 +480,7 @@ a:hover {
 .status {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius-full);
   font-weight: 500;
   font-size: 0.75rem;

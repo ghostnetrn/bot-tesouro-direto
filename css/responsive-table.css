@@ -421,3 +421,164 @@ body:not(.dark-theme) table.dataTable thead th.sorting_desc:hover {
   color: #333 !important;
   background-color: rgba(59, 130, 246, 0.1);
 }
+/* ===== SEARCH BOX REDESIGN ===== */
+
+/* CSS Custom Properties for Search Box */
+:root {
+  --search-bg: #ffffff;
+  --search-border: #e2e8f0;
+  --search-text: #1a202c;
+  --search-placeholder: #9ca3af;
+  --search-focus: #3b82f6;
+  --search-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --search-focus-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Dark theme variables */
+.dark-theme {
+  --search-bg: #2d3748;
+  --search-border: #4a5568;
+  --search-text: #f7fafc;
+  --search-placeholder: #a0aec0;
+  --search-focus: #63b3ed;
+  --search-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --search-focus-shadow: 0 0 0 3px rgba(99, 179, 237, 0.2);
+}
+
+/* DataTables search container styling */
+.dataTables_filter {
+  margin-bottom: 1.5rem !important;
+  text-align: center !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.dataTables_filter label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  font-weight: 500 !important;
+  color: var(--search-text) !important;
+  margin-bottom: 0 !important;
+  flex-direction: row !important;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Search input container with modern design */
+.dataTables_filter input[type="search"] {
+  width: 100% !important;
+  padding: 12px 20px !important;
+  border: 2px solid var(--search-border) !important;
+  border-radius: 12px !important;
+  background-color: var(--search-bg) !important;
+  color: var(--search-text) !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  box-shadow: var(--search-shadow) !important;
+  transition: all 0.2s ease-in-out !important;
+  outline: none !important;
+}
+
+/* Search input placeholder */
+.dataTables_filter input[type="search"]::placeholder {
+  color: var(--search-placeholder) !important;
+  opacity: 1 !important;
+}
+/* Search icon before the label text */
+.dataTables_filter label::before {
+  content: "\f002"; /* FontAwesome search icon */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: static;
+  color: var(--search-text);
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+  pointer-events: none;
+}
+
+/* Adjust icon color on focus */
+.dataTables_filter label:focus-within::before {
+  color: var(--search-focus);
+}
+/* Enhanced input field styling */
+.dataTables_filter input[type="search"] {
+  /* Remove default search input styling */
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Remove the X button in search inputs on WebKit browsers */
+.dataTables_filter input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none !important;
+  display: none !important;
+}
+
+/* Custom focus state */
+.dataTables_filter input[type="search"]:focus {
+  border-color: var(--search-focus) !important;
+  box-shadow: var(--search-focus-shadow) !important;
+}
+
+/* Hover state */
+.dataTables_filter input[type="search"]:hover:not(:focus) {
+  border-color: var(--search-focus) !important;
+  box-shadow: var(--search-shadow) !important;
+}
+
+/* Responsive design for search box */
+@media (max-width: 768px) {
+  .dataTables_filter label {
+    max-width: 100%;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  .dataTables_filter input[type="search"] {
+    font-size: 16px !important; /* Prevent zoom on iOS */
+    padding: 14px 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dataTables_filter {
+    margin-bottom: 1rem !important;
+  }
+
+  .dataTables_filter label {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  .dataTables_filter input[type="search"] {
+    padding: 12px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  .dataTables_filter label::before {
+    font-size: 0.8rem;
+  }
+}
+/* Mobile status text - keep on single line */
+@media (max-width: 767px) {
+  .status {
+    white-space: nowrap !important;
+  }
+
+  .status br {
+    display: none !important;
+  }
+
+  .status br::before {
+    content: " " !important;
+    white-space: pre !important;
+  }
+
+  /* Force space replacement for br tags */
+  .table td:last-child .status {
+    line-height: 1.2;
+  }
+}
