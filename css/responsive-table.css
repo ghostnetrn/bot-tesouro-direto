@@ -582,3 +582,22 @@ body:not(.dark-theme) table.dataTable thead th.sorting_desc:hover {
     line-height: 1.2;
   }
 }
+/* Mobile layout - Alert card first */
+@media (max-width: 767px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #alerta {
+    order: -1; /* Move alert to first position */
+  }
+
+  #dashboard {
+    order: 0; /* Keep dashboard in normal position */
+  }
+
+  .table-container {
+    order: 1; /* Table after dashboard */
+  }
+}
