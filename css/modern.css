@@ -261,6 +261,18 @@ a:hover {
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: background-color var(--transition-fast);
+}
+
+.mobile-menu-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-toggle:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
 }
 
 /* Date Filter */
@@ -581,8 +593,14 @@ a:hover {
 
 /* Responsive */
 @media (max-width: 991px) {
+  .header {
+    position: relative;
+    z-index: 1000;
+  }
+
   .header-container {
     flex-wrap: wrap;
+    position: relative;
   }
 
   .mobile-menu-toggle {
@@ -592,28 +610,56 @@ a:hover {
   .nav {
     display: none;
     width: 100%;
-    margin-top: var(--spacing-md);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--gradient-primary);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 999;
   }
 
   .nav.show {
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
 
   .nav-list {
     flex-direction: column;
+    margin-bottom: var(--spacing-md);
+    width: 100%;
   }
 
   .nav-item {
     margin: var(--spacing-xs) 0;
+    width: 100%;
+  }
+
+  .nav-link {
+    display: block;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    width: 100%;
+    text-align: left;
   }
 
   .date-filter {
     margin-left: 0;
     margin-top: var(--spacing-md);
     width: 100%;
+    flex-direction: column;
+    gap: var(--spacing-sm);
   }
 
   .date-filter-input {
+    width: 100%;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .reset-btn {
+    margin-left: 0;
     width: 100%;
   }
 }
@@ -728,4 +774,94 @@ a:hover {
 
 .value-closest-to-mean {
   color: #0ea5e9 !important;
+}
+/* Market Statistics Styling */
+.market-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0.75rem;
+  border-radius: 50% !important;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* Override status colors for stat values to ensure proper contrast */
+.stat-value.status-optimal {
+  background-color: #16a34a !important;
+  color: white !important;
+}
+
+.stat-value.status-good {
+  background-color: #0ea5e9 !important;
+  color: white !important;
+}
+
+.stat-value.status-bad {
+  background-color: #f59e0b !important;
+  color: white !important;
+}
+
+.stat-value.status-terrible {
+  background-color: #dc2626 !important;
+  color: white !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .market-stats {
+    justify-content: center;
+  }
+
+  .stat-value {
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+    padding: 0.625rem;
+    font-size: 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .market-stats {
+    gap: 0.75rem;
+  }
+
+  .stat-value {
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
 }
