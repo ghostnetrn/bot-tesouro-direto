@@ -244,13 +244,14 @@
   /* Make sure the status indicator is centered */
   .table td:last-child {
     text-align: center;
-    padding-left: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
   }
 
   .table td:last-child .status {
     display: inline-flex;
     width: 100%;
     justify-content: center;
+    margin: var(--spacing-sm) 0;
   }
 
   /* Hide low priority columns on mobile */
@@ -599,5 +600,24 @@ body:not(.dark-theme) table.dataTable thead th.sorting_desc:hover {
 
   .table-container {
     order: 1; /* Table after dashboard */
+  }
+}
+/* Mobile - Increase vertical padding for status elements */
+@media (max-width: 767px) {
+  .status {
+    padding: 0.75rem 1.5rem !important;
+    text-align: center !important;
+    display: block !important;
+    width: 100% !important;
+  }
+}
+
+/* Very small mobile - adjust padding accordingly */
+@media (max-width: 480px) {
+  .status {
+    padding: 0.7rem 1.2rem !important;
+    text-align: center !important;
+    display: block !important;
+    width: 100% !important;
   }
 }
