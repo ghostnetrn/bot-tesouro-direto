@@ -29,6 +29,9 @@
   --color-text-secondary: #64748b;
   --color-border: #e2e8f0;
 
+  /* RGB values for alpha calculations */
+  --color-primary-rgb: 30, 64, 175;
+
   /* Gradients */
   --gradient-primary: linear-gradient(
     135deg,
@@ -864,4 +867,178 @@ a:hover {
   .stat-label {
     font-size: 0.75rem;
   }
+}
+/* Tab Navigation Styles */
+.tab-navigation {
+  display: flex;
+  background: var(--color-card);
+  border-radius: 12px 12px 0 0;
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.tab-button:hover {
+  background: rgba(var(--color-primary-rgb), 0.05);
+  color: var(--color-primary);
+}
+
+.tab-button.active {
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 600;
+}
+
+.tab-button.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-primary);
+}
+
+.tab-button i {
+  font-size: 1rem;
+}
+
+/* Tab Content Styles */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Responsive tab navigation */
+@media (max-width: 768px) {
+  .tab-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tab-button i {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-navigation {
+    flex-direction: column;
+  }
+
+  .tab-button {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Spread indicator styles */
+.spread-positive {
+  color: var(--color-positive);
+  font-weight: 600;
+}
+
+.spread-negative {
+  color: var(--color-negative);
+  font-weight: 600;
+}
+
+.spread-neutral {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* Recommendation styles */
+.recommendation-buy {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--color-positive);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.recommendation-sell {
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--color-negative);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.recommendation-hold {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.recommendation-neutral {
+  background: rgba(100, 116, 139, 0.1);
+  color: var(--color-text-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+/* Dark theme adjustments for tabs */
+.dark-theme .tab-navigation {
+  background: var(--color-card);
+  border-color: var(--color-border);
+}
+
+.dark-theme .tab-button:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.dark-theme .recommendation-buy {
+  background: rgba(22, 163, 74, 0.2);
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.dark-theme .recommendation-sell {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.dark-theme .recommendation-hold {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.dark-theme .recommendation-neutral {
+  background: rgba(100, 116, 139, 0.2);
+  border-color: rgba(100, 116, 139, 0.3);
 }

@@ -179,8 +179,32 @@
           </div>
         </div>
 
-        <!-- Table -->
+        <!-- Table with Tabs -->
         <div class="table-container fade-in">
+          <!-- Tab Navigation -->
+          <div class="tab-navigation">
+            <button
+              id="tab-investir"
+              class="tab-button active"
+              data-tab="investir"
+            >
+              <i class="fas fa-plus-circle"></i>
+              Taxas para Investir
+            </button>
+            <button id="tab-resgatar" class="tab-button" data-tab="resgatar">
+              <i class="fas fa-minus-circle"></i>
+              Taxas para Resgatar
+            </button>
+            <button
+              id="tab-comparacao"
+              class="tab-button"
+              data-tab="comparacao"
+            >
+              <i class="fas fa-balance-scale"></i>
+              Comparação
+            </button>
+          </div>
+
           <div
             class="table-scroll-hint"
             role="alert"
@@ -194,27 +218,71 @@
               informações</span
             >
           </div>
-          <table id="tesouro" class="table">
-            <thead>
-              <tr>
-                <th class="priority-high">Nome</th>
-                <th class="priority-medium">Vencimento</th>
-                <th class="priority-medium">Invest. Mínimo</th>
-                <th class="priority-high">Última Taxa</th>
-                <th class="priority-low">Mínimo</th>
-                <th class="priority-low">1º Quartil</th>
-                <th class="priority-medium">Mediana</th>
-                <th class="priority-medium">3º Quartil</th>
-                <th class="priority-medium">Máximo</th>
-                <th class="priority-low">Média</th>
-                <th class="priority-low">Desvio Padrão</th>
-                <th class="priority-high">Janela</th>
-              </tr>
-            </thead>
-            <tbody id="treasuryBondsTableBody">
-              <!-- Table data will be loaded dynamically -->
-            </tbody>
-          </table>
+
+          <!-- Tab Content for Investir -->
+          <div id="content-investir" class="tab-content active">
+            <table id="tesouro" class="table">
+              <thead>
+                <tr>
+                  <th class="priority-high">Nome</th>
+                  <th class="priority-medium">Vencimento</th>
+                  <th class="priority-medium">Invest. Mínimo</th>
+                  <th class="priority-high">Última Taxa</th>
+                  <th class="priority-low">Mínimo</th>
+                  <th class="priority-low">1º Quartil</th>
+                  <th class="priority-medium">Mediana</th>
+                  <th class="priority-medium">3º Quartil</th>
+                  <th class="priority-medium">Máximo</th>
+                  <th class="priority-low">Média</th>
+                  <th class="priority-low">Desvio Padrão</th>
+                  <th class="priority-high">Janela</th>
+                </tr>
+              </thead>
+              <tbody id="treasuryBondsTableBody">
+                <!-- Table data will be loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tab Content for Resgatar -->
+          <div id="content-resgatar" class="tab-content">
+            <table id="tesouro-resgate" class="table">
+              <thead>
+                <tr>
+                  <th class="priority-high">Nome</th>
+                  <th class="priority-medium">Vencimento</th>
+                  <th class="priority-high">Taxa de Resgate</th>
+                  <th class="priority-high">Preço Unitário</th>
+                  <th class="priority-medium">Spread vs Investimento</th>
+                  <th class="priority-high">Análise de Resgate</th>
+                </tr>
+              </thead>
+              <tbody id="treasuryRedemptionTableBody">
+                <!-- Redemption data will be loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tab Content for Comparação -->
+          <div id="content-comparacao" class="tab-content">
+            <table id="tesouro-comparacao" class="table">
+              <thead>
+                <tr>
+                  <th class="priority-high">Nome</th>
+                  <th class="priority-medium">Vencimento</th>
+                  <th class="priority-high">Taxa Investir</th>
+                  <th class="priority-high">Taxa Resgatar</th>
+                  <th class="priority-medium">Spread</th>
+                  <th class="priority-medium">PU Investir</th>
+                  <th class="priority-medium">PU Resgatar</th>
+                  <th class="priority-high">Recomendação</th>
+                </tr>
+              </thead>
+              <tbody id="treasuryComparisonTableBody">
+                <!-- Comparison data will be loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Legend -->
@@ -224,6 +292,49 @@
             <h5 class="card-title">Legenda e Interpretação</h5>
           </div>
           <div class="card-body">
+            <h6 style="margin-bottom: 1rem; color: var(--color-primary)">
+              Abas de Análise
+            </h6>
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <i
+                  class="fas fa-plus-circle"
+                  style="color: var(--color-positive)"
+                ></i>
+                <span
+                  ><strong>Taxas para Investir:</strong> Análise histórica para
+                  compra de títulos</span
+                >
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <i
+                  class="fas fa-minus-circle"
+                  style="color: var(--color-negative)"
+                ></i>
+                <span
+                  ><strong>Taxas para Resgatar:</strong> Taxas atuais para
+                  resgate antecipado</span
+                >
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <i
+                  class="fas fa-balance-scale"
+                  style="color: var(--color-info)"
+                ></i>
+                <span
+                  ><strong>Comparação:</strong> Spread entre taxas de compra e
+                  venda</span
+                >
+              </div>
+            </div>
+
             <h6 style="margin-bottom: 1rem; color: var(--color-primary)">
               Janelas de Compra
             </h6>
@@ -254,6 +365,31 @@
             </div>
 
             <h6 style="margin-bottom: 1rem; color: var(--color-primary)">
+              Recomendações de Comparação
+            </h6>
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="recommendation-buy">Favorável para investir</span>
+                <span>Spread positivo > 2% - bom momento para comprar</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="recommendation-sell">Considere resgatar</span>
+                <span>Spread negativo < -1% - pode ser hora de vender</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem">
+                <span class="recommendation-hold">Aguardar</span>
+                <span>Spread neutro - aguarde melhores condições</span>
+              </div>
+            </div>
+
+            <h6 style="margin-bottom: 1rem; color: var(--color-primary)">
               Cores das Taxas na Tabela
             </h6>
             <div style="display: flex; flex-wrap: wrap; gap: 1rem">
@@ -276,32 +412,24 @@
               </div>
               <div style="display: flex; align-items: center; gap: 0.5rem">
                 <span
-                  style="color: #16a34a; font-weight: bold; font-size: 0.9rem"
-                  >6.94</span
+                  class="spread-positive"
+                  style="font-weight: bold; font-size: 0.9rem"
+                  >+2.15%</span
                 >
                 <span
-                  ><strong>Texto Verde:</strong> Taxa próxima do 3º quartil (boa
-                  oportunidade)</span
-                >
-              </div>
-              <div style="display: flex; align-items: center; gap: 0.5rem">
-                <span
-                  style="color: #dc2626; font-weight: bold; font-size: 0.9rem"
-                  >4.85</span
-                >
-                <span
-                  ><strong>Texto Vermelho:</strong> Taxa próxima do mínimo ou 1º
-                  quartil (momento menos favorável)</span
+                  ><strong>Spread Positivo:</strong> Taxa de investimento maior
+                  que resgate</span
                 >
               </div>
               <div style="display: flex; align-items: center; gap: 0.5rem">
                 <span
-                  style="color: #0ea5e9; font-weight: bold; font-size: 0.9rem"
-                  >6.26</span
+                  class="spread-negative"
+                  style="font-weight: bold; font-size: 0.9rem"
+                  >-1.25%</span
                 >
                 <span
-                  ><strong>Texto Azul:</strong> Taxa próxima da média
-                  histórica</span
+                  ><strong>Spread Negativo:</strong> Taxa de resgate maior que
+                  investimento</span
                 >
               </div>
             </div>
@@ -316,9 +444,10 @@
               "
             >
               <p style="margin: 0; font-size: 0.875rem">
-                <strong>💡 Dica:</strong> Valores com fundo verde indicam as
-                melhores oportunidades de investimento no momento, pois
-                representam taxas próximas aos máximos históricos do título.
+                <strong>💡 Nova Funcionalidade:</strong> Use a aba "Comparação"
+                para analisar o spread entre taxas de compra e venda, ajudando a
+                identificar o melhor momento para investir ou resgatar seus
+                títulos.
               </p>
             </div>
           </div>
@@ -417,6 +546,7 @@
 
     <!-- JavaScript -->
     <script src="js/app-colorized.js"></script>
+    <script src="js/redemption-tabs.js"></script>
     <script src="js/responsive-table.js"></script>
     <script src="js/progress-fix.js"></script>
   </body>
