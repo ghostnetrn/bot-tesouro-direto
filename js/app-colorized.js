@@ -3,6 +3,108 @@
  * Main JavaScript file - With value-based colorization
  */
 
+// === Adaptador rendimento_investir.csv -> estrutura tipo tesouro.json ===
+async function loadTreasuryBonds() {
+  // 1) tenta tesouro.json (se existir, mantém 100% compatível)
+  try {
+    const r = await fetch('tesouro.json');
+    if (r.ok) {
+      const data = await r.json();
+      if (data?.response?.TrsrBdTradgList) return data.response;
+    }
+  } catch (_) { }
+
+  // 2) fallback: montar a partir de rendimento_investir.csv
+  const csvUrl = 'rendimento_investir.csv';
+  const res = await fetch(csvUrl);
+  const buf = await res.arrayBuffer();
+
+  // o arquivo costuma vir em UTF-8; se vier vazio, tenta ISO-8859-1
+  let csv = new TextDecoder('utf-8').decode(buf);
+  if (!csv || !csv.includes('\n')) {
+    csv = new TextDecoder('iso-8859-1').decode(buf);
+  }
+
+  // normaliza quebras, remove BOM / espaços iniciais
+  csv = csv.replace(/\r/g, '').replace(/^\uFEFF/, '');
+  const lines = csv.split('\n').filter(l => l.trim().length);
+
+  if (lines.length < 2) throw new Error('CSV sem dados');
+
+  // cabeçalhos fornecidos: 
+  // "Título;Rendimento anual do título;Investimento mínimo;Preço unitário de investimento;Vencimento do Título"
+  const header = lines[0].trim();
+  const delim = header.includes(';') ? ';' : ',';
+  const H = header.split(delim).map(h => h.trim().toUpperCase());
+
+  const iTitulo = H.indexOf('TÍTULO') >= 0 ? H.indexOf('TÍTULO') : H.indexOf('TITULO');
+  const iRend = H.indexOf('RENDIMENTO ANUAL DO TÍTULO') >= 0 ? H.indexOf('RENDIMENTO ANUAL DO TÍTULO') : H.indexOf('RENDIMENTO ANUAL DO TITULO');
+  const iMin = H.indexOf('INVESTIMENTO MÍNIMO') >= 0 ? H.indexOf('INVESTIMENTO MÍNIMO') : H.indexOf('INVESTIMENTO MINIMO');
+  const iPU = H.indexOf('PREÇO UNITÁRIO DE INVESTIMENTO') >= 0 ? H.indexOf('PREÇO UNITÁRIO DE INVESTIMENTO') : H.indexOf('PRECO UNITÁRIO DE INVESTIMENTO');
+  const iVenc = H.indexOf('VENCIMENTO DO TÍTULO') >= 0 ? H.indexOf('VENCIMENTO DO TÍTULO') : H.indexOf('VENCIMENTO DO TITULO');
+
+  if ([iTitulo, iRend, iMin, iPU, iVenc].some(i => i < 0)) {
+    throw new Error('Cabeçalhos inesperados em rendimento_investir.csv');
+  }
+
+  const parseNumberBR = (s) => {
+    if (s == null) return 0;
+    s = String(s).replace(/\s/g, '').replace(/[R$\u00A0]/g, ''); // tira R$, NBSP
+    // mantém apenas dígitos, vírgula, ponto e sinal
+    s = s.replace(/[^\d,.\-]/g, '');
+    if (s.includes('.') && s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
+    else if (s.includes(',')) s = s.replace(',', '.');
+    const v = parseFloat(s);
+    return Number.isFinite(v) ? v : 0;
+  };
+
+  // "SELIC + 0,05%"  |  "IPCA + 7,21%"  |  "13,83%"
+  const parseRendimento = (txt) => {
+    const t = String(txt).trim().toUpperCase();
+    // pega só o número após o "+", quando houver
+    const plus = t.split('+')[1];
+    const alvo = plus ? plus : t; // se não há '+', é prefixado
+    return parseNumberBR(alvo.replace('%', ''));
+  };
+
+  const toISO = (dmy) => {
+    const m = String(dmy).trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (!m) return String(dmy).trim();
+    const [, d, mth, y] = m;
+    return `${y}-${mth}-${d}T00:00:00`;
+  };
+
+  const TrsrBdTradgList = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(delim).map(c => c.trim());
+    if (!cols[iTitulo] || !cols[iVenc]) continue;
+
+    const nm = cols[iTitulo];
+    const rate = parseRendimento(cols[iRend]);   // número limpo (ex.: 7.21 ou 0.05)
+    const min = parseNumberBR(cols[iMin]);      // R$ 171,98 -> 171.98
+    const pu = parseNumberBR(cols[iPU]);       // R$ 17.198,54 -> 17198.54
+    const mdt = toISO(cols[iVenc]);             // 01/03/2028 -> 2028-03-01T00:00:00
+
+    // id estável simples
+    const cd = Math.abs((nm + '|' + mdt).split('')
+      .reduce((a, c) => ((a << 5) - a + c.charCodeAt(0)) | 0, 0));
+
+    TrsrBdTradgList.push({
+      TrsrBd: {
+        cd,
+        nm,                    // usado no app
+        mtrtyDt: mdt,          // usado no app
+        anulInvstmtRate: rate, // usado no app (numérico SEM "IPCA/SELIC +")
+        minInvstmtAmt: min,    // usado no app
+        untrInvstmtVal: pu     // usado no app
+      }
+    });
+  }
+
+  return { TrsrBdTradgList };
+}
+
+
 // Global variables
 let tabela;
 let isDarkTheme = false;
@@ -377,11 +479,8 @@ async function getData(startDate, endDate) {
       alertElement.style.display = 'block';
       alertElement.querySelector('.alert-title').textContent = 'Gerando histórico do período! Aguarde.';
     }
-
-    // Fetch data from local file instead of API to avoid CORS issues
-    const response = await fetch('tesouro.json');
-    const data = await response.json();
-    const treasuryBonds = data.response;
+    // Carrega estrutura compatível com tesouro.json (com fallback do rendimento_investir.csv)
+    const treasuryBonds = await loadTreasuryBonds();
 
     // Clear table body
     if (tableBody) {
@@ -752,10 +851,8 @@ async function loadInitialData() {
     // Get last update info
     await getLastUpdateInfo();
 
-    // Fetch data
-    const response = await fetch('tesouro.json');
-    const data = await response.json();
-    const treasuryBonds = data.response;
+    // Carrega estrutura compatível com tesouro.json (com fallback do rendimento_investir.csv)
+    const treasuryBonds = await loadTreasuryBonds();
 
     // Clear table body
     if (tableBody) {
