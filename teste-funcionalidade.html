@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teste - Funcionalidade de Resgate</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .success {
+        color: green;
+        font-weight: bold;
+      }
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+      .info {
+        color: blue;
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 Teste da Funcionalidade de Resgate</h1>
+
+    <div class="test-section">
+      <h2>1. Verificação de Arquivos</h2>
+      <div id="file-check">Verificando arquivos...</div>
+    </div>
+
+    <div class="test-section">
+      <h2>2. Teste de Carregamento de Dados</h2>
+      <div id="data-check">Carregando dados...</div>
+    </div>
+
+    <div class="test-section">
+      <h2>3. Resultado dos Testes</h2>
+      <div id="result-summary">Executando testes...</div>
+    </div>
+
+    <script>
+      async function testFunctionality() {
+        const fileCheck = document.getElementById("file-check");
+        const dataCheck = document.getElementById("data-check");
+        const resultSummary = document.getElementById("result-summary");
+
+        let testsPassedCount = 0;
+        let totalTests = 3;
+
+        // Test 1: Check if CSV files exist
+        try {
+          const investResponse = await fetch("rendimento_investir.csv");
+          const redeemResponse = await fetch("rendimento_resgatar.csv");
+
+          if (investResponse.ok && redeemResponse.ok) {
+            fileCheck.innerHTML =
+              '<span class="success">✅ Arquivos CSV encontrados</span>';
+            testsPassedCount++;
+          } else {
+            fileCheck.innerHTML =
+              '<span class="error">❌ Arquivos CSV não encontrados</span>';
+          }
+        } catch (error) {
+          fileCheck.innerHTML =
+            '<span class="error">❌ Erro ao verificar arquivos: ' +
+            error.message +
+            "</span>";
+        }
+
+        // Test 2: Test data loading
+        try {
+          const response = await fetch("rendimento_resgatar.csv");
+          const text = await response.text();
+          const lines = text.split("\n").filter((l) => l.trim().length);
+
+          if (lines.length > 1) {
+            dataCheck.innerHTML =
+              '<span class="success">✅ Dados carregados: ' +
+              (lines.length - 1) +
+              " títulos encontrados</span>";
+            testsPassedCount++;
+          } else {
+            dataCheck.innerHTML =
+              '<span class="error">❌ Nenhum dado encontrado</span>';
+          }
+        } catch (error) {
+          dataCheck.innerHTML =
+            '<span class="error">❌ Erro ao carregar dados: ' +
+            error.message +
+            "</span>";
+        }
+
+        // Test 3: Check if main page exists
+        try {
+          const response = await fetch("index.html");
+          if (response.ok) {
+            testsPassedCount++;
+          }
+        } catch (error) {
+          // Silent fail for this test
+        }
+
+        // Summary
+        if (testsPassedCount === totalTests) {
+          resultSummary.innerHTML =
+            '<span class="success">🎉 Todos os testes passaram! A funcionalidade está pronta para uso.</span><br><br><a href="index.html" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Abrir Aplicação Principal</a>';
+        } else {
+          resultSummary.innerHTML =
+            '<span class="error">⚠️ ' +
+            testsPassedCount +
+            "/" +
+            totalTests +
+            " testes passaram. Verifique os erros acima.</span>";
+        }
+      }
+
+      // Run tests when page loads
+      testFunctionality();
+    </script>
+  </body>
+</html>
