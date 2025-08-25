@@ -5,6 +5,7 @@ const puppeteer = require("puppeteer");
 const arquivoJson = "tesouro.json";
 const arquivoCsv = "PrecoTaxaTesouroDireto.csv";           // CSV antigo (mantido)
 const arquivoCsvRendimento = "rendimento_investir.csv";     // NOVO CSV
+const arquivoCsvRendimentoResgatar = "rendimento_resgatar.csv";
 
 // Mantidos como estão
 const URL_API =
@@ -15,6 +16,10 @@ const URL_FILE_TESOURO =
 // NOVO link do CSV “rendimento-investir”
 const URL_FILE_RENDIMENTO_INVESTIR =
   "https://www.tesourodireto.com.br/documents/d/guest/rendimento-investir-csv?download=true";
+
+// NOVO link do CSV “rendimento-investir”
+const URL_FILE_RENDIMENTO_RESGATAR =
+  "https://www.tesourodireto.com.br/documents/d/guest/rendimento-resgatar-csv?download=true";
 
 async function downloadJsonViaPuppeteer(url, arquivo) {
   let browser;
@@ -98,6 +103,9 @@ async function downloadArquivo(arquivo, url) {
 
       // CSV novo (rendimento-investir)
       downloadArquivo(arquivoCsvRendimento, URL_FILE_RENDIMENTO_INVESTIR),
+
+      // CSV novo (rendimento-resgatar)
+      downloadArquivo(arquivoCsvRendimentoResgatar, URL_FILE_RENDIMENTO_RESGATAR),
     ]);
     console.log("Todos os downloads foram concluídos.");
   } catch (error) {
