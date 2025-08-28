@@ -3,18 +3,9 @@
  * Main JavaScript file - With value-based colorization
  */
 
-// === Adaptador rendimento_investir.csv -> estrutura tipo tesouro.json ===
+// === Carregador de dados a partir de rendimento_investir.csv ===
 async function loadTreasuryBonds() {
-  // 1) tenta tesouro.json (se existir, mantém 100% compatível)
-  try {
-    const r = await fetch('tesouro.json');
-    if (r.ok) {
-      const data = await r.json();
-      if (data?.response?.TrsrBdTradgList) return data.response;
-    }
-  } catch (_) { }
-
-  // 2) fallback: montar a partir de rendimento_investir.csv
+  // Carrega dados diretamente do rendimento_investir.csv
   const csvUrl = 'rendimento_investir.csv';
   const res = await fetch(csvUrl);
   const buf = await res.arrayBuffer();
@@ -479,7 +470,7 @@ async function getData(startDate, endDate) {
       alertElement.style.display = 'block';
       alertElement.querySelector('.alert-title').textContent = 'Gerando histórico do período! Aguarde.';
     }
-    // Carrega estrutura compatível com tesouro.json (com fallback do rendimento_investir.csv)
+    // Carrega dados do rendimento_investir.csv
     const treasuryBonds = await loadTreasuryBonds();
 
     // Clear table body
@@ -851,7 +842,7 @@ async function loadInitialData() {
     // Get last update info
     await getLastUpdateInfo();
 
-    // Carrega estrutura compatível com tesouro.json (com fallback do rendimento_investir.csv)
+    // Carrega dados do rendimento_investir.csv
     const treasuryBonds = await loadTreasuryBonds();
 
     // Clear table body
