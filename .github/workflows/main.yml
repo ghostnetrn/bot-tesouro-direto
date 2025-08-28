@@ -31,7 +31,7 @@ jobs:
             echo "Nenhuma mudança a ser comitada."
             exit 0
           else
-            git add PrecoTaxaTesouroDireto.csv tesouro.json
+            git add PrecoTaxaTesouroDireto.csv rendimento_investir.csv rendimento_resgatar.csv
             git commit -m "Atualizar Tesouro Direto"
             git push
           fi

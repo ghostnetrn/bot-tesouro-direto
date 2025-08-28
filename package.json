@@ -1,6 +1,6 @@
 {
   "name": "bot-tesouro-direto",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,6 @@
     "node-fetch": "^3.3.0",
     "papaparse": "^5.4.0",
     "path": "^0.12.7",
-    "puppeteer": "^23.1.1",
     "simple-statistics": "^7.8.3",
     "telegraf": "^4.11.2"
   },
