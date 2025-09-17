@@ -23,7 +23,7 @@ jobs:
 
       - run: npm install
 
-      - name: Executar script Puppeteer
+      - name: Executar script download
         run: node downloadTesouro.js
 
       - name: Commit and Push Changes
