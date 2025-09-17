@@ -203,7 +203,6 @@ async function baixarArquivoSeNecessario() {
       });
     });
   } else {
-    //console.log("O arquivo já está atualizado.");
     return Promise.resolve();
   }
 }
