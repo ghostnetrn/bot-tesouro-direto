@@ -15,18 +15,13 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20.x"
-          check-latest: true
+          node-version: "20"
           cache: 'npm'
-
-      - name: Verificar versão do Node
-        run: node --version
 
       - name: Clear npm cache
         run: npm cache clean --force
 
-      - name: Instalar dependências
-        run: npm ci
+      - run: npm install
 
       - name: Executar script Puppeteer
         run: node downloadTesouro.js
