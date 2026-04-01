@@ -90,7 +90,7 @@ async function fetchTesouroInvestir() {
       return val.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     };
 
-    $("#rankigns tbody tr").each((_, tr) => {
+    $("#treasure-list-table tbody tr").each((_, tr) => {
       const tds = $(tr).find("td");
       if (tds.length > 0) {
         let tituloBase = clean($(tds[1]).text());
@@ -128,7 +128,7 @@ async function fetchTesouroResgatar() {
     ];
     rows.push(header);
 
-    $("#rankigns tbody tr").each((_, tr) => {
+    $("#treasure-list-table tbody tr").each((_, tr) => {
       const tds = $(tr).find("td");
       if (tds.length > 0) {
         let titulo = clean($(tds[1]).text());

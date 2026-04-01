@@ -24,7 +24,7 @@ async function fetchTesouroResgatar() {
     const clean = (txt) => txt.replace(/\s+/g, " ").trim();
 
     // Pega dados da tabela
-    $("#rankigns tbody tr").each((_, tr) => {
+    $("#treasure-list-table tbody tr").each((_, tr) => {
       const tds = $(tr).find("td");
       if (tds.length > 0) {
         let titulo = clean($(tds[1]).text());

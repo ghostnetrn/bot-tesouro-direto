@@ -62,7 +62,7 @@ async function fetchTesouroDireto() {
       return val.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     };
 
-    $("#rankigns tbody tr").each((_, tr) => {
+    $("#treasure-list-table tbody tr").each((_, tr) => {
       const tds = $(tr).find("td");
       if (tds.length > 0) {
         let tituloBase = clean($(tds[1]).text());
