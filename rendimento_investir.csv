@@ -1,37 +1,37 @@
 Título;Rendimento anual do título;Investimento mínimo;Preço unitário de investimento;Vencimento do Título
-Tesouro Prefixado 2029;13,50%;R$ 7,16;R$ 716,29;01/01/2029
-Tesouro Prefixado 2032;13,73%;R$ 4,85;R$ 485,08;01/01/2032
-Tesouro Prefixado com Juros Semestrais 2037;13,86%;R$ 8,33;R$ 833,53;01/01/2037
+Tesouro Prefixado 2029;13,51%;R$ 7,16;R$ 716,12;01/01/2029
+Tesouro Prefixado 2032;13,74%;R$ 4,84;R$ 484,84;01/01/2032
+Tesouro Prefixado com Juros Semestrais 2037;13,87%;R$ 8,33;R$ 833,09;01/01/2037
 Tesouro Selic 2031;SELIC + 0,0822%;R$ 188,73;R$ 18.873,05;01/03/2031
 Tesouro Renda+ Aposentadoria Extra 2049;IPCA + 7,21%;R$ 19,75;R$ 1.975,27;15/12/2049
 Tesouro Renda+ Aposentadoria Extra 2054;IPCA + 7,07%;R$ 14,27;R$ 1.427,69;15/12/2054
 Tesouro Renda+ Aposentadoria Extra 2059;IPCA + 6,98%;R$ 10,35;R$ 1.035,05;15/12/2059
 Tesouro Renda+ Aposentadoria Extra 2064;IPCA + 6,95%;R$ 7,45;R$ 745,76;15/12/2064
-Tesouro Renda+ Aposentadoria Extra 2069;IPCA + 6,95%;R$ 5,34;R$ 534,05;15/12/2069
-Tesouro Renda+ Aposentadoria Extra 2074;IPCA + 6,96%;R$ 3,81;R$ 381,13;15/12/2074
-Tesouro Renda+ Aposentadoria Extra 2079;IPCA + 6,96%;R$ 2,72;R$ 272,78;15/12/2079
-Tesouro Renda+ Aposentadoria Extra 2084;IPCA + 6,96%;R$ 1,95;R$ 195,25;15/12/2084
+Tesouro Renda+ Aposentadoria Extra 2069;IPCA + 6,94%;R$ 5,35;R$ 535,61;15/12/2069
+Tesouro Renda+ Aposentadoria Extra 2074;IPCA + 6,94%;R$ 3,83;R$ 383,73;15/12/2074
+Tesouro Renda+ Aposentadoria Extra 2079;IPCA + 6,93%;R$ 2,75;R$ 275,95;15/12/2079
+Tesouro Renda+ Aposentadoria Extra 2084;IPCA + 6,93%;R$ 1,97;R$ 197,80;15/12/2084
 Tesouro Educa+ 2031;IPCA + 7,76%;R$ 37,38;R$ 3.738,44;15/12/2031
 Tesouro Educa+ 2032;IPCA + 7,71%;R$ 34,77;R$ 3.477,12;15/12/2032
-Tesouro Educa+ 2033;IPCA + 7,67%;R$ 32,35;R$ 3.235,64;15/12/2033
-Tesouro Educa+ 2034;IPCA + 7,62%;R$ 30,14;R$ 3.014,26;15/12/2034
-Tesouro Educa+ 2035;IPCA + 7,55%;R$ 28,14;R$ 2.814,41;15/12/2035
-Tesouro Educa+ 2036;IPCA + 7,49%;R$ 26,29;R$ 2.629,47;15/12/2036
-Tesouro Educa+ 2037;IPCA + 7,43%;R$ 24,59;R$ 2.459,60;15/12/2037
-Tesouro Educa+ 2038;IPCA + 7,36%;R$ 23,05;R$ 2.305,79;15/12/2038
+Tesouro Educa+ 2033;IPCA + 7,66%;R$ 32,37;R$ 3.237,13;15/12/2033
+Tesouro Educa+ 2034;IPCA + 7,61%;R$ 30,15;R$ 3.015,93;15/12/2034
+Tesouro Educa+ 2035;IPCA + 7,54%;R$ 28,16;R$ 2.816,23;15/12/2035
+Tesouro Educa+ 2036;IPCA + 7,48%;R$ 26,31;R$ 2.631,41;15/12/2036
+Tesouro Educa+ 2037;IPCA + 7,42%;R$ 24,61;R$ 2.461,65;15/12/2037
+Tesouro Educa+ 2038;IPCA + 7,35%;R$ 23,07;R$ 2.307,93;15/12/2038
 Tesouro Educa+ 2039;IPCA + 7,29%;R$ 21,64;R$ 2.164,38;15/12/2039
 Tesouro Educa+ 2040;IPCA + 7,23%;R$ 20,31;R$ 2.031,56;15/12/2040
-Tesouro Educa+ 2041;IPCA + 7,18%;R$ 19,06;R$ 1.906,65;15/12/2041
+Tesouro Educa+ 2041;IPCA + 7,17%;R$ 19,08;R$ 1.908,96;15/12/2041
 Tesouro Educa+ 2042;IPCA + 7,12%;R$ 17,93;R$ 1.793,45;15/12/2042
-Tesouro Educa+ 2043;IPCA + 7,08%;R$ 16,84;R$ 1.684,01;15/12/2043
-Tesouro Educa+ 2044;IPCA + 7,05%;R$ 15,80;R$ 1.580,19;15/12/2044
+Tesouro Educa+ 2043;IPCA + 7,09%;R$ 16,81;R$ 1.681,66;15/12/2043
+Tesouro Educa+ 2044;IPCA + 7,06%;R$ 15,77;R$ 1.577,84;15/12/2044
 Tesouro Educa+ 2045;IPCA + 7,03%;R$ 14,81;R$ 1.481,37;15/12/2045
 Tesouro Educa+ 2046;IPCA + 7,01%;R$ 13,89;R$ 1.389,34;15/12/2046
 Tesouro IPCA+ 2040;IPCA + 7,10%;R$ 17,73;R$ 1.773,30;15/08/2040
-Tesouro Educa+ 2047;IPCA + 6,99%;R$ 13,03;R$ 1.303,61;15/12/2047
-Tesouro IPCA+ 2050;IPCA + 6,92%;R$ 9,34;R$ 934,63;15/08/2050
+Tesouro Educa+ 2047;IPCA + 7,00%;R$ 13,01;R$ 1.301,31;15/12/2047
+Tesouro IPCA+ 2050;IPCA + 6,93%;R$ 9,32;R$ 932,52;15/08/2050
 Tesouro IPCA+ 2032;IPCA + 7,63%;R$ 29,67;R$ 2.967,67;15/08/2032
 Tesouro Educa+ 2048;IPCA + 6,98%;R$ 12,21;R$ 1.221,36;15/12/2048
 Tesouro IPCA+ com Juros Semestrais 2045;IPCA + 7,15%;R$ 43,03;R$ 4.303,07;15/05/2045
-Tesouro IPCA+ com Juros Semestrais 2060;IPCA + 7,10%;R$ 41,31;R$ 4.131,57;15/08/2060
-Tesouro IPCA+ com Juros Semestrais 2037;IPCA + 7,40%;R$ 43,66;R$ 4.366,57;15/05/2037
+Tesouro IPCA+ com Juros Semestrais 2060;IPCA + 7,09%;R$ 41,36;R$ 4.136,79;15/08/2060
+Tesouro IPCA+ com Juros Semestrais 2037;IPCA + 7,39%;R$ 43,69;R$ 4.369,74;15/05/2037
