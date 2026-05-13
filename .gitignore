@@ -133,13 +133,13 @@ indexBkp.html
 teste.js
 index2.html
 teste.js
-/.kiro
+#/.kiro
 /.vscode
 .vscode/settings.json
-.kiro/specs/responsive-tables/requirements.md
-.kiro/specs/responsive-tables/design.md
-.kiro/specs/responsive-tables/tasks.md
-/.kiro
+#.kiro/specs/responsive-tables/requirements.md
+#.kiro/specs/responsive-tables/design.md
+#.kiro/specs/responsive-tables/tasks.md
+#/.kiro
 js.zip
 # Deprecated files - no longer used
 tesouro.json
