@@ -23,18 +23,30 @@ async function fetchTesouroResgatar() {
 
     const clean = (txt) => txt.replace(/\s+/g, " ").trim();
 
-    // Pega dados da tabela
+    console.log("=== Extraindo dados de resgate ===");
+
+    // Pega dados da tabela - estrutura: 0=Ativos, 1=Rent.anual, 2=Rent.estimada, 3=Preço, 4=Vencimento
     $("#treasure-list-table tbody tr").each((_, tr) => {
       const tds = $(tr).find("td");
-      if (tds.length > 0) {
-        let titulo = clean($(tds[1]).text());
-        let rendimento = clean($(tds[2]).text());
-        let preco = clean($(tds[3]).text());
-        let vencimento = clean($(tds[4]).text());
+      if (tds.length >= 5) {
+        let titulo = clean($(tds[0]).text());
+        let rendimento = clean($(tds[1]).text());
+        let preco = clean($(tds[3]).text()); // Coluna 3 é o preço
+        let vencimento = clean($(tds[4]).text()); // Coluna 4 é o vencimento
+
+        console.log(`Processando: ${titulo} | Venc: ${vencimento}`);
+
+        // Pula se não tiver vencimento
+        if (!vencimento || vencimento === "") {
+          console.log("⚠️ Vencimento vazio, pulando linha");
+          return;
+        }
 
         rows.push([titulo, rendimento, preco, vencimento]);
       }
     });
+
+    console.log(`\n✅ Total de ${rows.length - 1} títulos de resgate extraídos`);
 
     // Gera CSV
     const csv = Papa.unparse(rows, {

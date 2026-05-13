@@ -26,6 +26,8 @@ async function fetchTesouroDireto() {
 
     // Normalização de título para ficar igual ao PrecoTaxaTesouroDireto.csv
     function formatarTitulo(base, vencimento) {
+      if (!vencimento || vencimento === "") return base;
+      
       const ano = vencimento.split("/")[2];
       let titulo = clean(base);
 
@@ -62,14 +64,26 @@ async function fetchTesouroDireto() {
       return val.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     };
 
+    console.log("=== Extraindo dados da tabela ===");
+    
     $("#treasure-list-table tbody tr").each((_, tr) => {
       const tds = $(tr).find("td");
-      if (tds.length > 0) {
-        let tituloBase = clean($(tds[1]).text());
-        let rendimento = clean($(tds[2]).text());
-        const minimo = clean($(tds[3]).text());
-        const preco = clean($(tds[4]).text());
-        const vencimento = clean($(tds[5]).text());
+      
+      if (tds.length >= 5) {
+        // Nova estrutura: 0=Ativos, 1=Rent.anual, 2=Rent.estimada, 3=Preço, 4=Vencimento
+        let tituloBase = clean($(tds[0]).text());
+        let rendimento = clean($(tds[1]).text());
+        const minimo = clean($(tds[2]).text()); // Investimento mínimo
+        const preco = clean($(tds[3]).text());
+        const vencimento = clean($(tds[4]).text());
+
+        console.log(`Processando: ${tituloBase} | Venc: ${vencimento}`);
+
+        // Pula se não tiver vencimento
+        if (!vencimento || vencimento === "") {
+          console.log("⚠️ Vencimento vazio, pulando linha");
+          return;
+        }
 
         // normaliza título + ano
         const titulo = formatarTitulo(tituloBase, vencimento);
@@ -83,6 +97,8 @@ async function fetchTesouroDireto() {
         ]);
       }
     });
+
+    console.log(`\n✅ Total de ${rows.length - 1} títulos extraídos`);
 
     // Gera CSV sem aspas extras
     const csv = Papa.unparse(rows, {
