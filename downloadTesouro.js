@@ -101,37 +101,47 @@ function formatRate(titulo, taxa) {
 // ============= DOWNLOAD GENÉRICO DE CSV =================
 
 /**
- * Baixa um arquivo CSV de uma URL e salva localmente
+ * Baixa um arquivo CSV de uma URL e salva localmente (com retentativas)
  */
-async function downloadCSV(url, outputFile) {
-  console.log(`⬇️  Tentando baixar: ${outputFile}`);
-  console.log(`   URL: ${url}`);
+async function downloadCSV(url, outputFile, retries = 3) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    console.log(`⬇️  Tentando baixar (tentativa ${attempt}/${retries}): ${outputFile}`);
+    console.log(`   URL: ${url}`);
 
-  try {
-    const response = await axios.get(url, {
-      responseType: "arraybuffer",
-      maxRedirects: 5,
-      timeout: 30000,
-      headers: {
-        Accept: "text/csv,application/octet-stream,*/*",
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      },
-    });
+    try {
+      const response = await axios.get(url, {
+        responseType: "arraybuffer",
+        maxRedirects: 5,
+        timeout: 300000, // 5 minutos de timeout
+        headers: {
+          Accept: "text/csv,application/octet-stream,*/*",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        },
+      });
 
-    fs.writeFileSync(outputFile, response.data);
-    console.log(`✅ ${outputFile} baixado com sucesso (${response.data.length} bytes)`);
-    return true;
-  } catch (error) {
-    if (error.response) {
-      console.error(
-        `❌ Erro HTTP ${error.response.status} ao baixar ${outputFile}: ${error.message}`
-      );
-    } else {
-      console.error(`❌ Erro ao baixar ${outputFile}: ${error.message}`);
+      fs.writeFileSync(outputFile, response.data);
+      console.log(`✅ ${outputFile} baixado com sucesso (${response.data.length} bytes)`);
+      return true;
+    } catch (error) {
+      const isLastAttempt = attempt === retries;
+      const errorMsg = error.response
+        ? `HTTP ${error.response.status}: ${error.message}`
+        : error.message;
+
+      console.error(`❌ Tentativa ${attempt} falhou ao baixar ${outputFile}: ${errorMsg}`);
+
+      if (isLastAttempt) {
+        return false;
+      }
+
+      // Aguarda um tempo progressivo (3s, 6s...) antes de tentar novamente
+      const delay = attempt * 3000;
+      console.log(`⏳ Aguardando ${delay / 1000}s antes da próxima tentativa...`);
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
-    return false;
   }
+  return false;
 }
 
 // ============= FALLBACK: GERAR CSVs A PARTIR DO HISTÓRICO =================
