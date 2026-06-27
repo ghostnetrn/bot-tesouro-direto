@@ -427,12 +427,27 @@ function processDownloadedCSV(inputFile, outputFile, isInvestir) {
 
   try {
     // 1. Baixar CSV histórico oficial
+    // ATENÇÃO: o servidor www.tesourotransparente.gov.br bloqueia (silenciosamente,
+    // gerando ETIMEDOUT) conexões vindas de IPs de nuvem estrangeiros, como os
+    // runners do GitHub Actions (Azure). Por isso este download NÃO é crítico:
+    // se falhar, mantemos o arquivo histórico já commitado no repositório e
+    // seguimos atualizando os CSVs de rendimento (que vêm de um host atrás de
+    // Cloudflare e são acessíveis globalmente).
     console.log("📊 PASSO 1: Baixando CSV histórico oficial");
     const historicoOk = await downloadCSV(URL_FILE_TESOURO, arquivoCsv);
 
     if (!historicoOk) {
-      console.error("❌ Falha crítica: não foi possível baixar o CSV histórico oficial");
-      process.exit(1);
+      if (fs.existsSync(arquivoCsv)) {
+        console.warn(
+          "⚠️  Não foi possível baixar o CSV histórico (provável bloqueio geográfico do servidor gov)."
+        );
+        console.warn(`   Mantendo o arquivo ${arquivoCsv} já existente no repositório.`);
+      } else {
+        console.error(
+          "❌ Falha crítica: download do histórico falhou e não há arquivo local para usar como fallback."
+        );
+        process.exit(1);
+      }
     }
 
     // 2. Tentar baixar CSVs atuais do Tesouro Direto
