@@ -28,5 +28,10 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "overrides": {
+    "cheerio": {
+      "undici": "8.9.0"
+    }
   }
 }
