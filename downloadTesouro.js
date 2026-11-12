@@ -29,6 +29,41 @@ function removeBOM(text) {
 }
 
 /**
+ * Decodifica o buffer como UTF-8 estrito; se inválido, usa latin1
+ */
+function decodeBuffer(buffer) {
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(buffer);
+  } catch {
+    return buffer.toString("latin1");
+  }
+}
+
+const CABECALHOS_CONHECIDOS = [
+  "Título",
+  "Rendimento anual do título",
+  "Investimento mínimo",
+  "Preço unitário de investimento",
+  "Preço unitário de resgate",
+  "Vencimento do Título",
+];
+
+/**
+ * Repara cabeçalhos com U+FFFD no lugar dos acentos (curinga)
+ */
+function repairHeader(header) {
+  const h = removeBOM(String(header)).trim();
+  if (!h.includes("\uFFFD")) return h;
+  const pattern = new RegExp(
+    "^" +
+      h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\uFFFD+/g, ".{1,2}") +
+      "$",
+    "i"
+  );
+  return CABECALHOS_CONHECIDOS.find((c) => pattern.test(c)) || h;
+}
+
+/**
  * Detecta o delimitador do CSV (ponto e vírgula ou vírgula)
  */
 function detectDelimiter(csvText) {
@@ -149,7 +184,7 @@ async function downloadCSV(url, outputFile, retries = 3) {
 /**
  * Gera os CSVs de investimento e resgate a partir do CSV histórico oficial
  */
-async function generateFromHistorico() {
+async function generateFromHistorico({ investir = true, resgatar = true } = {}) {
   console.log("\n🔄 Usando fallback: gerando CSVs a partir do histórico oficial...");
 
   if (!fs.existsSync(arquivoCsv)) {
@@ -160,15 +195,8 @@ async function generateFromHistorico() {
 
   // Ler o arquivo histórico
   const buffer = fs.readFileSync(arquivoCsv);
-  let csvText;
-
-  // Tentar UTF-8 primeiro, depois ISO-8859-1
-  try {
-    csvText = buffer.toString("utf-8");
-    if (!csvText.includes("Tipo Titulo")) {
-      csvText = buffer.toString("latin1");
-    }
-  } catch {
+  let csvText = decodeBuffer(buffer);
+  if (!csvText.includes("Tipo Titulo")) {
     csvText = buffer.toString("latin1");
   }
 
@@ -219,6 +247,7 @@ async function generateFromHistorico() {
 
   console.log(`   Total de registros na última data: ${latestRecords.length}`);
 
+  if (investir) {
   // Gerar rendimento_investir.csv
   const investirRows = [];
   investirRows.push([
@@ -254,12 +283,17 @@ async function generateFromHistorico() {
     ]);
   }
 
+  if (investirRows.length < 2) {
+    throw new Error("Fallback gerou rendimento_investir.csv sem títulos");
+  }
   const csvInvestir = Papa.unparse(investirRows, { delimiter: ";", quotes: false });
   fs.writeFileSync(arquivoCsvRendimento, csvInvestir, "utf8");
   console.log(
     `✅ ${arquivoCsvRendimento} gerado com ${investirRows.length - 1} títulos (fallback)`
   );
+  }
 
+  if (resgatar) {
   // Gerar rendimento_resgatar.csv
   const resgatarRows = [];
   resgatarRows.push([
@@ -290,11 +324,15 @@ async function generateFromHistorico() {
     ]);
   }
 
+  if (resgatarRows.length < 2) {
+    throw new Error("Fallback gerou rendimento_resgatar.csv sem títulos");
+  }
   const csvResgatar = Papa.unparse(resgatarRows, { delimiter: ";", quotes: false });
   fs.writeFileSync(arquivoCsvRendimentoResgatar, csvResgatar, "utf8");
   console.log(
     `✅ ${arquivoCsvRendimentoResgatar} gerado com ${resgatarRows.length - 1} títulos (fallback)`
   );
+  }
 }
 
 // ============= PROCESSAR CSV BAIXADO =================
@@ -306,14 +344,7 @@ function processDownloadedCSV(inputFile, outputFile, isInvestir) {
   console.log(`📝 Processando ${inputFile}...`);
 
   const buffer = fs.readFileSync(inputFile);
-  let csvText;
-
-  // Tentar UTF-8 primeiro, depois ISO-8859-1
-  try {
-    csvText = buffer.toString("utf-8");
-  } catch {
-    csvText = buffer.toString("latin1");
-  }
+  let csvText = decodeBuffer(buffer);
 
   csvText = removeBOM(csvText);
   const delimiter = detectDelimiter(csvText);
@@ -322,6 +353,7 @@ function processDownloadedCSV(inputFile, outputFile, isInvestir) {
     delimiter,
     header: true,
     skipEmptyLines: true,
+    transformHeader: repairHeader,
   });
 
   if (!parsed.data || parsed.data.length === 0) {
@@ -415,6 +447,14 @@ function processDownloadedCSV(inputFile, outputFile, isInvestir) {
     }
   }
 
+  if (rows.length < 2) {
+    throw new Error(
+      `CSV ${inputFile} sem linhas de dados (cabeçalhos encontrados: ${(
+        parsed.meta.fields || []
+      ).join(" | ")})`
+    );
+  }
+
   const csv = Papa.unparse(rows, { delimiter: ";", quotes: false });
   fs.writeFileSync(outputFile, csv, "utf8");
   console.log(`✅ ${outputFile} processado com ${rows.length - 1} títulos`);
@@ -457,27 +497,45 @@ function processDownloadedCSV(inputFile, outputFile, isInvestir) {
     const resgatarOk = await downloadCSV(URL_CSV_RESGATAR, "temp_resgatar.csv");
 
     // 3. Processar ou usar fallback
-    if (investirOk && resgatarOk) {
-      console.log("\n📊 PASSO 3: Processando CSVs baixados");
-      try {
-        processDownloadedCSV("temp_investir.csv", arquivoCsvRendimento, true);
-        processDownloadedCSV("temp_resgatar.csv", arquivoCsvRendimentoResgatar, false);
+    const falhou = { investir: !investirOk, resgatar: !resgatarOk };
 
-        // Limpar arquivos temporários
-        fs.unlinkSync("temp_investir.csv");
-        fs.unlinkSync("temp_resgatar.csv");
-      } catch (error) {
-        console.error(`❌ Erro ao processar CSVs: ${error.message}`);
-        console.log("   Tentando fallback...");
-        await generateFromHistorico();
-      }
+    if (investirOk || resgatarOk) {
+      console.log("\n📊 PASSO 3: Processando CSVs baixados");
     } else {
       console.log("\n📊 PASSO 3: CSVs atuais indisponíveis, usando fallback");
-      await generateFromHistorico();
+    }
 
-      // Limpar arquivos temporários se existirem
-      if (fs.existsSync("temp_investir.csv")) fs.unlinkSync("temp_investir.csv");
-      if (fs.existsSync("temp_resgatar.csv")) fs.unlinkSync("temp_resgatar.csv");
+    if (investirOk) {
+      try {
+        processDownloadedCSV("temp_investir.csv", arquivoCsvRendimento, true);
+      } catch (error) {
+        console.error(`❌ Erro ao processar investir: ${error.message}`);
+        falhou.investir = true;
+      }
+    }
+    if (resgatarOk) {
+      try {
+        processDownloadedCSV("temp_resgatar.csv", arquivoCsvRendimentoResgatar, false);
+      } catch (error) {
+        console.error(`❌ Erro ao processar resgatar: ${error.message}`);
+        falhou.resgatar = true;
+      }
+    }
+
+    if (falhou.investir || falhou.resgatar) {
+      console.log("   Tentando fallback para os arquivos que falharam...");
+      try {
+        await generateFromHistorico(falhou);
+      } catch (error) {
+        console.error(
+          `❌ Fallback falhou: ${error.message}. Mantendo arquivos anteriores.`
+        );
+      }
+    }
+
+    // Limpar arquivos temporários
+    for (const f of ["temp_investir.csv", "temp_resgatar.csv"]) {
+      if (fs.existsSync(f)) fs.unlinkSync(f);
     }
 
     console.log("\n🎉 Processo concluído com sucesso!");
